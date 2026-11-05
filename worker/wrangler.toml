@@ -1,0 +1,14 @@
+name = "ninety-push"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+# כל 5 דקות — חייב להתאים ל-WINDOW_MIN ב-src/index.js
+[triggers]
+crons = ["*/5 * * * *"]
+
+[[kv_namespaces]]
+binding = "SUBS"
+id = "REPLACE_WITH_KV_ID"
+
+[observability]
+enabled = true

@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>90 יום</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0E1116">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="90 יום">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@500;700;800;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E1116;
+    --surface:#161B22;
+    --surface-2:#1F2630;
+    --line:#2D3642;
+    --text:#E6EDF3;
+    --muted:#9AA4B2;
+    --amber:#F59E0B;     /* רצף / מינימום / הדגשה */
+    --green:#10B981;     /* בוצע במלואו */
+    --on-color:#0E1116;  /* טקסט על ענבר/ירוק — תמיד כהה */
+    --danger:#F87171;
+    --r:14px;
+    --r-sm:10px;
+    --font-display:'Heebo', system-ui, sans-serif;
+    --font-body:'Rubik', system-ui, sans-serif;
+    --nav-h:64px;
+    color-scheme:dark;
+  }
+
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  button{ touch-action:manipulation; font:inherit; color:inherit; }
+  html,body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--font-body); }
+  body{
+    min-height:100vh;
+    padding-bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom, 0px));
+    line-height:1.5;
+  }
+  h1,h2,h3{ font-family:var(--font-display); margin:0; letter-spacing:-0.01em; }
+  :focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
+  [hidden]{ display:none !important; }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+
+  .ic{ width:1.25em; height:1.25em; fill:none; stroke:currentColor; stroke-width:2.25; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+  .num{ font-variant-numeric:tabular-nums; }
+
+  /* ---------- layout ---------- */
+
+  .wrap{
+    padding:
+      calc(16px + env(safe-area-inset-top, 0px))
+      calc(16px + env(safe-area-inset-right, 0px))
+      16px
+      calc(16px + env(safe-area-inset-left, 0px));
+    max-width:640px;
+    margin:0 auto;
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--r);
+    padding:16px;
+    margin-bottom:12px;
+  }
+  .card h2{ font-size:1.15rem; margin-bottom:8px; }
+  .card h3{ font-size:1rem; margin-bottom:4px; }
+  .muted{ color:var(--muted); }
+  .small{ font-size:0.88rem; }
+  .label{ font-family:var(--font-display); font-weight:700; font-size:0.9rem; color:var(--muted); margin:0 0 8px; }
+
+  /* ---------- header ---------- */
+
+  .day-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:12px; }
+  .day-head h1{ font-size:2.2rem; font-weight:900; line-height:1.1; }
+  .day-head h1 .of{ font-size:1.1rem; color:var(--muted); font-weight:700; }
+  .kept{ font-size:0.95rem; color:var(--muted); text-align:left; }
+  .kept b{ color:var(--amber); font-size:1.1rem; }
+
+  .bar{ height:8px; background:var(--surface-2); border-radius:99px; overflow:hidden; margin-bottom:16px; }
+  .bar > i{ display:block; height:100%; background:linear-gradient(90deg, var(--amber), var(--green)); border-radius:99px; }
+
+  .identity{ font-size:0.95rem; color:var(--muted); border-right:3px solid var(--amber); padding-right:12px; margin:0 0 16px; }
+
+  .date-nav{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px; }
+  .date-nav .dn-label{ font-family:var(--font-display); font-weight:800; font-size:1.05rem; text-align:center; flex:1; }
+  .icon-btn{
+    width:48px; height:48px; border-radius:var(--r-sm);
+    background:var(--surface); border:1px solid var(--line);
+    display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .icon-btn:disabled{ opacity:0.35; cursor:default; }
+  .icon-btn:active:not(:disabled){ background:var(--surface-2); }
+
+  /* ---------- habit card ---------- */
+
+  .habit{ position:relative; overflow:hidden; }
+  .habit::before{
+    content:""; position:absolute; top:0; bottom:0; right:0; width:5px; background:var(--line);
+  }
+  .habit.s-full::before{ background:var(--green); }
+  .habit.s-min::before{ background:var(--amber); }
+  .habit.s-miss::before{ background:repeating-linear-gradient(-45deg, var(--muted) 0 3px, transparent 3px 6px); }
+
+  .habit-name{ font-family:var(--font-display); font-weight:800; font-size:1.15rem; }
+  .habit-anchor{ font-size:0.88rem; color:var(--muted); margin-top:2px; }
+  .habit-versions{ display:flex; gap:16px; flex-wrap:wrap; font-size:0.9rem; margin:8px 0 12px; }
+  .habit-versions span b{ font-weight:600; color:var(--muted); }
+
+  .tri{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .tri button{
+    height:56px; border-radius:var(--r-sm);
+    background:var(--surface-2); border:2px solid var(--line);
+    font-family:var(--font-display); font-weight:800; font-size:0.98rem;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer; transition:background .12s, border-color .12s;
+  }
+  .tri button:active{ transform:scale(0.98); }
+  .tri button[aria-pressed="true"][data-v="full"]{ background:var(--green); border-color:var(--green); color:var(--on-color); }
+  .tri button[aria-pressed="true"][data-v="min"]{ background:var(--amber); border-color:var(--amber); color:var(--on-color); }
+  .tri button[aria-pressed="true"][data-v="miss"]{ background:var(--text); border-color:var(--text); color:var(--on-color); }
+
+  /* ---------- buttons / forms ---------- */
+
+  .btn{
+    width:100%; min-height:56px; border-radius:var(--r-sm);
+    border:2px solid var(--line); background:var(--surface-2);
+    font-family:var(--font-display); font-weight:800; font-size:1.05rem;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    cursor:pointer; padding:0 16px; margin-top:8px;
+  }
+  .btn:active{ transform:scale(0.99); }
+  .btn-primary{ background:var(--amber); border-color:var(--amber); color:var(--on-color); }
+  .btn-green{ background:var(--green); border-color:var(--green); color:var(--on-color); }
+  .btn-ghost{ background:transparent; }
+  .btn-danger{ background:transparent; border-color:var(--danger); color:var(--danger); }
+  .btn:disabled{ opacity:0.45; cursor:default; transform:none; }
+  .row{ display:flex; gap:8px; }
+  .row > *{ flex:1; }
+
+  .field{ margin-bottom:12px; }
+  .field label{ display:block; font-family:var(--font-display); font-weight:700; font-size:0.92rem; margin-bottom:6px; }
+  .field .hint{ font-size:0.84rem; color:var(--muted); margin:-2px 0 6px; }
+  input[type=text], input[type=number], input[type=date], input[type=time], textarea, select{
+    width:100%; min-height:52px; padding:12px;
+    background:var(--bg); color:var(--text);
+    border:2px solid var(--line); border-radius:var(--r-sm);
+    font-family:var(--font-body); font-size:1rem;
+    outline:none;
+  }
+  textarea{ min-height:84px; resize:vertical; line-height:1.5; }
+  input:focus, textarea:focus, select:focus{ border-color:var(--amber); }
+
+  .days-pick{ display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; }
+  .days-pick button{
+    height:48px; border-radius:var(--r-sm); border:2px solid var(--line); background:var(--surface-2);
+    font-family:var(--font-display); font-weight:800; cursor:pointer;
+  }
+  .days-pick button[aria-pressed="true"]{ background:var(--amber); border-color:var(--amber); color:var(--on-color); }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    min-height:44px; padding:0 14px; border-radius:99px; border:2px solid var(--line); background:var(--surface-2);
+    font-family:var(--font-display); font-weight:700; font-size:0.92rem; cursor:pointer;
+  }
+  .chip[aria-pressed="true"]{ background:var(--amber); border-color:var(--amber); color:var(--on-color); }
+
+  .check-row{
+    display:flex; align-items:center; gap:12px; min-height:52px; padding:8px 0;
+    border-bottom:1px solid var(--line); cursor:pointer;
+  }
+  .check-row:last-child{ border-bottom:none; }
+  .check-row input{ width:26px; height:26px; accent-color:var(--green); flex-shrink:0; margin:0; }
+  .check-row.done span{ color:var(--muted); text-decoration:line-through; }
+
+  .list-item{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+    padding:12px 0; border-bottom:1px solid var(--line);
+  }
+  .list-item:last-child{ border-bottom:none; }
+  .list-item .li-meta{ font-size:0.82rem; color:var(--muted); white-space:nowrap; }
+
+  .notice{
+    background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4);
+    border-radius:var(--r-sm); padding:12px; font-size:0.92rem; margin-bottom:12px;
+  }
+
+  /* ---------- 90-day board ---------- */
+
+  .board{ display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; }
+  .board .wk{ grid-column:1 / -1; font-size:0.78rem; color:var(--muted); margin-top:4px; }
+  .cell{
+    aspect-ratio:1; border-radius:6px; background:var(--surface-2);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.72rem; font-weight:600; color:var(--muted);
+    border:1px solid transparent;
+  }
+  .cell.full{ background:var(--green); color:var(--on-color); }
+  .cell.min{ background:var(--amber); color:var(--on-color); }
+  .cell.miss{ background:repeating-linear-gradient(-45deg, #3A4452 0 3px, var(--surface-2) 3px 6px); color:var(--text); }
+  .cell.open{ border-color:var(--muted); color:var(--text); }
+  .cell.rest{ background:transparent; border-color:var(--line); }
+  .cell.future{ background:transparent; border:1px dashed var(--line); }
+  .cell.today{ outline:2px solid var(--text); outline-offset:1px; }
+
+  .legend{ display:flex; flex-wrap:wrap; gap:12px; font-size:0.82rem; color:var(--muted); margin-top:12px; }
+  .legend span{ display:inline-flex; align-items:center; gap:6px; }
+  .legend i{ width:14px; height:14px; border-radius:4px; display:inline-block; }
+
+  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .stat{ background:var(--surface-2); border-radius:var(--r-sm); padding:12px; }
+  .stat b{ display:block; font-family:var(--font-display); font-size:1.5rem; font-weight:900; }
+  .stat span{ font-size:0.84rem; color:var(--muted); }
+
+  /* ---------- week table ---------- */
+
+  .wtable{ width:100%; border-collapse:collapse; font-size:0.85rem; }
+  .wtable th{ font-weight:600; color:var(--muted); padding:4px 2px; font-size:0.78rem; }
+  .wtable td{ padding:3px 2px; text-align:center; }
+  .wtable td.hn{ text-align:right; font-weight:600; padding-left:6px; max-width:96px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .dot{ display:inline-block; width:22px; height:22px; border-radius:6px; background:var(--surface-2); }
+  .dot.full{ background:var(--green); }
+  .dot.min{ background:var(--amber); }
+  .dot.miss{ background:repeating-linear-gradient(-45deg, #3A4452 0 3px, var(--surface-2) 3px 6px); }
+  .dot.rest{ background:transparent; border:1px solid var(--line); }
+  .dot.none{ background:transparent; border:1px dashed var(--muted); }
+
+  .pattern-row{ display:flex; align-items:center; gap:8px; font-size:0.88rem; margin:6px 0; }
+  .pattern-row .pd{ width:44px; color:var(--muted); }
+  .pattern-row .pb{ flex:1; height:10px; background:var(--surface-2); border-radius:99px; overflow:hidden; }
+  .pattern-row .pb i{ display:block; height:100%; background:var(--muted); }
+  .pattern-row .pv{ width:44px; text-align:left; color:var(--muted); }
+
+  .update-box{
+    background:var(--bg); border:1px solid var(--line); border-radius:var(--r-sm);
+    padding:12px; white-space:pre-wrap; font-size:0.95rem; line-height:1.6;
+  }
+
+  /* ---------- sparkline ---------- */
+  .spark{ width:100%; height:64px; display:block; margin:8px 0; }
+  .spark polyline{ fill:none; stroke:var(--amber); stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round; }
+  .spark circle{ fill:var(--amber); }
+
+  /* ---------- bottom nav ---------- */
+
+  .nav{
+    position:fixed; bottom:0; right:0; left:0; z-index:20;
+    background:rgba(14,17,22,0.96);
+    border-top:1px solid var(--line);
+    padding:0 calc(4px + env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) calc(4px + env(safe-area-inset-left, 0px));
+    display:grid; grid-template-columns:repeat(5, 1fr);
+  }
+  .nav button{
+    height:var(--nav-h); background:none; border:none; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    font-family:var(--font-display); font-weight:700; font-size:0.76rem; color:var(--muted);
+  }
+  .nav button .ic{ width:24px; height:24px; }
+  .nav button[aria-current="page"]{ color:var(--amber); }
+
+  /* ---------- sheet ---------- */
+
+  .sheet-overlay{
+    position:fixed; inset:0; z-index:40; background:rgba(0,0,0,0.65);
+    display:flex; align-items:flex-end;
+  }
+  .sheet{
+    width:100%; max-width:640px; margin:0 auto;
+    background:var(--surface); border-radius:18px 18px 0 0; border-top:1px solid var(--line);
+    padding:20px calc(16px + env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
+    max-height:calc(92dvh - env(safe-area-inset-top, 0px)); overflow-y:auto;
+    animation:up .2s ease-out;
+  }
+  @keyframes up{ from{ transform:translateY(6%); opacity:.6; } }
+  .sheet h2{ font-size:1.4rem; margin-bottom:4px; }
+
+  /* ---------- wizard ---------- */
+
+  .steps{ display:flex; gap:4px; margin-bottom:20px; }
+  .steps i{ flex:1; height:4px; border-radius:99px; background:var(--surface-2); }
+  .steps i.on{ background:var(--amber); }
+  .wiz h1{ font-size:1.7rem; font-weight:900; margin-bottom:8px; }
+  .wiz .lead{ color:var(--muted); margin:0 0 20px; }
+  .wiz-foot{ display:flex; gap:8px; margin-top:16px; }
+  .wiz-foot .btn{ margin-top:0; }
+
+  .toast{
+    position:fixed; left:50%; transform:translateX(-50%);
+    bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px));
+    background:var(--text); color:var(--on-color); z-index:60;
+    padding:12px 18px; border-radius:99px; font-weight:600; font-size:0.92rem;
+    max-width:calc(100% - 32px); text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+<nav class="nav" id="nav" hidden></nav>
+<div id="sheet" class="sheet-overlay" hidden><div class="sheet" id="sheetBody"></div></div>
+<div id="toast" class="toast" hidden role="status"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* =========================================================
+     קבועים
+     ========================================================= */
+
+  const STORE_KEY = 'ninety-state';
+  const TOTAL = 90;
+  const PUSH_URL = 'https://ninety-push.quixonn.workers.dev';
+  const VAPID_PUBLIC = 'BJKyvhBWgfLTIVYpYLaT_YUSO09f8_5BlQj-Z8w_Etm_s3D6REt2Swn0HMZvMFBNHRs4HKAwF1k2jccWi4hhsng';
+  const DAY_SHORT = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+  const DAY_LONG = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+
+  const ICONS = {
+    today:'<path d="M8 2v4M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M9 16l2 2 4-4"/>',
+    board:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+    receipt:'<path d="M4 2v20l3-2 3 2 2-2 2 2 3-2 3 2V2l-3 2-3-2-2 2-2-2-3 2z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    review:'<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
+    settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+    check:'<path d="M20 6 9 17l-5-5"/>',
+    half:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>',
+    x:'<path d="M18 6 6 18M6 6l12 12"/>',
+    left:'<path d="m15 18-6-6 6-6"/>',
+    right:'<path d="m9 18 6-6-6-6"/>',
+    plus:'<path d="M12 5v14M5 12h14"/>',
+    moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>',
+    copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+    share:'<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4M12 2v13"/>',
+    bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+    trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>'
+  };
+  function icon(n){ return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + ICONS[n] + '</svg>'; }
+
+  /* =========================================================
+     עזרי תאריך — תמיד תאריך מקומי YYYY-MM-DD
+     ========================================================= */
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function ds(d){ return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+  function parse(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); }
+  function today(){ return ds(new Date()); }
+  function addDays(s, n){ const d = parse(s); d.setDate(d.getDate() + n); return ds(d); }
+  function diffDays(a, b){
+    const [ay,am,ad] = a.split('-').map(Number), [by,bm,bd] = b.split('-').map(Number);
+    return Math.round((Date.UTC(by,bm-1,bd) - Date.UTC(ay,am-1,ad)) / 86400000);
+  }
+  function weekday(s){ return parse(s).getDay(); }
+  function fmt(s){ const [y,m,d] = s.split('-'); return d + '/' + m; }
+  function fmtLong(s){ return 'יום ' + DAY_LONG[weekday(s)] + ', ' + fmt(s); }
+
+  /* =========================================================
+     state
+     ========================================================= */
+
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+  function emptyState(){
+    return {
+      v:1,
+      setup:null,
+      days:{},        // 'YYYY-MM-DD' → { h:{habitId:'full'|'min'|'miss'}, closed, prep }
+      receipts:[],    // { id, date, text }
+      measureLog:[],  // { id, date, measureId, value }
+      weekly:[]       // { id, week, well, broke, cause, reasons:[], fix, ts }
+    };
+  }
+
+  let S = load();
+
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORE_KEY);
+      if(raw){
+        const s = JSON.parse(raw);
+        return Object.assign(emptyState(), s);
+      }
+    }catch(e){}
+    return emptyState();
+  }
+
+  function save(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }
+    catch(e){ toast('השמירה נכשלה — נסה שוב'); }
+    writeSwConfig();
+  }
+
+  function tick(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms || 12); }catch(e){} }
+
+  function esc(v){
+    return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  let toastTimer;
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+  }
+
+  /* =========================================================
+     חישובים
+     ========================================================= */
+
+  function habits(){ return S.setup ? S.setup.habits : []; }
+  function activeHabits(){ return habits().filter(h => !h.archivedOn); }
+
+  /* הרגל מתוכנן לתאריך אם הוא נוסף לפני כן, לא הועבר לארכיון, והיום בשבוע מסומן. */
+  function scheduled(h, date){
+    if(date < (h.from || S.setup.startDate)) return false;
+    if(h.archivedOn && date >= h.archivedOn) return false;
+    return h.days.includes(weekday(date));
+  }
+  function habitsOn(date){ return habits().filter(h => scheduled(h, date)); }
+
+  function dayIndex(date){ return diffDays(S.setup.startDate, date) + 1; } // 1..90
+  function endDate(){ return addDays(S.setup.startDate, TOTAL - 1); }
+  function inRange(date){ const i = dayIndex(date); return i >= 1 && i <= TOTAL; }
+
+  function mark(date, hid){ const d = S.days[date]; return d && d.h ? d.h[hid] : undefined; }
+
+  /* מצב היום: full = הכול במלואו, min = עמדת (חלק במינימום), miss = משהו פוספס,
+     open = יש משהו לא מסומן, rest = אין הרגלים מתוכננים. */
+  function dayStatus(date){
+    const hs = habitsOn(date);
+    if(hs.length === 0) return 'rest';
+    let anyMin = false, anyMiss = false, anyOpen = false;
+    hs.forEach(h => {
+      const m = mark(date, h.id);
+      if(m === 'min') anyMin = true;
+      else if(m === 'miss') anyMiss = true;
+      else if(m !== 'full') anyOpen = true;
+    });
+    if(anyMiss) return 'miss';
+    if(anyOpen) return 'open';
+    return anyMin ? 'min' : 'full';
+  }
+
+  /* "X ימים מתוך Y": Y = ימים שעברו (כולל היום אם נסגר) שהיו בהם הרגלים מתוכננים.
+     יום שפוספס לא מאפס כלום — הוא פשוט לא נספר ב-X. */
+  function keptStats(){
+    const t = today();
+    let kept = 0, passed = 0;
+    for(let i = 0; i < TOTAL; i++){
+      const date = addDays(S.setup.startDate, i);
+      if(date > t) break;
+      const closed = S.days[date] && S.days[date].closed;
+      if(date === t && !closed){
+        const st = dayStatus(date);
+        if(st === 'full' || st === 'min'){ kept++; passed++; }
+        continue;
+      }
+      const st = dayStatus(date);
+      if(st === 'rest') continue;
+      passed++;
+      if(st === 'full' || st === 'min') kept++;
+    }
+    return { kept, passed };
+  }
+
+  function habitFreqText(h){
+    if(h.days.length === 7) return 'כל יום';
+    return h.days.length + ' פעמים בשבוע (' + h.days.map(d => DAY_SHORT[d]).join(' ') + ')';
+  }
+
+  function weekOf(date){ return Math.floor((dayIndex(date) - 1) / 7) + 1; } // 1..13
+  function weekRange(w){
+    const a = addDays(S.setup.startDate, (w-1)*7);
+    let b = addDays(a, 6);
+    if(b > endDate()) b = endDate();
+    return [a, b];
+  }
+
+  /* =========================================================
+     ניווט
+     ========================================================= */
+
+  let view = 'today';
+  let viewDate = today();
+  let reviewWeek = null;
+  let wizStep = 0;
+  let draft = null; // טיוטת האשף
+
+  const NAV = [
+    { id:'today', label:'היום', ic:'today' },
+    { id:'board', label:'התקדמות', ic:'board' },
+    { id:'receipts', label:'קבלות', ic:'receipt' },
+    { id:'review', label:'סקירה', ic:'review' },
+    { id:'settings', label:'הגדרות', ic:'settings' }
+  ];
+
+  function go(v){
+    view = v;
+    if(v === 'today') viewDate = clampDate(today());
+    render();
+    window.scrollTo(0, 0);
+  }
+
+  function clampDate(d){
+    if(!S.setup) return d;
+    if(d < S.setup.startDate) return S.setup.startDate;
+    if(d > endDate()) return endDate();
+    return d;
+  }
+
+  function renderNav(){
+    const nav = document.getElementById('nav');
+    nav.hidden = !S.setup;
+    nav.innerHTML = NAV.map(n =>
+      '<button data-go="' + n.id + '"' + (view === n.id ? ' aria-current="page"' : '') + '>' + icon(n.ic) + '<span>' + n.label + '</span></button>'
+    ).join('');
+  }
+
+  function render(){
+    renderNav();
+    const app = document.getElementById('app');
+    if(!S.setup){ app.innerHTML = renderWizard(); return; }
+    const fn = { today:renderToday, board:renderBoard, receipts:renderReceipts, review:renderReview, settings:renderSettings }[view];
+    app.innerHTML = '<div class="wrap">' + fn() + '</div>';
+  }
+
+  /* =========================================================
+     אשף הגדרה
+     ========================================================= */
+
+  const ENV_SUGGEST = [
+    'להכין את בגדי האימון מהערב',
+    'לכתוב את האימון של מחר מראש',
+    'לשים את הספר במקום שבו אני באמת קורא',
+    'להשאיר בבית רק את האוכל שאני רוצה לאכול',
+    'לפתוח את המחשב ישר על המשימה החשובה (לא מייל/יוטיוב)',
+    'לבחור חדר כושר קרוב, גם אם הוא לא המושלם',
+    'לשים לב ממי אני מקבל הכי הרבה "זמן אוויר" ולצמצם את מי שמושך אחורה'
+  ];
+
+  function newDraft(){
+    return {
+      startDate: today(),
+      identity:{ who:'', day:'', stop:'', seen:'' },
+      habits:[],
+      env: ENV_SUGGEST.map(t => ({ id:uid(), text:t, on:false, done:false })),
+      measures:[{ id:uid(), name:'משקל', unit:'ק״ג', first:'' }],
+      partner:{ name:'' },
+      notify:{ morning:'06:30', evening:'21:30', weeklyDay:5, weeklyTime:'12:00', on:false }
+    };
+  }
+
+  const WIZ = ['פתיחה','מי אתה הופך להיות','הרגלים','סביבה','מדדים','אדם אחד','התראות'];
+
+  function renderWizard(){
+    if(!draft) draft = newDraft();
+    const steps = '<div class="steps">' + WIZ.map((_, i) => '<i class="' + (i <= wizStep ? 'on' : '') + '"></i>').join('') + '</div>';
+    let body = '';
+    const d = draft;
+
+    if(wizStep === 0){
+      body =
+        '<h1>90 יום</h1>' +
+        '<p class="lead">לא מחכים להרגיש כמו אדם חדש. עושים את הדבר, שוב ושוב, ואוספים ראיות — עד שהסיפור הישן על עצמך כבר לא מחזיק.</p>' +
+        '<div class="card"><h3>הסדר</h3><p class="small muted" style="margin:0">' +
+        '1. מגדירים בצורה מוחשית את מי שאתה הופך להיות.<br>' +
+        '2. בוחרים מעט הרגלים — לכל אחד גרסה רגילה וגרסת מינימום.<br>' +
+        '3. מסדרים את הסביבה כך שתעזור.<br>' +
+        '4. מסמנים כל יום, כותבים קבלות, וסוקרים פעם בשבוע.</p></div>' +
+        '<div class="field"><label for="w-start">תאריך התחלה</label><input type="date" id="w-start" value="' + d.startDate + '"></div>';
+    }
+
+    if(wizStep === 1){
+      body =
+        '<h1>מי אתה הופך להיות</h1>' +
+        '<p class="lead">לא "הגרסה הכי טובה שלי". מה האדם הזה <b>עושה</b> ביום רגיל?</p>' +
+        field('w-who', 'במשפט אחד', 'למשל: מישהו שמתאמן 4 פעמים בשבוע וכותב כל בוקר', d.identity.who, true) +
+        field('w-day', 'מה הוא עושה ביום רגיל?', 'איך הוא מתאמן, איך הוא עובד, מתי הוא קם', d.identity.day, true) +
+        field('w-stop', 'ממה הוא הפסיק?', 'למשל: לגלול בטלפון במיטה, לדחות למחר', d.identity.stop, true) +
+        field('w-seen', 'מה מישהו היה רואה אם היה עוקב אחריו שבוע?', '', d.identity.seen, true);
+    }
+
+    if(wizStep === 2){
+      body =
+        '<h1>הרגלים</h1>' +
+        '<p class="lead">2–4 הרגלים, לא 20. המבחן: <b>אם אעשה את זה 90 יום — משהו משמעותי ישתנה?</b> אם לא, הוא לא צריך להיות פה.</p>' +
+        (d.habits.length ? d.habits.map((h, i) =>
+          '<div class="card"><div class="row" style="align-items:center"><div style="flex:3">' +
+          '<div class="habit-name">' + esc(h.name) + '</div>' +
+          '<div class="small muted">' + esc(habitFreqText(h)) + (h.anchor ? ' · ' + esc(h.anchor) : '') + '</div>' +
+          '<div class="small">רגיל: ' + esc(h.full) + ' · מינימום: ' + esc(h.min) + '</div></div>' +
+          '<div style="flex:0 0 auto" class="row">' +
+          '<button class="icon-btn" data-act="wiz-edit-habit" data-i="' + i + '" aria-label="עריכה">' + icon('settings') + '</button>' +
+          '<button class="icon-btn" data-act="wiz-del-habit" data-i="' + i + '" aria-label="מחיקה">' + icon('trash') + '</button>' +
+          '</div></div></div>'
+        ).join('') : '<div class="notice">עוד לא הוספת הרגל. הראשון ברשימה יקבל את התראת הבוקר — שים שם את הכי חשוב.</div>') +
+        (d.habits.length < 4 ? '<button class="btn btn-ghost" data-act="add-habit">' + icon('plus') + ' הוספת הרגל</button>' : '');
+    }
+
+    if(wizStep === 3){
+      body =
+        '<h1>סביבה</h1>' +
+        '<p class="lead">מה הופך את מה שאתה רוצה לקשה יותר ממה שצריך? כל דבר קטן כאן הוא עוד מקום שבו ההרגל יכול למות. סמן מה רלוונטי — זה ייכנס כרשימת הכנות במסך היום.</p>' +
+        '<div class="card">' + d.env.map((e, i) =>
+          '<label class="check-row"><input type="checkbox" data-act="wiz-env" data-i="' + i + '"' + (e.on ? ' checked' : '') + '><span>' + esc(e.text) + '</span></label>'
+        ).join('') + '</div>' +
+        '<div class="field"><label for="w-env-new">משהו משלך</label><div class="row"><input type="text" id="w-env-new" placeholder="למשל: להוריד את אינסטגרם מהמסך הראשי"><button class="icon-btn" style="flex:0 0 52px;height:52px" data-act="wiz-env-add" aria-label="הוספה">' + icon('plus') + '</button></div></div>';
+    }
+
+    if(wizStep === 4){
+      body =
+        '<h1>מדדים</h1>' +
+        '<p class="lead">אחד או שניים, לא יותר. מצב הרוח הוא מדד גרוע לשינוי — תן לעצמך משהו שלא זז כמו הרגשות.</p>' +
+        d.measures.map((m, i) =>
+          '<div class="card"><div class="row">' +
+          '<div class="field" style="flex:2"><label>שם</label><input type="text" data-m="name" data-i="' + i + '" value="' + esc(m.name) + '" placeholder="משקל / זמן ריצה / סקוואט"></div>' +
+          '<div class="field" style="flex:1"><label>יחידה</label><input type="text" data-m="unit" data-i="' + i + '" value="' + esc(m.unit) + '" placeholder="ק״ג"></div></div>' +
+          '<div class="row"><div class="field" style="flex:2"><label>ערך היום (אופציונלי)</label><input type="number" step="any" inputmode="decimal" data-m="first" data-i="' + i + '" value="' + esc(m.first) + '"></div>' +
+          '<div style="flex:0 0 auto;display:flex;align-items:flex-end;padding-bottom:12px"><button class="icon-btn" data-act="wiz-del-m" data-i="' + i + '" aria-label="מחיקה">' + icon('trash') + '</button></div></div></div>'
+        ).join('') +
+        (d.measures.length < 2 ? '<button class="btn btn-ghost" data-act="wiz-add-m">' + icon('plus') + ' עוד מדד</button>' : '');
+    }
+
+    if(wizStep === 5){
+      body =
+        '<h1>אדם אחד</h1>' +
+        '<p class="lead">מישהו אחד שיודע מה התוכנית המדויקת. פעם בשבוע האפליקציה תכין לך עדכון קצר לשלוח לו: מה אמרתי, מה עשיתי, איפה פספסתי. חוץ ממנו — לשמור את זה בשקט.</p>' +
+        field('w-partner', 'השם שלו', 'אפשר להשאיר ריק ולהוסיף אחר כך', d.partner.name, false);
+    }
+
+    if(wizStep === 6){
+      const n = d.notify;
+      body =
+        '<h1>התראות</h1>' +
+        '<p class="lead">בוקר — להרגל החשוב, לפני הטלפון. ערב — לסגירת היום. ופעם בשבוע — לסקירה.</p>' +
+        '<div class="row"><div class="field"><label for="w-nm">בוקר</label><input type="time" id="w-nm" value="' + n.morning + '"></div>' +
+        '<div class="field"><label for="w-ne">ערב</label><input type="time" id="w-ne" value="' + n.evening + '"></div></div>' +
+        '<div class="row"><div class="field"><label for="w-nwd">סקירה שבועית — יום</label><select id="w-nwd">' + DAY_LONG.map((x, i) => '<option value="' + i + '"' + (i === Number(n.weeklyDay) ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+        '<div class="field"><label for="w-nwt">שעה</label><input type="time" id="w-nwt" value="' + n.weeklyTime + '"></div></div>' +
+        '<p class="small muted">את ההתראות עצמן מפעילים אחרי הסיום, במסך ההגדרות. באייפון זה עובד רק כשהאפליקציה פתוחה מהאייקון במסך הבית.</p>';
+    }
+
+    const foot = '<div class="wiz-foot">' +
+      (wizStep > 0 ? '<button class="btn btn-ghost" data-act="wiz-back">הקודם</button>' : '') +
+      (wizStep < WIZ.length - 1
+        ? '<button class="btn btn-primary" data-act="wiz-next">הבא</button>'
+        : '<button class="btn btn-green" data-act="wiz-finish">מתחילים</button>') +
+      '</div>' +
+      (wizStep === 0 ? '<button class="btn btn-ghost" data-act="open-import">יש לי גיבוי — ייבוא</button>' : '');
+
+    return '<div class="wrap wiz">' + steps + body + foot + '</div>';
+  }
+
+  function field(id, label, hint, value, multi){
+    return '<div class="field"><label for="' + id + '">' + label + '</label>' +
+      (hint && multi ? '<div class="hint">' + hint + '</div>' : '') +
+      (multi
+        ? '<textarea id="' + id + '">' + esc(value) + '</textarea>'
+        : '<input type="text" id="' + id + '" value="' + esc(value) + '" placeholder="' + esc(hint) + '">') +
+      '</div>';
+  }
+
+  function val(id){ const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+  /* שומר את מה שמוקלד במסך הנוכחי של האשף לתוך הטיוטה. */
+  function captureWizard(){
+    const d = draft;
+    if(wizStep === 0){ d.startDate = val('w-start') || today(); }
+    if(wizStep === 1){ d.identity = { who:val('w-who'), day:val('w-day'), stop:val('w-stop'), seen:val('w-seen') }; }
+    if(wizStep === 3){
+      document.querySelectorAll('[data-act="wiz-env"]').forEach(cb => { d.env[Number(cb.dataset.i)].on = cb.checked; });
+    }
+    if(wizStep === 4){
+      document.querySelectorAll('[data-m]').forEach(inp => { d.measures[Number(inp.dataset.i)][inp.dataset.m] = inp.value.trim(); });
+    }
+    if(wizStep === 5){ d.partner.name = val('w-partner'); }
+    if(wizStep === 6){
+      d.notify.morning = val('w-nm') || '06:30';
+      d.notify.evening = val('w-ne') || '21:30';
+      d.notify.weeklyDay = Number(val('w-nwd'));
+      d.notify.weeklyTime = val('w-nwt') || '12:00';
+    }
+  }
+
+  function finishWizard(){
+    captureWizard();
+    const d = draft;
+    if(d.habits.length === 0){ wizStep = 2; render(); toast('צריך לפחות הרגל אחד'); return; }
+    const start = d.startDate;
+    S = emptyState();
+    S.setup = {
+      startDate: start,
+      identity: d.identity,
+      habits: d.habits.map(h => Object.assign({}, h, { from:start })),
+      env: d.env.filter(e => e.on).map(e => ({ id:e.id, text:e.text, done:false })),
+      measures: d.measures.filter(m => m.name).map(m => ({ id:m.id, name:m.name, unit:m.unit })),
+      partner: d.partner,
+      notify: d.notify
+    };
+    d.measures.forEach(m => {
+      if(m.name && m.first !== '' && !isNaN(Number(m.first))){
+        S.measureLog.push({ id:uid(), date:today(), measureId:m.id, value:Number(m.first) });
+      }
+    });
+    draft = null;
+    save();
+    tick(30);
+    go('today');
+  }
+
+  /* ---------- habit editor (shared by wizard + settings) ---------- */
+
+  let habitEdit = null; // { h, onSave }
+
+  function openHabitEditor(h, onSave){
+    habitEdit = {
+      h: h ? JSON.parse(JSON.stringify(h)) : { id:uid(), name:'', full:'', min:'', anchor:'', days:[0,1,2,3,4,5,6] },
+      onSave
+    };
+    renderHabitSheet();
+  }
+
+  function renderHabitSheet(){
+    const h = habitEdit.h;
+    openSheet(
+      '<h2>' + (h.name ? 'עריכת הרגל' : 'הרגל חדש') + '</h2>' +
+      '<p class="small muted" style="margin:0 0 16px">הגדר את המינימום עכשיו, לפני שהיום הרע מגיע — כדי שלא תתווכח עם עצמך 45 דקות אם זה נחשב.</p>' +
+      '<div class="field"><label for="h-name">שם</label><input type="text" id="h-name" value="' + esc(h.name) + '" placeholder="אימון / כתיבה / קריאה"></div>' +
+      '<div class="field"><label for="h-full">גרסה רגילה</label><input type="text" id="h-full" value="' + esc(h.full) + '" placeholder="60 דקות בחדר כושר"></div>' +
+      '<div class="field"><label for="h-min">מינימום — הרצפה ליום רע</label><div class="hint">לא גדול מדי. זה רצפה, לא תקן חדש.</div><input type="text" id="h-min" value="' + esc(h.min) + '" placeholder="25 דקות בבית"></div>' +
+      '<div class="field"><label for="h-anchor">איפה הוא גר ביום שלך?</label><div class="hint">חבר אותו למשהו שכבר קורה. "מתישהו היום" זה המקום שבו הרגלים נעלמים.</div><input type="text" id="h-anchor" value="' + esc(h.anchor) + '" placeholder="אחרי הקפה של הבוקר"></div>' +
+      '<div class="field"><label>באילו ימים</label><div class="hint">קצב שאפשר להחזיק 13 שבועות, לא השבוע המושלם.</div><div class="days-pick" id="h-days">' +
+        DAY_SHORT.map((x, i) => '<button type="button" data-day="' + i + '" aria-pressed="' + h.days.includes(i) + '" aria-label="' + DAY_LONG[i] + '">' + x + '</button>').join('') +
+      '</div></div>' +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="habit-save">שמירה</button></div>'
+    );
+  }
+
+  function saveHabitFromSheet(){
+    const h = habitEdit.h;
+    h.name = val('h-name');
+    h.full = val('h-full');
+    h.min = val('h-min');
+    h.anchor = val('h-anchor');
+    if(!h.name){ toast('צריך שם להרגל'); return; }
+    if(!h.min){ toast('הגדר מינימום — זה מה שמציל את היום הרע'); return; }
+    if(h.days.length === 0){ toast('בחר לפחות יום אחד'); return; }
+    h.days.sort();
+    habitEdit.onSave(h);
+    habitEdit = null;
+    closeSheet();
+  }
+
+  /* =========================================================
+     מסך היום
+     ========================================================= */
+
+  function renderToday(){
+    const t = today();
+    const setup = S.setup;
+
+    if(t < setup.startDate){
+      const n = diffDays(t, setup.startDate);
+      return '<div class="day-head"><h1>עוד ' + n + ' ' + (n === 1 ? 'יום' : 'ימים') + '</h1></div>' +
+        '<p class="identity">' + esc(setup.identity.who || '') + '</p>' +
+        envCard() +
+        '<div class="card"><p class="muted" style="margin:0">ה-90 יום מתחילים ב-' + fmtLong(setup.startDate) + '. זה זמן טוב להכין את הסביבה.</p></div>';
+    }
+
+    const date = viewDate;
+    const idx = dayIndex(date);
+    const ks = keptStats();
+    const pct = Math.min(100, Math.round(Math.min(dayIndex(t), TOTAL) / TOTAL * 100));
+    const done = t > endDate();
+
+    let html =
+      '<div class="day-head"><h1><span class="num">יום ' + Math.min(dayIndex(t), TOTAL) + '</span> <span class="of">/ 90</span></h1>' +
+      '<div class="kept"><b class="num">' + ks.kept + '</b> ימים מתוך <span class="num">' + ks.passed + '</span></div></div>' +
+      '<div class="bar" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + pct + '%"></i></div>';
+
+    if(done) html += finishedCard();
+
+    if(setup.identity.who) html += '<p class="identity">' + esc(setup.identity.who) + '</p>';
+
+    html +=
+      '<div class="date-nav">' +
+      '<button class="icon-btn" data-act="day-prev" aria-label="יום קודם"' + (date <= setup.startDate ? ' disabled' : '') + '>' + icon('right') + '</button>' +
+      '<div class="dn-label">' + (date === t ? 'היום · ' : '') + fmtLong(date) + ' <span class="muted small">(' + idx + ')</span></div>' +
+      '<button class="icon-btn" data-act="day-next" aria-label="יום הבא"' + (date >= t || date >= endDate() ? ' disabled' : '') + '>' + icon('left') + '</button>' +
+      '</div>';
+
+    const prevPrep = S.days[addDays(date, -1)] && S.days[addDays(date, -1)].prep;
+    if(prevPrep && date === t){
+      html += '<div class="notice"><b>הכנת אתמול למחר:</b> ' + esc(prevPrep) + '</div>';
+    }
+
+    const hs = habitsOn(date);
+    if(hs.length === 0){
+      html += '<div class="card"><p class="muted" style="margin:0">אין הרגלים מתוכננים ליום הזה. יום מנוחה.</p></div>';
+    }else{
+      html += hs.map(h => {
+        const m = mark(date, h.id);
+        const btn = (v, label, ic) => '<button data-act="mark" data-h="' + h.id + '" data-v="' + v + '" aria-pressed="' + (m === v) + '">' + icon(ic) + label + '</button>';
+        return '<div class="card habit' + (m ? ' s-' + m : '') + '">' +
+          '<div class="habit-name">' + esc(h.name) + '</div>' +
+          (h.anchor ? '<div class="habit-anchor">' + esc(h.anchor) + '</div>' : '') +
+          '<div class="habit-versions"><span><b>רגיל:</b> ' + esc(h.full || '—') + '</span><span><b>מינימום:</b> ' + esc(h.min) + '</span></div>' +
+          '<div class="tri">' + btn('full', 'רגיל', 'check') + btn('min', 'מינימום', 'half') + btn('miss', 'לא', 'x') + '</div>' +
+          '</div>';
+      }).join('');
+    }
+
+    const closed = S.days[date] && S.days[date].closed;
+    html += '<button class="btn ' + (closed ? 'btn-ghost' : 'btn-primary') + '" data-act="close-day">' + icon('moon') + (closed ? ' היום נסגר — לפתוח שוב' : ' סגירת יום') + '</button>';
+
+    if(date === t) html += envCard();
+    return html;
+  }
+
+  function envCard(){
+    const env = S.setup.env || [];
+    const open = env.filter(e => !e.done);
+    if(open.length === 0) return '';
+    return '<div class="card" style="margin-top:16px"><h2>הכנת הסביבה</h2>' +
+      '<p class="small muted" style="margin:0 0 4px">כל אחד מאלה מוריד חיכוך. לסמן כשסידרת.</p>' +
+      env.map(e => '<label class="check-row' + (e.done ? ' done' : '') + '"><input type="checkbox" data-act="env-done" data-id="' + e.id + '"' + (e.done ? ' checked' : '') + '><span>' + esc(e.text) + '</span></label>').join('') +
+      '</div>';
+  }
+
+  function finishedCard(){
+    const ks = keptStats();
+    return '<div class="card" style="border-color:var(--green)"><h2>90 הימים הושלמו</h2>' +
+      '<p style="margin:0 0 8px">עמדת ב-<b>' + ks.kept + '</b> ימים מתוך ' + ks.passed + ', ואספת <b>' + S.receipts.length + '</b> קבלות.</p>' +
+      '<p class="small muted" style="margin:0">תסתכל על המשפט הישן שהיית אומר על עצמך. הוא עדיין מחזיק מול שלושה חודשים של ראיות?</p>' +
+      '<button class="btn btn-ghost" data-go="board">לראות את הלוח</button></div>';
+  }
+
+  function setMark(date, hid, v){
+    if(!S.days[date]) S.days[date] = { h:{}, closed:false, prep:'' };
+    const d = S.days[date];
+    if(d.h[hid] === v) delete d.h[hid]; else d.h[hid] = v;
+    save();
+    tick(v === 'full' ? 20 : 12);
+  }
+
+  /* ---------- סגירת יום ---------- */
+
+  function openCloseDay(date){
+    const d = S.days[date] || { h:{}, closed:false, prep:'' };
+    const hs = habitsOn(date);
+    const unmarked = hs.filter(h => !d.h[h.id]);
+    const todays = S.receipts.filter(r => r.date === date);
+    openSheet(
+      '<h2>סגירת יום</h2>' +
+      '<p class="small muted" style="margin:0 0 16px">' + fmtLong(date) + '. עובדות, לא הרגשות. "היה יום עמוס" יכול להיות נכון — וההתחייבות עדיין פוספסה.</p>' +
+      (unmarked.length
+        ? '<p class="label">עוד לא סומנו</p>' + unmarked.map(h =>
+            '<div class="card habit" style="padding:12px"><div class="habit-name" style="font-size:1rem;margin-bottom:8px">' + esc(h.name) + '</div><div class="tri">' +
+            ['full:רגיל:check','min:מינימום:half','miss:לא:x'].map(x => { const [v,l,ic] = x.split(':'); return '<button data-act="mark-sheet" data-date="' + date + '" data-h="' + h.id + '" data-v="' + v + '" aria-pressed="false">' + icon(ic) + l + '</button>'; }).join('') +
+            '</div></div>').join('')
+        : (hs.length ? '<div class="notice" style="background:rgba(16,185,129,0.12);border-color:rgba(16,185,129,0.4)">כל ההרגלים של היום סומנו.</div>' : '')) +
+      '<div class="field"><label for="c-receipt">קבלה</label><div class="hint">משהו שעשית היום שסותר את הגרסה הישנה שלך. "התאמנתי למרות שלא רציתי".</div><textarea id="c-receipt" placeholder="אפשר להשאיר ריק"></textarea></div>' +
+      (todays.length ? '<p class="small muted">כבר נרשמו היום: ' + todays.map(r => esc(r.text)).join(' · ') + '</p>' : '') +
+      '<div class="field"><label for="c-prep">מה תכין עכשיו כדי שמחר יהיה קל יותר?</label><input type="text" id="c-prep" value="' + esc(d.prep || '') + '" placeholder="בגדי אימון ליד המיטה"></div>' +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="close-save" data-date="' + date + '">' + icon('moon') + ' לסגור את היום</button></div>'
+    );
+  }
+
+  function saveCloseDay(date){
+    if(!S.days[date]) S.days[date] = { h:{}, closed:false, prep:'' };
+    const d = S.days[date];
+    const r = val('c-receipt');
+    if(r) S.receipts.push({ id:uid(), date, text:r });
+    d.prep = val('c-prep');
+    d.closed = true;
+    save();
+    closeSheet();
+    tick(30);
+    toast('היום נסגר. מחר כבר יש תוכנית.');
+    render();
+  }
+
+  /* =========================================================
+     התקדמות — לוח 90 יום + מדדים
+     ========================================================= */
+
+  function renderBoard(){
+    const t = today();
+    let cells = '';
+    for(let i = 0; i < TOTAL; i++){
+      if(i % 7 === 0) cells += '<div class="wk">שבוע ' + (i/7 + 1) + '</div>';
+      const date = addDays(S.setup.startDate, i);
+      let cls;
+      if(date > t) cls = 'future';
+      else{
+        const st = dayStatus(date);
+        cls = st;
+        if(st === 'open' && date < t) cls = 'open';
+      }
+      if(date === t) cls += ' today';
+      cells += '<button class="cell ' + cls + '" data-act="board-day" data-date="' + date + '" aria-label="' + fmtLong(date) + '">' + (i + 1) + '</button>';
+    }
+
+    const ks = keptStats();
+    const perHabit = activeHabits().map(h => {
+      let f = 0, mn = 0, ms = 0;
+      for(let i = 0; i < TOTAL; i++){
+        const date = addDays(S.setup.startDate, i);
+        if(date > t) break;
+        if(!scheduled(h, date)) continue;
+        const m = mark(date, h.id);
+        if(m === 'full') f++; else if(m === 'min') mn++; else if(m === 'miss') ms++;
+      }
+      return '<div class="list-item"><div><b>' + esc(h.name) + '</b><div class="small muted">' + esc(habitFreqText(h)) + '</div></div>' +
+        '<div class="li-meta num">' + f + ' רגיל · ' + mn + ' מינ׳ · ' + ms + ' לא</div></div>';
+    }).join('');
+
+    return '<h1 style="font-size:1.6rem;margin-bottom:12px">התקדמות</h1>' +
+      '<div class="stat-grid" style="margin-bottom:12px">' +
+      '<div class="stat"><b class="num">' + ks.kept + '/' + ks.passed + '</b><span>ימים שעמדת בהם</span></div>' +
+      '<div class="stat"><b class="num">' + S.receipts.length + '</b><span>קבלות</span></div></div>' +
+      '<div class="card"><div class="board">' + cells + '</div>' +
+      '<div class="legend">' +
+        '<span><i style="background:var(--green)"></i>הכול רגיל</span>' +
+        '<span><i style="background:var(--amber)"></i>עמדת (עם מינימום)</span>' +
+        '<span><i style="background:repeating-linear-gradient(-45deg,#3A4452 0 3px,var(--surface-2) 3px 6px)"></i>פוספס</span>' +
+        '<span><i style="border:1px solid var(--muted)"></i>לא סומן</span>' +
+        '<span><i style="border:1px solid var(--line)"></i>מנוחה</span>' +
+      '</div></div>' +
+      (perHabit ? '<div class="card"><h2>לפי הרגל</h2>' + perHabit + '</div>' : '') +
+      renderMeasures();
+  }
+
+  function renderMeasures(){
+    const ms = S.setup.measures || [];
+    if(ms.length === 0) return '<div class="card"><h2>מדדים</h2><p class="small muted" style="margin:0">אין מדדים. אפשר להוסיף בהגדרות.</p></div>';
+    return ms.map(m => {
+      const log = S.measureLog.filter(x => x.measureId === m.id).sort((a,b) => a.date.localeCompare(b.date));
+      const first = log[0], last = log[log.length - 1];
+      let summary = '<p class="small muted" style="margin:0">עוד אין ערכים.</p>';
+      if(first){
+        const delta = last.value - first.value;
+        summary = '<p style="margin:0">התחלה: <b class="num">' + first.value + '</b> ' + esc(m.unit) + ' (' + fmt(first.date) + ') · עכשיו: <b class="num">' + last.value + '</b>' +
+          (log.length > 1 ? ' <span class="muted num">(' + (delta > 0 ? '+' : '') + Math.round(delta * 100) / 100 + ')</span>' : '') + '</p>';
+      }
+      return '<div class="card"><h2>' + esc(m.name) + '</h2>' + summary + sparkline(log) +
+        '<div class="row" style="align-items:flex-end"><div class="field" style="flex:2;margin:0"><label for="mv-' + m.id + '">ערך חדש (' + esc(m.unit) + ')</label><input type="number" step="any" inputmode="decimal" id="mv-' + m.id + '"></div>' +
+        '<button class="btn btn-primary" style="flex:1;width:auto;margin:0" data-act="measure-add" data-id="' + m.id + '">' + icon('plus') + ' רישום</button></div>' +
+        (log.length ? '<details style="margin-top:12px"><summary class="small muted" style="cursor:pointer;min-height:32px">כל הערכים (' + log.length + ')</summary>' +
+          log.slice().reverse().map(x => '<div class="list-item"><span class="num">' + x.value + ' ' + esc(m.unit) + '</span><span class="li-meta">' + fmt(x.date) +
+          ' <button class="icon-btn" style="width:40px;height:40px;margin-right:8px" data-act="measure-del" data-id="' + x.id + '" aria-label="מחיקה">' + icon('trash') + '</button></span></div>').join('') +
+          '</details>' : '') +
+        '</div>';
+    }).join('');
+  }
+
+  function sparkline(log){
+    if(log.length < 2) return '';
+    const vals = log.map(x => x.value);
+    const min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+    const span = max - min || 1;
+    const W = 300, H = 64, P = 6;
+    const pts = log.map((x, i) => {
+      const px = P + (i / (log.length - 1)) * (W - 2*P);
+      const py = H - P - ((x.value - min) / span) * (H - 2*P);
+      return [Math.round(px*10)/10, Math.round(py*10)/10];
+    });
+    const lastPt = pts[pts.length - 1];
+    /* מצויר משמאל לימין (זמן), גם בממשק RTL — כמו כל גרף. */
+    return '<svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true" style="direction:ltr"><polyline points="' + pts.map(p => p.join(',')).join(' ') + '"/><circle cx="' + lastPt[0] + '" cy="' + lastPt[1] + '" r="4"/></svg>';
+  }
+
+  /* =========================================================
+     קבלות
+     ========================================================= */
+
+  function renderReceipts(){
+    const list = S.receipts.slice().sort((a,b) => b.date.localeCompare(a.date) || 0);
+    return '<h1 style="font-size:1.6rem;margin-bottom:8px">קבלות</h1>' +
+      '<p class="muted" style="margin:0 0 16px">קבלה אחת לא משנה זהות. חמישים מתחילות לטעון טענה. תקרא את זה ביום שהמוח אומר "לא התקדמתי כלום".</p>' +
+      '<div class="card"><div class="field" style="margin-bottom:0"><label for="r-new">קבלה חדשה</label>' +
+      '<textarea id="r-new" placeholder="סיימתי את הפרק במקום לנטוש באמצע"></textarea></div>' +
+      '<button class="btn btn-primary" data-act="receipt-add">' + icon('plus') + ' הוספה</button></div>' +
+      (list.length
+        ? '<div class="card">' + list.map(r =>
+            '<div class="list-item"><div>' + esc(r.text) + '</div><div class="li-meta">' +
+            (inRange(r.date) ? 'יום ' + dayIndex(r.date) + ' · ' : '') + fmt(r.date) +
+            ' <button class="icon-btn" style="width:40px;height:40px;margin-right:8px" data-act="receipt-del" data-id="' + r.id + '" aria-label="מחיקה">' + icon('trash') + '</button></div></div>'
+          ).join('') + '</div>'
+        : '<p class="muted small">עוד אין קבלות. תתחיל מהראשונה.</p>');
+  }
+
+  /* =========================================================
+     סקירה שבועית
+     ========================================================= */
+
+  function currentWeek(){
+    const t = today();
+    if(t < S.setup.startDate) return 1;
+    if(t > endDate()) return weekOf(endDate());
+    return weekOf(t);
+  }
+
+  function weekStats(w){
+    const [a, b] = weekRange(w);
+    const t = today();
+    const rows = habits().filter(h => {
+      for(let d = a; d <= b; d = addDays(d, 1)) if(scheduled(h, d)) return true;
+      return false;
+    }).map(h => {
+      let planned = 0, f = 0, mn = 0, ms = 0, missDays = [];
+      const cells = [];
+      for(let d = a; d <= b; d = addDays(d, 1)){
+        if(!scheduled(h, d)){ cells.push('rest'); continue; }
+        if(d > t){ cells.push('future'); planned++; continue; }
+        planned++;
+        const m = mark(d, h.id);
+        if(m === 'full'){ f++; cells.push('full'); }
+        else if(m === 'min'){ mn++; cells.push('min'); }
+        else if(m === 'miss'){ ms++; missDays.push(d); cells.push('miss'); }
+        else { missDays.push(d); cells.push('none'); }
+      }
+      return { h, planned, f, mn, ms, missDays, cells };
+    });
+    return { a, b, rows };
+  }
+
+  function renderReview(){
+    if(reviewWeek === null) reviewWeek = currentWeek();
+    const w = reviewWeek;
+    const maxW = Math.ceil(TOTAL / 7);
+    const st = weekStats(w);
+    const dates = [];
+    for(let d = st.a; d <= st.b; d = addDays(d, 1)) dates.push(d);
+
+    const table = '<table class="wtable"><thead><tr><th></th>' + dates.map(d => '<th>' + DAY_SHORT[weekday(d)] + '<br><span class="num">' + fmt(d) + '</span></th>').join('') + '</tr></thead><tbody>' +
+      st.rows.map(r => '<tr><td class="hn">' + esc(r.h.name) + '</td>' + r.cells.map(c => '<td><span class="dot ' + (c === 'future' ? 'rest' : c) + '"></span></td>').join('') + '</tr>').join('') +
+      '</tbody></table>';
+
+    const saved = S.weekly.find(x => x.week === w) || { well:'', broke:'', cause:'', reasons:[], fix:'' };
+    const REASONS = ['שעה לא נכונה','המינימום גדול מדי','הסביבה מקלה על האופציה הרעה','ההרגל לא באמת חשוב לי','משהו אחר'];
+
+    return '<h1 style="font-size:1.6rem;margin-bottom:12px">סקירה שבועית</h1>' +
+      '<div class="date-nav">' +
+      '<button class="icon-btn" data-act="week-prev" aria-label="שבוע קודם"' + (w <= 1 ? ' disabled' : '') + '>' + icon('right') + '</button>' +
+      '<div class="dn-label">שבוע ' + w + ' <span class="muted small">(' + fmt(st.a) + '–' + fmt(st.b) + ')</span></div>' +
+      '<button class="icon-btn" data-act="week-next" aria-label="שבוע הבא"' + (w >= Math.min(maxW, currentWeek()) ? ' disabled' : '') + '>' + icon('left') + '</button>' +
+      '</div>' +
+      '<div class="card">' + table +
+      '<div class="legend"><span><i style="background:var(--green)"></i>רגיל</span><span><i style="background:var(--amber)"></i>מינימום</span><span><i style="background:repeating-linear-gradient(-45deg,#3A4452 0 3px,var(--surface-2) 3px 6px)"></i>לא</span><span><i style="border:1px dashed var(--muted)"></i>לא סומן</span></div></div>' +
+      patternCard() +
+      '<div class="card"><h2>אבחון</h2>' +
+      '<p class="small muted" style="margin:0 0 12px">תסתכל על השבוע כולו, לא על כל יום בנפרד. פספסת אימון אחד אקראי — או כל אימון אחרי 18:00?</p>' +
+      '<div class="field"><label for="rv-well">איפה זה עבד?</label><textarea id="rv-well">' + esc(saved.well) + '</textarea></div>' +
+      '<div class="field"><label for="rv-broke">איפה המערכת נשברה?</label><textarea id="rv-broke">' + esc(saved.broke) + '</textarea></div>' +
+      '<div class="field"><label>מה הסיבה האמיתית?</label><div class="chips" id="rv-cause">' +
+        '<button type="button" class="chip" data-cause="effort" aria-pressed="' + (saved.cause === 'effort') + '">מאמץ — ידעתי ולא עשיתי</button>' +
+        '<button type="button" class="chip" data-cause="system" aria-pressed="' + (saved.cause === 'system') + '">המערכת בנויה לא נכון</button>' +
+      '</div></div>' +
+      '<div class="field" id="rv-reasons-wrap"' + (saved.cause === 'system' ? '' : ' hidden') + '><label>מה בדיוק?</label><div class="chips" id="rv-reasons">' +
+        REASONS.map(r => '<button type="button" class="chip" data-reason="' + esc(r) + '" aria-pressed="' + saved.reasons.includes(r) + '">' + esc(r) + '</button>').join('') +
+      '</div></div>' +
+      '<div class="field"><label for="rv-fix">מה משנים לשבוע הבא?</label><div class="hint">אם זה מאמץ — פשוט לקחת אחריות. אם זו המערכת — לתקן את הבעיה האמיתית. אפשר לערוך הרגלים בהגדרות.</div><input type="text" id="rv-fix" value="' + esc(saved.fix) + '"></div>' +
+      '<button class="btn btn-primary" data-act="review-save">שמירת הסקירה</button></div>' +
+      updateCard(w, st, saved);
+  }
+
+  /* דפוסים לפי יום בשבוע לאורך כל התקופה — מופיע אחרי שבועיים. */
+  function patternCard(){
+    const t = today();
+    if(dayIndex(t) < 14) return '';
+    const planned = [0,0,0,0,0,0,0], missed = [0,0,0,0,0,0,0];
+    for(let i = 0; i < TOTAL; i++){
+      const date = addDays(S.setup.startDate, i);
+      if(date >= t) break;
+      habitsOn(date).forEach(h => {
+        const wd = weekday(date);
+        planned[wd]++;
+        const m = mark(date, h.id);
+        if(m !== 'full' && m !== 'min') missed[wd]++;
+      });
+    }
+    const rows = DAY_LONG.map((name, i) => {
+      if(!planned[i]) return '';
+      const p = Math.round(missed[i] / planned[i] * 100);
+      return '<div class="pattern-row"><span class="pd">' + name + '</span><span class="pb"><i style="width:' + p + '%"></i></span><span class="pv num">' + p + '%</span></div>';
+    }).join('');
+    return '<div class="card"><h2>איפה זה נופל</h2><p class="small muted" style="margin:0 0 8px">אחוז ההרגלים שלא בוצעו, לפי יום בשבוע, מתחילת הדרך.</p>' + rows + '</div>';
+  }
+
+  function updateText(w, st, saved){
+    const name = S.setup.partner && S.setup.partner.name;
+    const lines = [];
+    lines.push('עדכון 90 יום — שבוע ' + w + ' (' + fmt(st.a) + '–' + fmt(st.b) + ')');
+    lines.push('');
+    lines.push('אמרתי:');
+    st.rows.forEach(r => lines.push('• ' + r.h.name + ' — ' + habitFreqText(r.h) + (r.h.full ? ' (' + r.h.full + ')' : '')));
+    lines.push('');
+    lines.push('עשיתי:');
+    st.rows.forEach(r => {
+      const doneN = r.f + r.mn;
+      lines.push('• ' + r.h.name + ': ' + doneN + ' מתוך ' + r.planned + (r.mn ? ' (' + r.mn + ' במינימום)' : ''));
+    });
+    const misses = [];
+    st.rows.forEach(r => r.missDays.forEach(d => misses.push(r.h.name + ' ביום ' + DAY_LONG[weekday(d)])));
+    lines.push('');
+    lines.push('פספסתי: ' + (misses.length ? misses.join(', ') : 'כלום'));
+    if(saved.fix){ lines.push(''); lines.push('משנה לשבוע הבא: ' + saved.fix); }
+    return { text: lines.join('\n'), name };
+  }
+
+  function updateCard(w, st, saved){
+    const u = updateText(w, st, saved);
+    return '<div class="card"><h2>עדכון ל' + (u.name ? esc(u.name) : 'אדם אחד') + '</h2>' +
+      '<p class="small muted" style="margin:0 0 8px">שתי דקות. הנקודה היא שיהיה קשה יותר לשנות את הכללים בשקט באמצע.</p>' +
+      '<div class="update-box" id="update-text">' + esc(u.text) + '</div>' +
+      '<div class="row"><button class="btn" data-act="update-copy">' + icon('copy') + ' העתקה</button>' +
+      (navigator.share ? '<button class="btn" data-act="update-share">' + icon('share') + ' שליחה</button>' : '') + '</div></div>';
+  }
+
+  function saveReview(){
+    const w = reviewWeek;
+    const cause = (document.querySelector('#rv-cause [aria-pressed="true"]') || {}).dataset;
+    const reasons = Array.from(document.querySelectorAll('#rv-reasons [aria-pressed="true"]')).map(b => b.dataset.reason);
+    const rec = {
+      id: uid(), week:w,
+      well: val('rv-well'), broke: val('rv-broke'),
+      cause: cause ? cause.cause : '',
+      reasons: cause && cause.cause === 'system' ? reasons : [],
+      fix: val('rv-fix'),
+      ts: new Date().toISOString()
+    };
+    const i = S.weekly.findIndex(x => x.week === w);
+    if(i >= 0){ rec.id = S.weekly[i].id; S.weekly[i] = rec; } else S.weekly.push(rec);
+    save();
+    tick(20);
+    toast('הסקירה נשמרה');
+    render();
+  }
+
+  /* =========================================================
+     הגדרות
+     ========================================================= */
+
+  function renderSettings(){
+    const s = S.setup;
+    const n = s.notify;
+    return '<h1 style="font-size:1.6rem;margin-bottom:12px">הגדרות</h1>' +
+
+      '<div class="card"><h2>מי אתה הופך להיות</h2>' +
+      field('s-who', 'במשפט אחד', '', s.identity.who, true) +
+      field('s-day', 'מה הוא עושה ביום רגיל?', '', s.identity.day, true) +
+      field('s-stop', 'ממה הוא הפסיק?', '', s.identity.stop, true) +
+      field('s-seen', 'מה מישהו היה רואה?', '', s.identity.seen, true) +
+      '<button class="btn btn-primary" data-act="identity-save">שמירה</button></div>' +
+
+      '<div class="card"><h2>הרגלים</h2>' +
+      activeHabits().map(h =>
+        '<div class="list-item"><div><b>' + esc(h.name) + '</b><div class="small muted">' + esc(habitFreqText(h)) + '</div><div class="small">רגיל: ' + esc(h.full) + ' · מינימום: ' + esc(h.min) + '</div></div>' +
+        '<div class="row" style="flex:0 0 auto"><button class="icon-btn" data-act="habit-edit" data-id="' + h.id + '" aria-label="עריכה">' + icon('settings') + '</button>' +
+        '<button class="icon-btn" data-act="habit-archive" data-id="' + h.id + '" aria-label="הסרה">' + icon('trash') + '</button></div></div>'
+      ).join('') +
+      (activeHabits().length < 4 ? '<button class="btn btn-ghost" data-act="habit-new">' + icon('plus') + ' הוספת הרגל</button>' : '') +
+      '<p class="small muted">הסרת הרגל לא מוחקת את ההיסטוריה שלו — הוא פשוט מפסיק להופיע מהיום.</p></div>' +
+
+      '<div class="card"><h2>הכנת הסביבה</h2>' +
+      (s.env || []).map(e => '<div class="list-item"><span' + (e.done ? ' class="muted"' : '') + '>' + esc(e.text) + (e.done ? ' ✓' : '') + '</span>' +
+        '<button class="icon-btn" style="flex:0 0 40px;width:40px;height:40px" data-act="env-del" data-id="' + e.id + '" aria-label="מחיקה">' + icon('trash') + '</button></div>').join('') +
+      '<div class="row" style="margin-top:8px"><input type="text" id="s-env-new" placeholder="עוד משהו להכין"><button class="icon-btn" style="flex:0 0 52px;height:52px" data-act="env-add" aria-label="הוספה">' + icon('plus') + '</button></div></div>' +
+
+      '<div class="card"><h2>מדדים</h2>' +
+      (s.measures || []).map(m => '<div class="list-item"><span>' + esc(m.name) + ' (' + esc(m.unit) + ')</span><button class="icon-btn" style="flex:0 0 40px;width:40px;height:40px" data-act="measure-remove" data-id="' + m.id + '" aria-label="מחיקה">' + icon('trash') + '</button></div>').join('') +
+      ((s.measures || []).length < 2 ? '<div class="row" style="margin-top:8px"><input type="text" id="s-m-name" placeholder="שם המדד" style="flex:2"><input type="text" id="s-m-unit" placeholder="יחידה"><button class="icon-btn" style="flex:0 0 52px;height:52px" data-act="measure-new" aria-label="הוספה">' + icon('plus') + '</button></div>' : '') +
+      '</div>' +
+
+      '<div class="card"><h2>אדם אחד</h2>' +
+      '<div class="row"><input type="text" id="s-partner" value="' + esc(s.partner.name || '') + '" placeholder="שם"><button class="btn btn-primary" style="flex:0 0 auto;width:auto;margin:0;min-height:52px" data-act="partner-save">שמירה</button></div></div>' +
+
+      '<div class="card"><h2>התראות</h2>' +
+      '<div class="row"><div class="field"><label for="s-nm">בוקר</label><input type="time" id="s-nm" value="' + n.morning + '"></div>' +
+      '<div class="field"><label for="s-ne">ערב</label><input type="time" id="s-ne" value="' + n.evening + '"></div></div>' +
+      '<div class="row"><div class="field"><label for="s-nwd">סקירה — יום</label><select id="s-nwd">' + DAY_LONG.map((x, i) => '<option value="' + i + '"' + (i === Number(n.weeklyDay) ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+      '<div class="field"><label for="s-nwt">שעה</label><input type="time" id="s-nwt" value="' + n.weeklyTime + '"></div></div>' +
+      '<p class="small muted" id="push-status">' + pushStatusText() + '</p>' +
+      (n.on
+        ? '<button class="btn btn-primary" data-act="push-on">' + icon('bell') + ' שמירת שעות</button><div class="row"><button class="btn" data-act="push-test">בדיקה</button><button class="btn btn-ghost" data-act="push-off">כיבוי</button></div>'
+        : '<button class="btn btn-primary" data-act="push-on">' + icon('bell') + ' הפעלת התראות</button>') +
+      '</div>' +
+
+      '<div class="card"><h2>גיבוי</h2>' +
+      '<p class="small muted" style="margin:0 0 8px">הנתונים נשמרים רק בטלפון הזה. באייפון, אפליקציה במסך הבית ו-Safari הם שני אחסונים נפרדים — ומחיקת האייקון מוחקת הכול. לפני שמוחקים: גיבוי.</p>' +
+      '<button class="btn" data-act="backup">' + icon('share') + ' גיבוי להעברה למכשיר אחר</button>' +
+      '<button class="btn btn-ghost" data-act="open-import">ייבוא גיבוי</button></div>' +
+
+      '<div class="card"><h2>התחלה מחדש</h2>' +
+      '<p class="small muted" style="margin:0 0 8px">מוחק את כל הנתונים במכשיר הזה. כדאי לגבות קודם.</p>' +
+      '<button class="btn btn-danger" data-act="reset">איפוס</button></div>';
+  }
+
+  /* =========================================================
+     התראות (Web Push)
+     ========================================================= */
+
+  function isIOS(){ return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+  function isStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }
+  function pushSupported(){ return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+
+  function pushStatusText(){
+    const n = S.setup.notify;
+    if(!pushSupported()){
+      return isIOS() && !isStandalone()
+        ? 'באייפון: קודם להוסיף למסך הבית (שיתוף ← הוספה למסך הבית), ואז לפתוח מהאייקון ולהפעיל מכאן.'
+        : 'הדפדפן הזה לא תומך בהתראות.';
+    }
+    if(Notification.permission === 'denied') return 'ההתראות חסומות בהגדרות הטלפון. צריך לאפשר אותן שם.';
+    return n.on ? 'פעיל. אחרי שינוי שעות — "שמירת שעות".' : 'כבוי.';
+  }
+
+  function b64ToBytes(b64){
+    const s = (b64 + '='.repeat((4 - b64.length % 4) % 4)).replace(/-/g,'+').replace(/_/g,'/');
+    return Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  }
+
+  function readNotifyInputs(){
+    const n = S.setup.notify;
+    n.morning = val('s-nm') || n.morning;
+    n.evening = val('s-ne') || n.evening;
+    n.weeklyDay = Number(val('s-nwd'));
+    n.weeklyTime = val('s-nwt') || n.weeklyTime;
+  }
+
+  async function pushOn(){
+    readNotifyInputs();
+    save();
+    if(!pushSupported()){ toast(pushStatusText()); return; }
+    try{
+      const perm = await Notification.requestPermission();
+      if(perm !== 'granted'){ toast('לא אושרו התראות'); render(); return; }
+      const reg = await navigator.serviceWorker.ready;
+      let sub = await reg.pushManager.getSubscription();
+      if(!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:b64ToBytes(VAPID_PUBLIC) });
+      const n = S.setup.notify;
+      const res = await fetch(PUSH_URL + '/subscribe', {
+        method:'POST', headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({
+          sub: sub.toJSON(),
+          sched:{ morning:n.morning, evening:n.evening, weeklyDay:n.weeklyDay, weeklyTime:n.weeklyTime },
+          tz: Intl.DateTimeFormat().resolvedOptions().timeZone
+        })
+      });
+      if(!res.ok) throw new Error('server ' + res.status);
+      n.on = true;
+      save();
+      tick(25);
+      toast('ההתראות פעילות');
+    }catch(e){
+      toast('ההפעלה נכשלה — נסה שוב');
+    }
+    render();
+  }
+
+  async function pushOff(){
+    try{
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.getSubscription();
+      if(sub){
+        await fetch(PUSH_URL + '/unsubscribe', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ endpoint: sub.endpoint }) }).catch(() => {});
+        await sub.unsubscribe();
+      }
+    }catch(e){}
+    S.setup.notify.on = false;
+    save();
+    toast('ההתראות כובו');
+    render();
+  }
+
+  async function pushTest(){
+    try{
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.getSubscription();
+      if(!sub){ toast('אין מנוי — להפעיל מחדש'); return; }
+      const res = await fetch(PUSH_URL + '/test', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ endpoint: sub.endpoint }) });
+      const j = await res.json();
+      toast(j.ok ? 'נשלחה התראת בדיקה' : 'הבדיקה נכשלה (' + (j.status || j.error) + ')');
+    }catch(e){ toast('הבדיקה נכשלה'); }
+  }
+
+  /* ה-service worker לא רואה localStorage — הוא מקבל את השעות והטקסטים דרך Cache. */
+  function writeSwConfig(){
+    if(!S.setup || !('caches' in window)) return;
+    const first = activeHabits()[0];
+    const cfg = {
+      sched: S.setup.notify,
+      morning: first ? (first.name + (first.full ? ' — ' + first.full : '') + '. מינימום: ' + first.min) : '',
+      partner: S.setup.partner && S.setup.partner.name || ''
+    };
+    caches.open('ninety-cfg').then(c => c.put('cfg', new Response(JSON.stringify(cfg), { headers:{ 'Content-Type':'application/json' } }))).catch(() => {});
+  }
+
+  /* =========================================================
+     גיבוי / שחזור
+     ========================================================= */
+
+  function b64EncodeUnicode(str){
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    for(let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+  function b64DecodeUnicode(b64){
+    let s = b64.replace(/-/g,'+').replace(/_/g,'/');
+    while(s.length % 4) s += '=';
+    return new TextDecoder().decode(Uint8Array.from(atob(s), c => c.charCodeAt(0)));
+  }
+
+  async function copy(text){
+    try{ await navigator.clipboard.writeText(text); return true; }
+    catch(e){
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try{ ok = document.execCommand('copy'); }catch(err){}
+      document.body.removeChild(ta);
+      return ok;
+    }
+  }
+
+  async function backup(){
+    const link = location.origin + location.pathname + '#restore=' + b64EncodeUnicode(JSON.stringify(S));
+    if(navigator.share){
+      try{ await navigator.share({ title:'גיבוי 90 יום', url:link }); toast('הגיבוי נשלח'); return; }catch(e){}
+    }
+    toast((await copy(link)) ? 'קישור הגיבוי הועתק' : 'ההעתקה נכשלה');
+  }
+
+  /* אם אין כאן נתונים — לוקחים את הגיבוי כמו שהוא. אם יש — מוסיפים מה שחסר
+     (ימים, קבלות, מדידות, סקירות) ולא נוגעים בהגדרות הקיימות. */
+  function importData(data){
+    if(!data || typeof data !== 'object' || !('days' in data)) return 'invalid';
+    if(!S.setup){
+      if(!confirm('לייבא את הגיבוי?')) return 'cancelled';
+      S = Object.assign(emptyState(), data);
+    }else{
+      const newDays = Object.keys(data.days || {}).filter(k => !S.days[k]);
+      const ids = arr => new Set(arr.map(x => x.id));
+      const rIds = ids(S.receipts), mIds = ids(S.measureLog), wIds = ids(S.weekly);
+      const nr = (data.receipts || []).filter(x => !rIds.has(x.id));
+      const nm = (data.measureLog || []).filter(x => !mIds.has(x.id));
+      const nw = (data.weekly || []).filter(x => !wIds.has(x.id));
+      if(newDays.length + nr.length + nm.length + nw.length === 0) return 'empty';
+      if(!confirm('נמצאו ' + newDays.length + ' ימים, ' + nr.length + ' קבלות, ' + nm.length + ' מדידות חדשים. להוסיף?')) return 'cancelled';
+      newDays.forEach(k => { S.days[k] = data.days[k]; });
+      S.receipts = S.receipts.concat(nr);
+      S.measureLog = S.measureLog.concat(nm);
+      S.weekly = S.weekly.concat(nw);
+    }
+    save();
+    tick(25);
+    go('today');
+    return 'ok';
+  }
+
+  function openImport(){
+    openSheet(
+      '<h2>ייבוא גיבוי</h2>' +
+      '<p class="small muted" style="margin:0 0 12px">להדביק כאן את הקישור או הקוד. באייפון — לעשות את זה בתוך האפליקציה שנפתחה מהאייקון, לא ב-Safari.</p>' +
+      '<div class="field"><textarea id="imp" style="direction:ltr;text-align:left;font-size:0.8rem" placeholder="https://...#restore=..."></textarea></div>' +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="import-go">ייבוא</button></div>'
+    );
+  }
+
+  function doImport(){
+    const text = val('imp');
+    const m = text.match(/restore=([^\s&]+)/);
+    const payload = m ? m[1] : text;
+    if(!payload) return;
+    let data;
+    try{ data = JSON.parse(b64DecodeUnicode(payload)); }catch(e){ toast('לא הצלחתי לקרוא את הקוד'); return; }
+    const r = importData(data);
+    if(r === 'invalid') toast('הקוד לא תקין');
+    else if(r === 'empty'){ toast('אין שום דבר חדש בגיבוי'); closeSheet(); }
+    else if(r === 'ok') closeSheet();
+  }
+
+  function checkRestoreHash(){
+    const m = location.hash.match(/^#restore=(.+)$/);
+    if(!m) return;
+    history.replaceState(null, '', location.pathname + location.search);
+    try{ importData(JSON.parse(b64DecodeUnicode(m[1]))); }catch(e){}
+  }
+
+  /* =========================================================
+     sheet
+     ========================================================= */
+
+  function openSheet(html){
+    document.getElementById('sheetBody').innerHTML = html;
+    document.getElementById('sheet').hidden = false;
+  }
+  function closeSheet(){
+    document.getElementById('sheet').hidden = true;
+    document.getElementById('sheetBody').innerHTML = '';
+  }
+
+  /* =========================================================
+     אירועים
+     ========================================================= */
+
+  document.addEventListener('click', async (e) => {
+    const goBtn = e.target.closest('[data-go]');
+    if(goBtn){ closeSheet(); go(goBtn.dataset.go); return; }
+
+    if(e.target.id === 'sheet'){ closeSheet(); return; }
+
+    // בוררי ימים / צ'יפים בתוך טפסים
+    const dayBtn = e.target.closest('#h-days [data-day]');
+    if(dayBtn){
+      const d = Number(dayBtn.dataset.day);
+      const arr = habitEdit.h.days;
+      const i = arr.indexOf(d);
+      if(i >= 0) arr.splice(i, 1); else arr.push(d);
+      dayBtn.setAttribute('aria-pressed', String(i < 0));
+      tick(8);
+      return;
+    }
+    const causeBtn = e.target.closest('#rv-cause [data-cause]');
+    if(causeBtn){
+      document.querySelectorAll('#rv-cause .chip').forEach(c => c.setAttribute('aria-pressed', String(c === causeBtn)));
+      document.getElementById('rv-reasons-wrap').hidden = causeBtn.dataset.cause !== 'system';
+      tick(8);
+      return;
+    }
+    const reasonBtn = e.target.closest('#rv-reasons [data-reason]');
+    if(reasonBtn){
+      reasonBtn.setAttribute('aria-pressed', String(reasonBtn.getAttribute('aria-pressed') !== 'true'));
+      tick(8);
+      return;
+    }
+
+    const el = e.target.closest('[data-act]');
+    if(!el) return;
+    const act = el.dataset.act;
+
+    switch(act){
+      /* --- wizard --- */
+      case 'wiz-next': captureWizard(); if(wizStep === 2 && draft.habits.length === 0){ toast('צריך לפחות הרגל אחד'); return; } wizStep++; render(); window.scrollTo(0,0); break;
+      case 'wiz-back': captureWizard(); wizStep--; render(); window.scrollTo(0,0); break;
+      case 'wiz-finish': finishWizard(); break;
+      case 'add-habit': captureWizard(); openHabitEditor(null, h => { draft.habits.push(h); render(); }); break;
+      case 'wiz-edit-habit': { const i = Number(el.dataset.i); openHabitEditor(draft.habits[i], h => { draft.habits[i] = h; render(); }); break; }
+      case 'wiz-del-habit': draft.habits.splice(Number(el.dataset.i), 1); render(); break;
+      case 'wiz-env-add': { captureWizard(); const t = val('w-env-new'); if(t){ draft.env.push({ id:uid(), text:t, on:true, done:false }); render(); } break; }
+      case 'wiz-add-m': captureWizard(); draft.measures.push({ id:uid(), name:'', unit:'', first:'' }); render(); break;
+      case 'wiz-del-m': captureWizard(); draft.measures.splice(Number(el.dataset.i), 1); render(); break;
+
+      /* --- habit sheet --- */
+      case 'habit-save': saveHabitFromSheet(); break;
+      case 'sheet-close': closeSheet(); break;
+
+      /* --- today --- */
+      case 'mark': setMark(viewDate, el.dataset.h, el.dataset.v); render(); break;
+      case 'mark-sheet': {
+        setMark(el.dataset.date, el.dataset.h, el.dataset.v);
+        el.parentElement.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === el && mark(el.dataset.date, el.dataset.h) === el.dataset.v)));
+        break;
+      }
+      case 'day-prev': viewDate = clampDate(addDays(viewDate, -1)); render(); break;
+      case 'day-next': { const n = addDays(viewDate, 1); if(n <= today()) viewDate = clampDate(n); render(); break; }
+      case 'close-day': openCloseDay(viewDate); break;
+      case 'close-save': saveCloseDay(el.dataset.date); break;
+      case 'env-done': {
+        const env = S.setup.env.find(x => x.id === el.dataset.id);
+        if(env){ env.done = el.checked; save(); tick(15); setTimeout(render, 250); }
+        break;
+      }
+
+      /* --- board --- */
+      case 'board-day': { const d = el.dataset.date; if(d <= today()){ viewDate = d; view = 'today'; render(); window.scrollTo(0,0); } break; }
+      case 'measure-add': {
+        const inp = document.getElementById('mv-' + el.dataset.id);
+        const v = inp ? parseFloat(inp.value) : NaN;
+        if(isNaN(v)){ toast('צריך מספר'); return; }
+        S.measureLog.push({ id:uid(), date:today(), measureId:el.dataset.id, value:v });
+        save(); tick(20); render();
+        break;
+      }
+      case 'measure-del':
+        if(!confirm('למחוק את הערך?')) return;
+        S.measureLog = S.measureLog.filter(x => x.id !== el.dataset.id); save(); render();
+        break;
+
+      /* --- receipts --- */
+      case 'receipt-add': {
+        const t = val('r-new');
+        if(!t) return;
+        S.receipts.push({ id:uid(), date:today(), text:t });
+        save(); tick(25); toast('עוד קבלה על הלוח'); render();
+        break;
+      }
+      case 'receipt-del':
+        if(!confirm('למחוק את הקבלה?')) return;
+        S.receipts = S.receipts.filter(x => x.id !== el.dataset.id); save(); render();
+        break;
+
+      /* --- review --- */
+      case 'week-prev': reviewWeek = Math.max(1, reviewWeek - 1); render(); break;
+      case 'week-next': reviewWeek = Math.min(currentWeek(), reviewWeek + 1); render(); break;
+      case 'review-save': saveReview(); break;
+      case 'update-copy': { const ok = await copy(document.getElementById('update-text').textContent); toast(ok ? 'הועתק' : 'ההעתקה נכשלה'); break; }
+      case 'update-share': try{ await navigator.share({ text: document.getElementById('update-text').textContent }); }catch(err){} break;
+
+      /* --- settings --- */
+      case 'identity-save':
+        S.setup.identity = { who:val('s-who'), day:val('s-day'), stop:val('s-stop'), seen:val('s-seen') };
+        save(); toast('נשמר');
+        break;
+      case 'habit-new':
+        openHabitEditor(null, h => { h.from = today() < S.setup.startDate ? S.setup.startDate : today(); S.setup.habits.push(h); save(); render(); });
+        break;
+      case 'habit-edit': {
+        const h = S.setup.habits.find(x => x.id === el.dataset.id);
+        openHabitEditor(h, nh => { Object.assign(h, nh); save(); render(); });
+        break;
+      }
+      case 'habit-archive': {
+        const h = S.setup.habits.find(x => x.id === el.dataset.id);
+        if(!h || !confirm('להסיר את "' + h.name + '" מהיום והלאה? ההיסטוריה נשמרת.')) return;
+        if(today() <= (h.from || S.setup.startDate)) S.setup.habits = S.setup.habits.filter(x => x.id !== h.id);
+        else h.archivedOn = today();
+        save(); render();
+        break;
+      }
+      case 'env-add': { const t = val('s-env-new'); if(t){ S.setup.env.push({ id:uid(), text:t, done:false }); save(); render(); } break; }
+      case 'env-del': S.setup.env = S.setup.env.filter(x => x.id !== el.dataset.id); save(); render(); break;
+      case 'measure-new': {
+        const name = val('s-m-name');
+        if(!name) return;
+        S.setup.measures.push({ id:uid(), name, unit:val('s-m-unit') });
+        save(); render();
+        break;
+      }
+      case 'measure-remove':
+        if(!confirm('להסיר את המדד וכל הערכים שלו?')) return;
+        S.setup.measures = S.setup.measures.filter(x => x.id !== el.dataset.id);
+        S.measureLog = S.measureLog.filter(x => x.measureId !== el.dataset.id);
+        save(); render();
+        break;
+      case 'partner-save': S.setup.partner.name = val('s-partner'); save(); toast('נשמר'); break;
+      case 'push-on': pushOn(); break;
+      case 'push-off': pushOff(); break;
+      case 'push-test': pushTest(); break;
+      case 'backup': backup(); break;
+      case 'open-import': openImport(); break;
+      case 'import-go': doImport(); break;
+      case 'reset':
+        if(!confirm('למחוק את כל הנתונים במכשיר הזה?')) return;
+        if(!confirm('בטוח? אי אפשר לבטל.')) return;
+        if(S.setup && S.setup.notify.on) await pushOff();
+        S = emptyState(); draft = null; wizStep = 0;
+        save(); render();
+        break;
+    }
+  });
+
+  document.addEventListener('change', (e) => {
+    const cb = e.target.closest('[data-act="wiz-env"]');
+    if(cb){ draft.env[Number(cb.dataset.i)].on = cb.checked; }
+  });
+
+  /* =========================================================
+     הפעלה
+     ========================================================= */
+
+  // פתיחה מהתראה: ?v=close / ?v=review
+  const qv = new URLSearchParams(location.search).get('v');
+
+  checkRestoreHash();
+  if(S.setup) viewDate = clampDate(today());
+  render();
+  writeSwConfig();
+
+  if(S.setup && qv === 'review') go('review');
+  if(S.setup && qv === 'close' && inRange(today())) openCloseDay(today());
+  if(qv) history.replaceState(null, '', location.pathname);
+
+  // כשחוזרים לאפליקציה אחרי לילה — "היום" מתעדכן.
+  document.addEventListener('visibilitychange', () => {
+    if(document.visibilityState === 'visible' && S.setup && view === 'today' && document.getElementById('sheet').hidden){
+      viewDate = clampDate(today());
+      render();
+    }
+  });
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', () => {
+      /* להעלות יחד עם CACHE_NAME ב-sw.js בכל שינוי ב-index.html */
+      const SW_VERSION = '1';
+      navigator.serviceWorker.register('sw.js?v=' + SW_VERSION).catch(() => {});
+    });
+  }
+})();
+</script>
+</body>
+</html>
