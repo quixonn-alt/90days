@@ -23,10 +23,11 @@
     --line:#2D3642;
     --text:#E6EDF3;
     --muted:#9AA4B2;
-    --amber:#F59E0B;     /* רצף / מינימום / הדגשה */
+    --amber:#F59E0B;     /* מינימום / הדגשה */
     --green:#10B981;     /* בוצע במלואו */
     --on-color:#0E1116;  /* טקסט על ענבר/ירוק — תמיד כהה */
     --danger:#F87171;
+    --hatch:repeating-linear-gradient(-45deg, #3A4452 0 3px, var(--surface-2) 3px 6px);
     --r:14px;
     --r-sm:10px;
     --font-display:'Heebo', system-ui, sans-serif;
@@ -38,80 +39,58 @@
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   button{ touch-action:manipulation; font:inherit; color:inherit; }
   html,body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--font-body); }
-  body{
-    min-height:100vh;
-    padding-bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom, 0px));
-    line-height:1.5;
-  }
+  body{ min-height:100vh; padding-bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom, 0px)); line-height:1.5; }
   h1,h2,h3{ font-family:var(--font-display); margin:0; letter-spacing:-0.01em; }
+  h1.page{ font-size:1.6rem; margin-bottom:12px; }
   :focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
   [hidden]{ display:none !important; }
-
-  @media (prefers-reduced-motion:reduce){
-    *{ transition:none !important; animation:none !important; }
-  }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; animation:none !important; } }
 
   .ic{ width:1.25em; height:1.25em; fill:none; stroke:currentColor; stroke-width:2.25; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
   .num{ font-variant-numeric:tabular-nums; }
 
-  /* ---------- layout ---------- */
-
   .wrap{
-    padding:
-      calc(16px + env(safe-area-inset-top, 0px))
-      calc(16px + env(safe-area-inset-right, 0px))
-      16px
-      calc(16px + env(safe-area-inset-left, 0px));
-    max-width:640px;
-    margin:0 auto;
+    padding:calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px)) 16px calc(16px + env(safe-area-inset-left, 0px));
+    max-width:640px; margin:0 auto;
   }
 
-  .card{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:var(--r);
-    padding:16px;
-    margin-bottom:12px;
-  }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:16px; margin-bottom:12px; }
   .card h2{ font-size:1.15rem; margin-bottom:8px; }
   .card h3{ font-size:1rem; margin-bottom:4px; }
+  .card.accent{ border-color:rgba(245,158,11,0.55); }
   .muted{ color:var(--muted); }
   .small{ font-size:0.88rem; }
   .label{ font-family:var(--font-display); font-weight:700; font-size:0.9rem; color:var(--muted); margin:0 0 8px; }
+  .tag{ display:inline-block; font-size:0.75rem; font-weight:700; color:var(--muted); border:1px solid var(--line); border-radius:99px; padding:1px 8px; margin-inline-start:6px; vertical-align:middle; }
+  p.flush{ margin:0; }
 
   /* ---------- header ---------- */
-
   .day-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:12px; }
   .day-head h1{ font-size:2.2rem; font-weight:900; line-height:1.1; }
   .day-head h1 .of{ font-size:1.1rem; color:var(--muted); font-weight:700; }
   .kept{ font-size:0.95rem; color:var(--muted); text-align:left; }
   .kept b{ color:var(--amber); font-size:1.1rem; }
-
   .bar{ height:8px; background:var(--surface-2); border-radius:99px; overflow:hidden; margin-bottom:16px; }
   .bar > i{ display:block; height:100%; background:linear-gradient(90deg, var(--amber), var(--green)); border-radius:99px; }
-
   .identity{ font-size:0.95rem; color:var(--muted); border-right:3px solid var(--amber); padding-right:12px; margin:0 0 16px; }
 
   .date-nav{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px; }
   .date-nav .dn-label{ font-family:var(--font-display); font-weight:800; font-size:1.05rem; text-align:center; flex:1; }
   .icon-btn{
-    width:48px; height:48px; border-radius:var(--r-sm);
+    width:48px; height:48px; border-radius:var(--r-sm); flex:0 0 auto;
     background:var(--surface); border:1px solid var(--line);
     display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
   }
+  .icon-btn.sm{ width:40px; height:40px; }
   .icon-btn:disabled{ opacity:0.35; cursor:default; }
   .icon-btn:active:not(:disabled){ background:var(--surface-2); }
 
   /* ---------- habit card ---------- */
-
   .habit{ position:relative; overflow:hidden; }
-  .habit::before{
-    content:""; position:absolute; top:0; bottom:0; right:0; width:5px; background:var(--line);
-  }
+  .habit::before{ content:""; position:absolute; top:0; bottom:0; right:0; width:5px; background:var(--line); }
   .habit.s-full::before{ background:var(--green); }
   .habit.s-min::before{ background:var(--amber); }
   .habit.s-miss::before{ background:repeating-linear-gradient(-45deg, var(--muted) 0 3px, transparent 3px 6px); }
-
   .habit-name{ font-family:var(--font-display); font-weight:800; font-size:1.15rem; }
   .habit-anchor{ font-size:0.88rem; color:var(--muted); margin-top:2px; }
   .habit-versions{ display:flex; gap:16px; flex-wrap:wrap; font-size:0.9rem; margin:8px 0 12px; }
@@ -119,11 +98,10 @@
 
   .tri{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
   .tri button{
-    height:56px; border-radius:var(--r-sm);
-    background:var(--surface-2); border:2px solid var(--line);
+    height:56px; border-radius:var(--r-sm); background:var(--surface-2); border:2px solid var(--line);
     font-family:var(--font-display); font-weight:800; font-size:0.98rem;
-    display:flex; align-items:center; justify-content:center; gap:6px;
-    cursor:pointer; transition:background .12s, border-color .12s;
+    display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer;
+    transition:background .12s, border-color .12s;
   }
   .tri button:active{ transform:scale(0.98); }
   .tri button[aria-pressed="true"][data-v="full"]{ background:var(--green); border-color:var(--green); color:var(--on-color); }
@@ -131,99 +109,113 @@
   .tri button[aria-pressed="true"][data-v="miss"]{ background:var(--text); border-color:var(--text); color:var(--on-color); }
 
   /* ---------- buttons / forms ---------- */
-
   .btn{
-    width:100%; min-height:56px; border-radius:var(--r-sm);
-    border:2px solid var(--line); background:var(--surface-2);
+    width:100%; min-height:56px; border-radius:var(--r-sm); border:2px solid var(--line); background:var(--surface-2);
     font-family:var(--font-display); font-weight:800; font-size:1.05rem;
-    display:flex; align-items:center; justify-content:center; gap:8px;
-    cursor:pointer; padding:0 16px; margin-top:8px;
+    display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; padding:0 16px; margin-top:8px;
   }
   .btn:active{ transform:scale(0.99); }
   .btn-primary{ background:var(--amber); border-color:var(--amber); color:var(--on-color); }
   .btn-green{ background:var(--green); border-color:var(--green); color:var(--on-color); }
   .btn-ghost{ background:transparent; }
   .btn-danger{ background:transparent; border-color:var(--danger); color:var(--danger); }
+  .btn-sm{ min-height:44px; font-size:0.92rem; width:auto; padding:0 14px; }
   .btn:disabled{ opacity:0.45; cursor:default; transform:none; }
   .row{ display:flex; gap:8px; }
-  .row > *{ flex:1; }
+  .row > *{ flex:1; min-width:0; }
 
   .field{ margin-bottom:12px; }
   .field label{ display:block; font-family:var(--font-display); font-weight:700; font-size:0.92rem; margin-bottom:6px; }
   .field .hint{ font-size:0.84rem; color:var(--muted); margin:-2px 0 6px; }
   input[type=text], input[type=number], input[type=date], input[type=time], textarea, select{
-    width:100%; min-height:52px; padding:12px;
-    background:var(--bg); color:var(--text);
-    border:2px solid var(--line); border-radius:var(--r-sm);
-    font-family:var(--font-body); font-size:1rem;
-    outline:none;
+    width:100%; min-height:52px; padding:12px; background:var(--bg); color:var(--text);
+    border:2px solid var(--line); border-radius:var(--r-sm); font-family:var(--font-body); font-size:1rem; outline:none;
   }
   textarea{ min-height:84px; resize:vertical; line-height:1.5; }
   input:focus, textarea:focus, select:focus{ border-color:var(--amber); }
 
-  .days-pick{ display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; }
-  .days-pick button{
-    height:48px; border-radius:var(--r-sm); border:2px solid var(--line); background:var(--surface-2);
-    font-family:var(--font-display); font-weight:800; cursor:pointer;
+  .score{ display:grid; grid-template-columns:repeat(11, 1fr); gap:4px; }
+  .score button{
+    height:44px; border-radius:8px; border:2px solid var(--line); background:var(--surface-2);
+    font-family:var(--font-display); font-weight:800; font-size:0.9rem; cursor:pointer; padding:0;
   }
+  .score button[aria-pressed="true"]{ background:var(--amber); border-color:var(--amber); color:var(--on-color); }
+
+  .days-pick{ display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; }
+  .days-pick button{ height:48px; border-radius:var(--r-sm); border:2px solid var(--line); background:var(--surface-2); font-family:var(--font-display); font-weight:800; cursor:pointer; }
   .days-pick button[aria-pressed="true"]{ background:var(--amber); border-color:var(--amber); color:var(--on-color); }
 
   .chips{ display:flex; flex-wrap:wrap; gap:8px; }
-  .chip{
-    min-height:44px; padding:0 14px; border-radius:99px; border:2px solid var(--line); background:var(--surface-2);
-    font-family:var(--font-display); font-weight:700; font-size:0.92rem; cursor:pointer;
-  }
+  .chip{ min-height:44px; padding:0 14px; border-radius:99px; border:2px solid var(--line); background:var(--surface-2); font-family:var(--font-display); font-weight:700; font-size:0.92rem; cursor:pointer; }
   .chip[aria-pressed="true"]{ background:var(--amber); border-color:var(--amber); color:var(--on-color); }
 
-  .check-row{
-    display:flex; align-items:center; gap:12px; min-height:52px; padding:8px 0;
-    border-bottom:1px solid var(--line); cursor:pointer;
-  }
+  .check-row{ display:flex; align-items:flex-start; gap:12px; min-height:52px; padding:12px 0; border-bottom:1px solid var(--line); cursor:pointer; }
   .check-row:last-child{ border-bottom:none; }
   .check-row input{ width:26px; height:26px; accent-color:var(--green); flex-shrink:0; margin:0; }
-  .check-row.done span{ color:var(--muted); text-decoration:line-through; }
+  .check-row.done > span{ color:var(--muted); text-decoration:line-through; }
 
-  .list-item{
-    display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
-    padding:12px 0; border-bottom:1px solid var(--line);
-  }
+  .step{ padding:12px 0; border-bottom:1px solid var(--line); }
+  .step:last-child{ border-bottom:none; }
+  .step .check-row{ border-bottom:none; padding:0; min-height:0; }
+  .step-actions{ display:flex; gap:8px; flex-wrap:wrap; margin:8px 38px 0 0; }
+  .counter{ display:inline-flex; align-items:center; gap:8px; }
+  .counter b{ font-family:var(--font-display); font-size:1.3rem; min-width:36px; text-align:center; }
+
+  .list-item{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); }
   .list-item:last-child{ border-bottom:none; }
-  .list-item .li-meta{ font-size:0.82rem; color:var(--muted); white-space:nowrap; }
+  .list-item .li-meta{ font-size:0.82rem; color:var(--muted); white-space:nowrap; display:flex; align-items:center; gap:8px; }
+  .list-btn{ width:100%; background:none; border:none; border-bottom:1px solid var(--line); text-align:right; cursor:pointer; padding:12px 0; display:flex; align-items:center; gap:12px; }
+  .list-btn:last-child{ border-bottom:none; }
+  .list-btn .lb-main{ flex:1; min-width:0; }
+  .list-btn .lb-title{ font-family:var(--font-display); font-weight:800; font-size:1rem; }
+  .list-btn .lb-sub{ font-size:0.84rem; color:var(--muted); }
+  .pill{ font-size:0.78rem; font-weight:700; border-radius:99px; padding:2px 10px; background:var(--surface-2); color:var(--muted); white-space:nowrap; }
+  .pill.done{ background:var(--green); color:var(--on-color); }
+  .pill.now{ background:var(--amber); color:var(--on-color); }
 
-  .notice{
-    background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4);
-    border-radius:var(--r-sm); padding:12px; font-size:0.92rem; margin-bottom:12px;
-  }
+  .notice{ background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4); border-radius:var(--r-sm); padding:12px; font-size:0.92rem; margin-bottom:12px; }
+  .notice.good{ background:rgba(16,185,129,0.12); border-color:rgba(16,185,129,0.4); }
 
-  /* ---------- 90-day board ---------- */
+  .quote{ border-right:3px solid var(--line); padding-right:12px; margin:8px 0; white-space:pre-wrap; }
+  .quote.anti{ border-color:var(--danger); }
+  .quote.want{ border-color:var(--green); }
 
+  /* ---------- board ---------- */
   .board{ display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; }
   .board .wk{ grid-column:1 / -1; font-size:0.78rem; color:var(--muted); margin-top:4px; }
   .cell{
-    aspect-ratio:1; border-radius:6px; background:var(--surface-2);
-    display:flex; align-items:center; justify-content:center;
-    font-size:0.72rem; font-weight:600; color:var(--muted);
-    border:1px solid transparent;
+    aspect-ratio:1; border-radius:6px; background:var(--surface-2); display:flex; align-items:center; justify-content:center;
+    font-size:0.72rem; font-weight:600; color:var(--muted); border:1px solid transparent; padding:0; cursor:pointer;
   }
   .cell.full{ background:var(--green); color:var(--on-color); }
   .cell.min{ background:var(--amber); color:var(--on-color); }
-  .cell.miss{ background:repeating-linear-gradient(-45deg, #3A4452 0 3px, var(--surface-2) 3px 6px); color:var(--text); }
+  .cell.miss{ background:var(--hatch); color:var(--text); }
   .cell.open{ border-color:var(--muted); color:var(--text); }
   .cell.rest{ background:transparent; border-color:var(--line); }
-  .cell.future{ background:transparent; border:1px dashed var(--line); }
+  .cell.future{ background:transparent; border:1px dashed var(--line); cursor:default; }
   .cell.today{ outline:2px solid var(--text); outline-offset:1px; }
-
   .legend{ display:flex; flex-wrap:wrap; gap:12px; font-size:0.82rem; color:var(--muted); margin-top:12px; }
   .legend span{ display:inline-flex; align-items:center; gap:6px; }
   .legend i{ width:14px; height:14px; border-radius:4px; display:inline-block; }
 
-  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .stat{ background:var(--surface-2); border-radius:var(--r-sm); padding:12px; }
+  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+  .stat{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r-sm); padding:12px; }
   .stat b{ display:block; font-family:var(--font-display); font-size:1.5rem; font-weight:900; }
   .stat span{ font-size:0.84rem; color:var(--muted); }
 
-  /* ---------- week table ---------- */
+  .goal-line{ display:flex; justify-content:space-between; gap:8px; font-size:0.92rem; margin:4px 0; }
+  .goal-bar{ position:relative; height:12px; background:var(--surface-2); border-radius:99px; overflow:hidden; margin:8px 0; }
+  .goal-bar i{ position:absolute; top:0; bottom:0; right:0; background:var(--green); border-radius:99px; }
+  .goal-bar u{ position:absolute; top:-2px; bottom:-2px; width:3px; background:var(--text); }
 
+  .audit-row{ display:flex; align-items:center; gap:8px; margin:8px 0; font-size:0.92rem; }
+  .audit-row .an{ width:88px; font-weight:600; }
+  .audit-row .ab{ flex:1; height:10px; background:var(--surface-2); border-radius:99px; position:relative; overflow:hidden; }
+  .audit-row .ab i{ position:absolute; top:0; bottom:0; right:0; background:var(--amber); border-radius:99px; }
+  .audit-row .ab u{ position:absolute; top:0; bottom:0; right:0; background:rgba(154,164,178,0.35); border-radius:99px; }
+  .audit-row .av{ width:64px; text-align:left; color:var(--muted); }
+
+  /* ---------- week table ---------- */
   .wtable{ width:100%; border-collapse:collapse; font-size:0.85rem; }
   .wtable th{ font-weight:600; color:var(--muted); padding:4px 2px; font-size:0.78rem; }
   .wtable td{ padding:3px 2px; text-align:center; }
@@ -231,32 +223,35 @@
   .dot{ display:inline-block; width:22px; height:22px; border-radius:6px; background:var(--surface-2); }
   .dot.full{ background:var(--green); }
   .dot.min{ background:var(--amber); }
-  .dot.miss{ background:repeating-linear-gradient(-45deg, #3A4452 0 3px, var(--surface-2) 3px 6px); }
+  .dot.miss{ background:var(--hatch); }
   .dot.rest{ background:transparent; border:1px solid var(--line); }
   .dot.none{ background:transparent; border:1px dashed var(--muted); }
-
   .pattern-row{ display:flex; align-items:center; gap:8px; font-size:0.88rem; margin:6px 0; }
   .pattern-row .pd{ width:44px; color:var(--muted); }
   .pattern-row .pb{ flex:1; height:10px; background:var(--surface-2); border-radius:99px; overflow:hidden; }
   .pattern-row .pb i{ display:block; height:100%; background:var(--muted); }
   .pattern-row .pv{ width:44px; text-align:left; color:var(--muted); }
+  .update-box{ background:var(--bg); border:1px solid var(--line); border-radius:var(--r-sm); padding:12px; white-space:pre-wrap; font-size:0.95rem; line-height:1.6; }
 
-  .update-box{
-    background:var(--bg); border:1px solid var(--line); border-radius:var(--r-sm);
-    padding:12px; white-space:pre-wrap; font-size:0.95rem; line-height:1.6;
-  }
-
-  /* ---------- sparkline ---------- */
-  .spark{ width:100%; height:64px; display:block; margin:8px 0; }
+  .spark{ width:100%; height:64px; display:block; margin:8px 0; direction:ltr; }
   .spark polyline{ fill:none; stroke:var(--amber); stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round; }
+  .spark line{ stroke:var(--muted); stroke-width:1.5; stroke-dasharray:4 4; }
   .spark circle{ fill:var(--amber); }
 
-  /* ---------- bottom nav ---------- */
+  /* ---------- focus timer ---------- */
+  .timer{ font-family:var(--font-display); font-weight:900; font-size:4rem; text-align:center; line-height:1; margin:16px 0 4px; direction:ltr; }
+  .timer-sub{ text-align:center; color:var(--muted); margin-bottom:16px; }
+  .urge-btn{
+    width:100%; height:96px; border-radius:var(--r); border:2px solid var(--amber); background:rgba(245,158,11,0.12);
+    font-family:var(--font-display); font-weight:900; font-size:1.25rem; color:var(--text); cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  }
+  .urge-btn small{ font-weight:600; font-size:0.85rem; color:var(--muted); }
+  .urge-btn:active{ background:var(--amber); color:var(--on-color); }
 
+  /* ---------- nav ---------- */
   .nav{
-    position:fixed; bottom:0; right:0; left:0; z-index:20;
-    background:rgba(14,17,22,0.96);
-    border-top:1px solid var(--line);
+    position:fixed; bottom:0; right:0; left:0; z-index:20; background:rgba(14,17,22,0.96); border-top:1px solid var(--line);
     padding:0 calc(4px + env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) calc(4px + env(safe-area-inset-left, 0px));
     display:grid; grid-template-columns:repeat(5, 1fr);
   }
@@ -269,23 +264,16 @@
   .nav button[aria-current="page"]{ color:var(--amber); }
 
   /* ---------- sheet ---------- */
-
-  .sheet-overlay{
-    position:fixed; inset:0; z-index:40; background:rgba(0,0,0,0.65);
-    display:flex; align-items:flex-end;
-  }
+  .sheet-overlay{ position:fixed; inset:0; z-index:40; background:rgba(0,0,0,0.65); display:flex; align-items:flex-end; }
   .sheet{
-    width:100%; max-width:640px; margin:0 auto;
-    background:var(--surface); border-radius:18px 18px 0 0; border-top:1px solid var(--line);
+    width:100%; max-width:640px; margin:0 auto; background:var(--surface); border-radius:18px 18px 0 0; border-top:1px solid var(--line);
     padding:20px calc(16px + env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
-    max-height:calc(92dvh - env(safe-area-inset-top, 0px)); overflow-y:auto;
-    animation:up .2s ease-out;
+    max-height:calc(92dvh - env(safe-area-inset-top, 0px)); overflow-y:auto; animation:up .2s ease-out;
   }
   @keyframes up{ from{ transform:translateY(6%); opacity:.6; } }
   .sheet h2{ font-size:1.4rem; margin-bottom:4px; }
 
   /* ---------- wizard ---------- */
-
   .steps{ display:flex; gap:4px; margin-bottom:20px; }
   .steps i{ flex:1; height:4px; border-radius:99px; background:var(--surface-2); }
   .steps i.on{ background:var(--amber); }
@@ -295,12 +283,11 @@
   .wiz-foot .btn{ margin-top:0; }
 
   .toast{
-    position:fixed; left:50%; transform:translateX(-50%);
-    bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px));
-    background:var(--text); color:var(--on-color); z-index:60;
-    padding:12px 18px; border-radius:99px; font-weight:600; font-size:0.92rem;
+    position:fixed; left:50%; transform:translateX(-50%); bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px));
+    background:var(--text); color:var(--on-color); z-index:60; padding:12px 18px; border-radius:99px; font-weight:600; font-size:0.92rem;
     max-width:calc(100% - 32px); text-align:center;
   }
+  details > summary{ cursor:pointer; min-height:36px; display:flex; align-items:center; color:var(--muted); font-size:0.9rem; }
 </style>
 </head>
 <body>
@@ -319,34 +306,184 @@
      ========================================================= */
 
   const STORE_KEY = 'ninety-state';
-  const TOTAL = 90;
   const PUSH_URL = 'https://ninety-push.quixonn.workers.dev';
   const VAPID_PUBLIC = 'BJKyvhBWgfLTIVYpYLaT_YUSO09f8_5BlQj-Z8w_Etm_s3D6REt2Swn0HMZvMFBNHRs4HKAwF1k2jccWi4hhsng';
   const DAY_SHORT = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
   const DAY_LONG = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+  const AREAS = [
+    { id:'health', name:'בריאות', ex:'משקל, אימונים בשבוע, שינה, ריצה' },
+    { id:'wealth', name:'כסף', ex:'הכנסה חודשית, חיסכון, חוב, לקוחות' },
+    { id:'love', name:'אהבה ויחסים', ex:'דייט בשבוע, זמן בלי טלפונים, פחות ריבים פתוחים' },
+    { id:'self', name:'עצמי', ex:'ספרים, מדיטציה, שפה, יומן, דברים שאתה נהנה מהם' }
+  ];
+
+  /* ---------- ספריית התרגילים — מתוך 30 ההדרכות ----------
+     כל צעד יכול להציע פעולה: habit (להוסיף כהרגל), counter (מונה),
+     focus (לפתוח בלוק פוקוס), receipt (לרשום קבלה). */
+  const EXERCISES = [
+    { id:'zero', t:'אף פעם לא מתחילים מאפס', idea:'אפס מרגיש כבד. כמעט תמיד אתה ממשיך משהו, לא מתחיל אותו.', steps:[
+      { t:'ליעד אחד שחשוב לך: לרשום לפחות 10 דברים אמיתיים שמוכיחים שכבר התחלת — ולקרוא את הרשימה בחזרה.' },
+      { t:'לבחור את הצעד הקטן ביותר ולסיים אותו היום, לפני השינה.' },
+      { t:'מעקב גלוי שרואים כל יום — זו האפליקציה הזו. להשאיר אותה במסך הראשי.' },
+      { t:'מעכשיו: כל יעד הוא המשך, לא התחלה.' } ] },
+    { id:'serious', t:'המחיר של להיות רציני', idea:'עונה היא תקופה מוגדרת שבה אתה מוותר על דברים כדי לשרת מטרה אחת.', steps:[
+      { t:'לקבוע את אורך העונה ולתת לה מטרה אחת (הוגדר באשף — לבדוק שזה עדיין נכון).' },
+      { t:'להוציא שלושה דברים שמרסקים לך משמעת, קשב או כבוד עצמי.' },
+      { t:'לבנות את היום סביב ארבעה עמודים: שינה, אימון, עבודה ממוקדת, וסקירה שבועית אחת.' } ] },
+    { id:'unfinished', t:'לסגור את הלא גמור', idea:'כל דבר פתוח ממשיך לגזול קשב ברקע, גם כשאתה לא חושב עליו.', steps:[
+      { t:'10 דקות: לכתוב כל מה שחוזר לראש ומרגיש לא גמור, לא פתור או לא הוחלט. לא לפתור תוך כדי — קודם הדף.' },
+      { t:'לסמן כל פריט: התחלתי ולא סיימתי / לא פתור מול מישהו / עוד לא החלטתי.' },
+      { t:'להקיף את מה שחוזר הכי הרבה.' },
+      { t:'לכל פריט מוקף: לעשות, לתת תאריך אמיתי, או לשחרר במודע.' },
+      { t:'בשבועות הבאים: לשים לב כמה פעמים זה עוד חוזר.' } ] },
+    { id:'loop', t:'הלולאה שאתה לא יודע שאתה בה', idea:'הטלפון בלי מטרה הוא לולאה. המודעות לבד משנה את היחס אליה יותר מכל חוק.', steps:[
+      { t:'יום אחד: לספור כל פעם שאתה מרים את הטלפון בלי מטרה מסוימת. רק לספור, לא לשנות.', counter:true },
+      { t:'למחוק היום כל אפליקציית גלילה אינסופית — לא כניסוי, כהחלטה קבועה. לשים לב שגל אי־הנוחות עובר מהר.' },
+      { t:'להשתמש בזמן שחזר לדבר אחד שדחית: שיחה, הליכה, ספר או פרויקט.' } ] },
+    { id:'focuswar', t:'המלחמה על הפוקוס', idea:'רוב מה שמושך אותך מהעבודה האמיתית בנוי בכוונה לעשות את זה.', steps:[
+      { t:'יום אחד: לעקוב אחרי הקשב ולרשום כל כוח שמושך אותך מהעבודה האמיתית.' },
+      { t:'לבחור "מטוטלת" אחת גדולה ולנתק לה את ההזנה היום: למחוק, לחסום, להשתיק, לעזוב או להרחיק.' },
+      { t:'לבחור משימה אחת למחר ובלוק עבודה מוגן אחד — לפני שהיום יספיק לגנוב את הפוקוס.', focus:true } ] },
+    { id:'focusmuscle', t:'לבנות פוקוס כמו שריר', idea:'פוקוס נבנה כמו כוח: עומס, להישאר תחת מתח, להתאושש, ולחזור קצת יותר חזק.', steps:[
+      { t:'לבחור משימה עם קו סיום שרואים לפני שמתחילים (1,000 מילים, פרק אחד, 20 תרגילים).' },
+      { t:'טלפון בחדר אחר, שולחן נקי רק למשימה, מים ליד.' },
+      { t:'טקס פתיחה קצר וקבוע: לכתוב את היעד, טיימר, חמש נשימות — ולהתחיל.' },
+      { t:'בדחף הראשון לברוח — זו תחילת העבודה. עוד 5 דקות, וסימון דחף. 5 הופך ל־10, ל־20.', focus:true },
+      { t:'אחרי כל סשן: ארבעה מספרים — מתוכנן, בפועל, דחפים, תוצר. בלוק הפוקוס באפליקציה רושם אותם.' },
+      { t:'להגיד 30 ולעשות 33 — לא להגיד 30 ולעשות שעתיים. אחרת אתה מפסיק להאמין לעצמך.' } ] },
+    { id:'honesthour', t:'השעה הכנה', idea:'שעה אחת מוגנת עם מטרה מוגדרת שווה יותר מיום שלם של "לעבוד על זה".', steps:[
+      { t:'לבחור שעה אחת מחר שאפשר באמת להגן עליה, בחלק של היום שבו הקשב טוב.' },
+      { t:'להחליט מראש למה היא: פעולה אחת ברורה, ומה נחשב "גמור".' },
+      { t:'להוריד את ההסחות הברורות לפני שמתחילים.', focus:true },
+      { t:'בסוף השעה: משפט או שניים כנים על מה שקרה. לשמור מה שעבד, לשנות דבר אחד.' } ] },
+    { id:'engine', t:'מנוע הפרודוקטיביות', idea:'20% מהפעולות מביאות 80% מהתוצאות. את השאר מקבצים או חותכים.', steps:[
+      { t:'לקבוע בלוק עבודה ראשון של 90 דקות מחר בבוקר, בשעות האנרגיה: טלפון כבוי, התראות כבויות, משימה אחת.', focus:true },
+      { t:'לרשום כל פעילות חוזרת בשבוע. לזהות את ה־20% שמביאים 80%. לחתוך או לקבץ את כל השאר לבלוק אדמין יומי אחד.' },
+      { t:'30 דקות היום: לסדר את סביבת העבודה — להוציא כל חפץ, מכשיר ופריט שלא משרת ריכוז.' } ] },
+    { id:'blind', t:'עיוורון סלקטיבי', idea:'לא צריך לדעת הכול. צריך לראות טוב מאוד את הנתיב שלך ולהיות עיוור בכוונה לכל השאר.', steps:[
+      { t:'לרשום כל מקור מידע קבוע בחיים שלך (ערוצים, פודקאסטים, קבוצות, אתרים).' },
+      { t:'לחסל כל מה שלא תרם ישירות ליעד העיקרי ב־30 הימים האחרונים — גם אם הוא איכותי ומעניין.' },
+      { t:'חלון מידע יומי אחד של 30–60 דקות לכל ה"להתעדכן". שאר היום — עיוור בכוונה.', habit:'חלון מידע אחד ביום' },
+      { t:'שיחה כנה עם אדם אחד מהמעגל הקרוב: מה אתה עושה ולמה. לא לבקש רשות — להגדיר את הגבול בקול (גם מול מי ששולח רילס כל היום).' } ] },
+    { id:'money30', t:'תוכנית תיקון פיננסי ב־30 יום', idea:'אי אפשר לנהל מה שלא רואים. נראות יומית היא מה שהופך חודש לניהול.', steps:[
+      { t:'היום: לפתוח את החשבונות ולבנות גיליון. למשוך 60–90 ימי תנועות. כל מנוי, חשבון קבוע, קטגוריה משתנה ומקור הכנסה — במקום אחד. לא לחכות לתבנית מושלמת.' },
+      { t:'להפוך כל חלק חוזר למספר חודשי מתוכנן: קבועות ברשימה, קבוע לכל קטגוריה משתנה, הכנסה בהערכה שמרנית, והפער מחושב לפני שהחודש מתחיל.' },
+      { t:'כל יום לפתוח את הגיליון ולרשום מה נכנס ומה יצא — גם ביום שלא היה כלום. להשוות לתוכנית ולתקן בזמן.', habit:'לפתוח את הגיליון הפיננסי' } ] },
+    { id:'integrity', t:'שלמות זהות', idea:'זהות יציבה היא כזו שההתנהגות שלך תומכת בה — גם כשהחיים לא מושלמים.', steps:[
+      { t:'לכתוב חמש תכונות שאתה רוצה שהזהות שלך תכיל, ולהגדיר כל אחת בהתנהגות. בלי מילים שאי אפשר לבדוק.' },
+      { t:'התנהגות אחת לכל תכונה חשובה — מחויבות מציאותית שאפשר לחזור עליה.' },
+      { t:'לתעד ראיות ספציפיות כל שבוע (קבלות).', receipt:true },
+      { t:'לבחור את הסטנדרטים שאתה מפסיק לנהל עליהם משא ומתן, ולמדוד כמה מהר אתה חוזר אחרי שבירה. ללמוד, לתקן, ולחזור בהזדמנות הסבירה הבאה.' } ] },
+    { id:'authentic', t:'"האני האותנטי" הוא מלכודת', idea:'הרבה ממה שאתה בטוח שהוא "אתה" הותקן מבחוץ. מה שהותקן — אפשר להחליף.', steps:[
+      { t:'שלוש האמונות שאתה הכי מחזיק עליך — לאתר מאיפה כל אחת הגיעה. "תמיד הייתי כזה" זו לא תשובה; למצוא את הרגע שבו היא הותקנה.' },
+      { t:'לבחור אמונה חדשה אחת על עצמך, גם בלי שום ראיה, ולכתוב אותה.' },
+      { t:'להגיד אותה כל יום בשכנוע ולפעול ממנה. לאסוף כל פירור הוכחה.', habit:'לפעול מהאמונה החדשה' },
+      { t:'לזהות דפוס, סיפור או סביבה אחת שמזינה את הזהות הישנה — ולהפסיק להזין: לא לחזור עליו, לא להעלות אותו.' } ] },
+    { id:'selfimage', t:'דימוי עצמי שהמציאות מתיישרת אליו', idea:'יש לך כבר דימוי עצמי — רק שלא בחרת אותו. אפשר לבחור.', steps:[
+      { t:'יום שלם: לצוד את הדימוי העצמי שלך בכסף, באהבה ובערך — ולכתוב כל משפט "סתמי" שאתה תופס את עצמך אומר.' },
+      { t:'לבחור את הדימוי העצמי החדש ולהתנהל ממנו מהיום — לפני שאתה מרגיש מוכן ולפני שההוכחה מגיעה.' },
+      { t:'כל לילה לפני השינה: סצנה קצרה וחיה של העצמי החדש. לחזור אליה מהר כשהמחשבה בורחת.', habit:'סצנה לפני השינה' } ] },
+    { id:'reality', t:'לשנות את המציאות לטובתך', idea:'ההנחות שלך על עצמך הן פרשנות של העבר, לא עובדה על העתיד.', steps:[
+      { t:'לבחור תחום אחד לשנות (בריאות, כסף, יחסים או אחר).' },
+      { t:'לכתוב שלוש הנחות שאתה מחזיק על עצמך בתחום. לכל אחת: מאיפה הגיעה? אילו פרשנויות אחרות סבירות באותה מידה?' },
+      { t:'לבחור הנחה אחת שאתה מוכן לבחון מחדש.' },
+      { t:'להגדיר בפירוט את האדם שאתה הופך אליו: מה הוא מאמין, למה הוא מצפה, איך הוא ניגש למצבים.' },
+      { t:'שבעה ימים: כשמצב מפעיל את ההנחה הישנה — "איך האדם שאני הופך אליו היה מגיב?" ולפעול כך. בערב: דוגמה אחת שבה הגבת אחרת.', habit:'להגיב כמו האדם שאני הופך אליו' } ] },
+    { id:'neuro', t:'המוח הלא גמור', idea:'יכולות שנראות לך "קבועות" נבנו מניסיון חוזר. ניסיון אחר יבנה אחרות.', steps:[
+      { t:'לזהות יכולת, התנהגות או תכונה אחת שאתה מתייחס אליה כקבועה.' },
+      { t:'לחשוב איך ניסיון, התנהגויות חוזרות והזדמנויות ללמוד בעבר בנו אותה. להפריד בין מה שאתה יודע על עצמך לבין מה שאתה מניח שיישאר נכון.' },
+      { t:'לבחור יכולת אחת לפתח ולתרגל אותה בפועל: ההתנהגות עצמה, באתגר מתאים, עם הזדמנות לזהות טעויות ולתקן.' },
+      { t:'לשים לב למצבים שמעודדים את הדפוס הישן וליצור בכוונה הזדמנויות לתרגל את החדש. לתת זמן והתאוששות ללמידה.' } ] },
+    { id:'stuck', t:'ארבע צורות של תקיעות', idea:'כשהשאיפה נשארת והמאמץ נופל — יש נקודת שבירה, ויש לה צורה.', steps:[
+      { t:'יעד אחד שחוזר אבל המאמץ נופל: לכתוב את הניסיונות האחרונים לפי סדר, רק לפי מה שעשית בפועל, ולמצוא את הנקודה הראשונה שבה ההתנהגות השתנתה.' },
+      { t:'לבחור את הצורה: בחירה (כמה אופציות אמיתיות מנעו התחייבות) / נוחות (הצעד היה ברור ובחרת קל) / סירוב (המילים אמרו כן, ההתנהגות לא) / חשיבת־יתר (מחשבה בלי מידע חדש).' },
+      { t:'פעולה אחת תוך יום לפי הצורה — בחירה: ניסוי ותאריך החלטה. נוחות: לשים ביומן ולפנות מכשולים. סירוב: כנות — אתה עדיין רוצה את זה? חשיבת־יתר: לעצור ולהשיג מידע חדש בניסוי.' },
+      { t:'לבדוק מה השתנה ולעשות סבב נוסף.' } ] },
+    { id:'smart', t:'פרדוקס האינטליגנציה', idea:'יותר ידע יכול להפוך לדרך מתוחכמת להימנע מאי־ודאות. פעולה מלמדת מה שקריאה לא.', steps:[
+      { t:'לבחור דבר אחד שאתה דוחה למרות שכבר יש לך מספיק ידע להתחיל.' },
+      { t:'לכתוב את הסיבות שאתה נותן לעצמך — מכשולים אמיתיים, או דרך נוחה להימנע מאי־ודאות?' },
+      { t:'לקבוע מה המידע שבאמת חסר להחלטה אחראית, להשיג אותו, ולקבוע בדיוק מה הצעד הבא.' },
+      { t:'הפעולה הפשוטה ביותר שבודקת את ההבנה שלך מול המציאות — ולהחליט מראש מה אתה מנסה ללמוד ממנה.' },
+      { t:'אחרי כל ניסיון: מה עבד, מה נכשל, איזו הנחה הייתה שגויה, מה לשפר. להתרגל לשאול, להודות בבורות ולהיראות חסר ניסיון.' } ] },
+    { id:'journal', t:'יומן שמתקן את הראש', idea:'דפוס שיש לו שם — אפשר לתפוס. בין הגירוי לתגובה יש רווח, ואפשר להרחיב אותו.', steps:[
+      { t:'הערב: לכתוב את שלושת הדפוסים שגרמו לך הכי הרבה בעיות בשנה האחרונה — טריגר, תגובה ותוצאה, כמה שיותר ספציפי.' },
+      { t:'לתת לכל דפוס שם פשוט שתופס את המהות שלו.' },
+      { t:'מחר והלאה: לספור כל פעם שדפוס עם שם מופעל, ולשים לב אם הצלחת לבחור תגובה אחרת.', counter:true },
+      { t:'כשמזהים דפוס: שלוש נשימות מלאות לפני שמגיבים. בערב לכתוב מה קרה בהפסקה.', habit:'יומן דפוסים בערב' } ] },
+    { id:'stress', t:'לפרק לחץ', idea:'הרבה מהלחץ מגיע מהסיפור שבנינו על המצב, ומדברים פתוחים שמחכים.', steps:[
+      { t:'הדבר האחד שאתה דוחה — החלטה, שיחה או משימה — לעשות תוך 24 שעות, בלי משא ומתן על התזמון.' },
+      { t:'לרשום כל לולאה פתוחה: הודעות שלא נענו, משימות, תוכניות חצי־גמורות, התחייבויות מעורפלות. לסגור כל אחת: לבצע, לתזמן או לוותר.' },
+      { t:'בלחץ הבא: לעצור ולשאול — אני מגיב למצב, או לסיפור שבניתי עליו? ולהתעסק עם המציאות עצמה.' } ] },
+    { id:'relax', t:'מנוחה אמיתית', idea:'בידור הוא לא מנוחה כשמשהו אחר מציק. קודם מטפלים באות — ואז בידור הוא סתם בידור.', steps:[
+      { t:'לפני שמושיטים יד לבידור: 2 דקות בלי גירוי. לבדוק גוף, ראש, רגש, ומה לא גמור.' },
+      { t:'להגיב לאות כמה שיותר ישירות: עייף — לישון. רעב — לאכול. צמא — לשתות. ישבת כל היום — לזוז. ראש מלא — פחות קלט. בודד — ליצור קשר. משימה שחוזרת — לטפל, או לרשום את הצעד הבא ומתי.' },
+      { t:'לתת לזה זמן לעבוד. אתה צלול ורגוע יותר? אם לא — הפרשנות הראשונה הייתה השערה; לנסות התאמה אחרת.' } ] },
+    { id:'energy', t:'אנרגיה לפני מציאות', idea:'מצב האנרגיה שבו אתה נכנס לפעולה קובע הרבה מהאיכות שלה.', steps:[
+      { t:'שבועיים: לרשום אנרגיה שלוש פעמים ביום — בוקר, צהריים, ערב — רמה (1–10), איכות ומה השפיע. לזהות את הגורמים הכי מרוקנים ומטעינים.' },
+      { t:'שגרת בוקר של 10 דקות: תנועה, נשימה מכוונת ודמיון של המצב הרצוי להיום. 30 יום לפני שמעריכים.', habit:'10 דקות טעינת בוקר' },
+      { t:'שלוש הפעילויות הכי חשובות השבוע: לפני כל אחת, 60 שניות לקבוע את סוג ועוצמת האנרגיה שהיא דורשת. אחר כך לכתוב איך זה השפיע.' } ] },
+    { id:'frequency', t:'התדר', idea:'התדר שלך הוא מה שאתה חוזר עליו כל יום. מערכת העצבים לא מקשיבה לאפירמציות — היא מקשיבה להוכחות.', steps:[
+      { t:'לכתוב את התדר הנוכחי במילה כנה אחת, את חמש החזרות היומיות שמחזיקות אותו, ומילת יעד אחת שתהיה העיקרון המארגן של העונה.' },
+      { t:'תוך 7 ימים: לחתוך שלוש חזרות "נמוכות" ולהחליף כל אחת בחלופה מכוונת, כדי שהמקום לא יתמלא שוב בישן.' },
+      { t:'יומן ראיות יומי: 1–3 רגעים שמוכיחים שאתה הופך לאדם שבחרת. לסקור כל 7 ימים.', receipt:true } ] },
+    { id:'mirror', t:'האנשים שאתה שונא הם מראה', idea:'תגובה רגשית חזקה מדי להתנהגות של מישהו מצביעה על חוק לא כתוב שלך — ולפעמים על יכולת שחסרה לך.', steps:[
+      { t:'בימים הקרובים: לשים לב מתי התנהגות של מישהו מעוררת תגובה רגשית חזקה ממה שהמצב מצדיק.' },
+      { t:'לכתוב את האדם, ההתנהגות המדויקת והתווית שנתת. להיות מדויק: לא "שחצן" אלא "מדבר בפתיחות על הישגים".' },
+      { t:'לבחור שיפוט חוזר אחד ולבנות את הטיעון הכי חזק והכי כן לגרסה המועילה של התכונה — עד שהעמדה ההפוכה נראית סבירה.' },
+      { t:'לזהות יכולת "נקייה" אחת בתוך התכונה ולנסות אותה במצב קטן ואמיתי. לראות מה קורה בפועל.' } ] },
+    { id:'talk', t:'לדבר עם כל אחד', idea:'שיחה טובה נשענת על עולם פנימי עשיר ותשומת לב מלאה, לא על טכניקות.', steps:[
+      { t:'השבוע להזין את העולם הפנימי: 20 דקות קריאה ביום, סרט תיעודי או ראיון ארוך אחד, ושעה על נושא שבדרך כלל לא מעניין אותך.', habit:'20 דקות קריאה' },
+      { t:'בשלוש השיחות הבאות: לחזור על משפט אחד שהאדם אמר — ולראות מה קורה.' },
+      { t:'ובשיחה אחת: לולאה מלאה — לשקף, להוסיף משהו משלך, להזמין אותו להמשיך.' } ] },
+    { id:'inchworm', t:'תאוריית הזחל', idea:'הטווח שלך הוא בין משחק ה־A למשחק ה־C. מתקדמים משני הקצוות: מרחיבים את השיא ומרימים את השפל.', steps:[
+      { t:'תחום אחד: לתאר את משחק ה־A ואת משחק ה־C שלך בהתנהגויות נצפות, מדוגמאות אחרונות. ומה מגדיר את האמצע.' },
+      { t:'יעד קדמי אחד (יכולת חדשה בשיא) ויעד אחורי אחד (התנהגות ה־C שעולה הכי ביוקר כשקשה). רק זוג אחד.' },
+      { t:'לעקוב כמה שבועות ולשפוט משני הקצוות: שיאים חדשים, שפלים קטנים יותר, ובמיוחד התאוששות מהירה יותר.' },
+      { t:'כשה־A הישן נהיה רגיל וה־C הישן כבר לא מזוהה — למפות מחדש ולהתחיל סבב.' } ] },
+    { id:'hours', t:'חוק 1,000 השעות', idea:'מי שנשאר מספיק זמן עם מיומנות אחת מנצח. השעות חייבות להצטבר — גם כשנראה שכלום לא זז.', steps:[
+      { t:'לבחור את המיומנות האחת שאתה חוזר אליה ולהתחייב — לפני עוד ספר או קורס. לכתוב אותה במקום שרואים כל יום.' },
+      { t:'לצמצם מקורות למעטים שמשרתים אותה ישירות. רשות לדלג על כל השאר, בלי אשמה ובלי FOMO.' },
+      { t:'שעות אמיתיות כל שבוע, במיוחד בשבועות שנראה שכלום לא זז. לעקוב אחרי הסה״כ המצטבר (אפשר כיעד במספרים, ביחידות "שעות").' } ] },
+    { id:'crossover', t:'אפקט ההצטלבות', idea:'השקעה טובה נראית גרועה בהתחלה. התוצאות מגיעות באיחור — והזיכרון מוחק את התהליך.', steps:[
+      { t:'יומן תהליך ולא תוצאה: החלטות, הרגלים, ורגעים שבחרת בקשה כשהקל היה שם. (הסימון היומי והקבלות הם בדיוק זה.)', receipt:true },
+      { t:'להרחיק את אופק ההערכה: משבועי לחודשי, מחודשי לרבעוני. לתת לריבית דריבית זמן להיראות לפני שמסיקים מסקנות.' },
+      { t:'כשמשהו מצליח — לעקוב אחורה להחלטה הקטנה שהתחילה אותו. וכשמשהו לא טוב — אותו דבר בכיוון ההפוך.' } ] },
+    { id:'fourth', t:'חשיבה ממימד רביעי', idea:'לחשוב על החשיבה: לראות את המסגרות וההנחות שמתחת למחשבות.', steps:[
+      { t:'10 דקות היום: לשבת בשקט ולצפות בתהליך המחשבה בלי להתעסק בתוכן — איך מחשבות עולות, באילו מסגרות ובאילו הנחות.' },
+      { t:'ביומן הבא להוסיף שלוש שאלות: מאיזו מסגרת פעלתי היום? איזו הנחה אפשר לבחון? איך זה נראה משלוש נקודות מבט שונות?' },
+      { t:'החלטה חשובה אחת: להחזיק כמה נקודות מבט בו־זמנית, לזהות דינמיקות נסתרות ואילוצים, ולשים לב לתהליך החשיבה שלך תוך כדי.' } ] },
+    { id:'freedom', t:'משוואת החופש', idea:'שלושה מטבעות — כסף, זמן, אנרגיה — ושלושה חופשים. אפשר להמיר מטבע חזק כדי לשחרר צוואר בקבוק.', steps:[
+      { t:'לדרג 1–10 לפי המציאות של עכשיו: כסף, זמן, אנרגיה, חופש כלכלי, חופש זמן, חופש מקום.' },
+      { t:'הציון הנמוך — הוא חשוב לך? אם כן, איזה מטבע חזק יכול לשפר אותו? לבחור צוואר בקבוק אחד.' },
+      { t:'החלפה מכוונת אחת בשבוע הקרוב (לבטל/להאציל משהו, לשלם כדי להוריד עומס, בלוק זמן להגדלת הכנסה). לכתוב מה תוותר ומה תקבל — ואחר כך לבדוק אם היית עושה את זה שוב.' } ] }
+  ];
 
   const ICONS = {
     today:'<path d="M8 2v4M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M9 16l2 2 4-4"/>',
     board:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
-    receipt:'<path d="M4 2v20l3-2 3 2 2-2 2 2 3-2 3 2V2l-3 2-3-2-2 2-2-2-3 2z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    book:'<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>',
     review:'<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>',
-    settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+    plan:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+    settings:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
     check:'<path d="M20 6 9 17l-5-5"/>',
     half:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>',
     x:'<path d="M18 6 6 18M6 6l12 12"/>',
     left:'<path d="m15 18-6-6 6-6"/>',
     right:'<path d="m9 18 6-6-6-6"/>',
     plus:'<path d="M12 5v14M5 12h14"/>',
+    minus:'<path d="M5 12h14"/>',
     moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>',
     copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
     share:'<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4M12 2v13"/>',
     bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
-    trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>'
+    trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+    timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
+    receipt:'<path d="M4 2v20l3-2 3 2 2-2 2 2 3-2 3 2V2l-3 2-3-2-2 2-2-2-3 2z"/><path d="M8 8h8M8 12h8M8 16h5"/>'
   };
   function icon(n){ return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + ICONS[n] + '</svg>'; }
 
   /* =========================================================
-     עזרי תאריך — תמיד תאריך מקומי YYYY-MM-DD
+     תאריכים — תמיד מקומי YYYY-MM-DD
      ========================================================= */
 
   function pad(n){ return String(n).padStart(2,'0'); }
@@ -359,8 +496,9 @@
     return Math.round((Date.UTC(by,bm-1,bd) - Date.UTC(ay,am-1,ad)) / 86400000);
   }
   function weekday(s){ return parse(s).getDay(); }
-  function fmt(s){ const [y,m,d] = s.split('-'); return d + '/' + m; }
+  function fmt(s){ const [, m, d] = s.split('-'); return d + '/' + m; }
   function fmtLong(s){ return 'יום ' + DAY_LONG[weekday(s)] + ', ' + fmt(s); }
+  function round(n){ return Math.round(n * 100) / 100; }
 
   /* =========================================================
      state
@@ -370,12 +508,16 @@
 
   function emptyState(){
     return {
-      v:1,
+      v:2,
       setup:null,
       days:{},        // 'YYYY-MM-DD' → { h:{habitId:'full'|'min'|'miss'}, closed, prep }
       receipts:[],    // { id, date, text }
-      measureLog:[],  // { id, date, measureId, value }
-      weekly:[]       // { id, week, well, broke, cause, reasons:[], fix, ts }
+      goalLog:[],     // { id, date, goalId, value }
+      audits:[],      // { id, date, scores:{health,wealth,love,self} }
+      focus:[],       // { id, date, target, planned, actual, urges, produced }
+      focusRun:null,  // { target, planned, start, urges }
+      ex:{},          // exerciseId → { steps:{i:true}, counts:{i:n}, notes, doneOn }
+      weekly:[]       // { id, week, well, broke, cause, reasons, bottleneck, fix, ts }
     };
   }
 
@@ -384,10 +526,7 @@
   function load(){
     try{
       const raw = localStorage.getItem(STORE_KEY);
-      if(raw){
-        const s = JSON.parse(raw);
-        return Object.assign(emptyState(), s);
-      }
+      if(raw) return Object.assign(emptyState(), JSON.parse(raw));
     }catch(e){}
     return emptyState();
   }
@@ -399,16 +538,13 @@
   }
 
   function tick(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms || 12); }catch(e){} }
-
-  function esc(v){
-    return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
+  function esc(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function nl(v){ return esc(v).replace(/\n/g, '<br>'); }
 
   let toastTimer;
   function toast(msg){
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.hidden = false;
+    t.textContent = msg; t.hidden = false;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
   }
@@ -417,25 +553,22 @@
      חישובים
      ========================================================= */
 
+  function L(){ return S.setup ? (S.setup.length || 90) : 90; }
   function habits(){ return S.setup ? S.setup.habits : []; }
   function activeHabits(){ return habits().filter(h => !h.archivedOn); }
 
-  /* הרגל מתוכנן לתאריך אם הוא נוסף לפני כן, לא הועבר לארכיון, והיום בשבוע מסומן. */
   function scheduled(h, date){
     if(date < (h.from || S.setup.startDate)) return false;
     if(h.archivedOn && date >= h.archivedOn) return false;
     return h.days.includes(weekday(date));
   }
   function habitsOn(date){ return habits().filter(h => scheduled(h, date)); }
-
-  function dayIndex(date){ return diffDays(S.setup.startDate, date) + 1; } // 1..90
-  function endDate(){ return addDays(S.setup.startDate, TOTAL - 1); }
-  function inRange(date){ const i = dayIndex(date); return i >= 1 && i <= TOTAL; }
-
+  function dayIndex(date){ return diffDays(S.setup.startDate, date) + 1; }
+  function endDate(){ return addDays(S.setup.startDate, L() - 1); }
+  function inRange(date){ const i = dayIndex(date); return i >= 1 && i <= L(); }
   function mark(date, hid){ const d = S.days[date]; return d && d.h ? d.h[hid] : undefined; }
 
-  /* מצב היום: full = הכול במלואו, min = עמדת (חלק במינימום), miss = משהו פוספס,
-     open = יש משהו לא מסומן, rest = אין הרגלים מתוכננים. */
+  /* full = הכול במלואו, min = עמדת (חלק במינימום), miss = פוספס, open = לא סומן, rest = אין הרגלים. */
   function dayStatus(date){
     const hs = habitsOn(date);
     if(hs.length === 0) return 'rest';
@@ -451,21 +584,16 @@
     return anyMin ? 'min' : 'full';
   }
 
-  /* "X ימים מתוך Y": Y = ימים שעברו (כולל היום אם נסגר) שהיו בהם הרגלים מתוכננים.
-     יום שפוספס לא מאפס כלום — הוא פשוט לא נספר ב-X. */
+  /* "X ימים מתוך Y" — יום שפוספס לא מאפס כלום, הוא פשוט לא נספר ב־X. */
   function keptStats(){
     const t = today();
     let kept = 0, passed = 0;
-    for(let i = 0; i < TOTAL; i++){
+    for(let i = 0; i < L(); i++){
       const date = addDays(S.setup.startDate, i);
       if(date > t) break;
-      const closed = S.days[date] && S.days[date].closed;
-      if(date === t && !closed){
-        const st = dayStatus(date);
-        if(st === 'full' || st === 'min'){ kept++; passed++; }
-        continue;
-      }
       const st = dayStatus(date);
+      const closed = S.days[date] && S.days[date].closed;
+      if(date === t && !closed){ if(st === 'full' || st === 'min'){ kept++; passed++; } continue; }
       if(st === 'rest') continue;
       passed++;
       if(st === 'full' || st === 'min') kept++;
@@ -478,12 +606,46 @@
     return h.days.length + ' פעמים בשבוע (' + h.days.map(d => DAY_SHORT[d]).join(' ') + ')';
   }
 
-  function weekOf(date){ return Math.floor((dayIndex(date) - 1) / 7) + 1; } // 1..13
+  function weekOf(date){ return Math.floor((dayIndex(date) - 1) / 7) + 1; }
   function weekRange(w){
     const a = addDays(S.setup.startDate, (w-1)*7);
     let b = addDays(a, 6);
     if(b > endDate()) b = endDate();
     return [a, b];
+  }
+  function currentWeek(){
+    const t = today();
+    if(t < S.setup.startDate) return 1;
+    if(t > endDate()) return weekOf(endDate());
+    return weekOf(t);
+  }
+
+  /* ---------- יעדים במספרים (ABTH: Actual, Becoming, Timeline, Habits) ---------- */
+
+  function goalLatest(g){
+    const log = S.goalLog.filter(x => x.goalId === g.id).sort((a,b) => a.date.localeCompare(b.date));
+    return log.length ? log[log.length - 1].value : g.actual;
+  }
+  /* איפה צריך להיות היום לפי קצב ישר מהנקודה ההתחלתית ליעד. */
+  function goalExpected(g, date){
+    const i = Math.max(0, Math.min(L(), dayIndex(date || today())));
+    return g.actual + (g.target - g.actual) * i / L();
+  }
+  function goalStatus(g){
+    const cur = goalLatest(g), exp = goalExpected(g), up = g.target >= g.actual;
+    const gap = g.target - g.actual;
+    if(gap === 0) return 'on';
+    const diff = (cur - exp) * (up ? 1 : -1);
+    if(diff >= -Math.abs(gap) * 0.02) return 'on';
+    return 'behind';
+  }
+  function goalPaceText(g){
+    const gap = g.target - g.actual;
+    const perDay = gap / L(), perWeek = perDay * 7, perMonth = perDay * 30;
+    const u = g.unit ? ' ' + g.unit : '';
+    /* בידוד כיווני כדי שמינוס/פלוס יישארו משמאל למספר גם בתוך טקסט RTL */
+    const s = n => '⁦' + (n > 0 ? '+' : '') + round(n) + '⁩';
+    return 'קצב: ' + s(perDay) + u + ' ביום · ' + s(perWeek) + ' בשבוע · ' + s(perMonth) + ' בחודש';
   }
 
   /* =========================================================
@@ -494,14 +656,14 @@
   let viewDate = today();
   let reviewWeek = null;
   let wizStep = 0;
-  let draft = null; // טיוטת האשף
+  let draft = null;
 
   const NAV = [
     { id:'today', label:'היום', ic:'today' },
-    { id:'board', label:'התקדמות', ic:'board' },
-    { id:'receipts', label:'קבלות', ic:'receipt' },
+    { id:'proof', label:'ראיות', ic:'board' },
+    { id:'ex', label:'תרגילים', ic:'book' },
     { id:'review', label:'סקירה', ic:'review' },
-    { id:'settings', label:'הגדרות', ic:'settings' }
+    { id:'plan', label:'תוכנית', ic:'plan' }
   ];
 
   function go(v){
@@ -530,228 +692,253 @@
     renderNav();
     const app = document.getElementById('app');
     if(!S.setup){ app.innerHTML = renderWizard(); return; }
-    const fn = { today:renderToday, board:renderBoard, receipts:renderReceipts, review:renderReview, settings:renderSettings }[view];
+    const fn = { today:renderToday, proof:renderProof, ex:renderExercises, review:renderReview, plan:renderPlan }[view];
     app.innerHTML = '<div class="wrap">' + fn() + '</div>';
   }
 
   /* =========================================================
-     אשף הגדרה
+     אשף — לפי סדר "ההמצאה מחדש ב־90 יום"
      ========================================================= */
 
   const ENV_SUGGEST = [
-    'להכין את בגדי האימון מהערב',
-    'לכתוב את האימון של מחר מראש',
-    'לשים את הספר במקום שבו אני באמת קורא',
-    'להשאיר בבית רק את האוכל שאני רוצה לאכול',
-    'לפתוח את המחשב ישר על המשימה החשובה (לא מייל/יוטיוב)',
-    'לבחור חדר כושר קרוב, גם אם הוא לא המושלם',
-    'לשים לב ממי אני מקבל הכי הרבה "זמן אוויר" ולצמצם את מי שמושך אחורה'
+    { t:'למחוק אפליקציות גלילה אינסופית מהטלפון', on:true },
+    { t:'להכין את בגדי האימון מהערב', on:false },
+    { t:'לכתוב את האימון של מחר מראש', on:false },
+    { t:'להשאיר בבית רק את האוכל שאני רוצה לאכול', on:false },
+    { t:'לשים את הספר במקום שבו אני באמת קורא', on:false },
+    { t:'לפתוח את המחשב ישר על המשימה החשובה — בלי מייל ויוטיוב', on:false },
+    { t:'טלפון מחוץ לחדר השינה', on:false },
+    { t:'לבחור חדר כושר קרוב, גם אם הוא לא המושלם', on:false },
+    { t:'לצמצם זמן עם מי שמושך אחורה, להגדיל עם מי שמרים', on:false }
   ];
 
   function newDraft(){
+    const audit = {}; AREAS.forEach(a => { audit[a.id] = { score:null, evidence:'', trend:'' }; });
+    const vision = {}; AREAS.forEach(a => { vision[a.id] = ''; });
     return {
-      startDate: today(),
+      startDate: today(), length:90,
+      audit, vision, week:'', anti:'',
+      reasons:{ here:'', want:'', refuse:'' },
       identity:{ who:'', day:'', stop:'', seen:'' },
+      goals:[],
       habits:[],
-      env: ENV_SUGGEST.map(t => ({ id:uid(), text:t, on:false, done:false })),
-      measures:[{ id:uid(), name:'משקל', unit:'ק״ג', first:'' }],
+      env: ENV_SUGGEST.map(e => ({ id:uid(), text:e.t, on:e.on, done:false })),
       partner:{ name:'' },
       notify:{ morning:'06:30', evening:'21:30', weeklyDay:5, weeklyTime:'12:00', on:false }
     };
   }
 
-  const WIZ = ['פתיחה','מי אתה הופך להיות','הרגלים','סביבה','מדדים','אדם אחד','התראות'];
+  const WIZ = ['פתיחה','ביקורת מציאות','שני עתידים','סיבות','זהות','יעדים במספרים','הרגלים','סביבה','אדם אחד','התראות'];
 
   function renderWizard(){
     if(!draft) draft = newDraft();
-    const steps = '<div class="steps">' + WIZ.map((_, i) => '<i class="' + (i <= wizStep ? 'on' : '') + '"></i>').join('') + '</div>';
-    let body = '';
     const d = draft;
+    const steps = '<div class="steps">' + WIZ.map((_, i) => '<i class="' + (i <= wizStep ? 'on' : '') + '"></i>').join('') + '</div>';
+    const stepLabel = '<p class="label">שלב ' + (wizStep + 1) + ' מתוך ' + WIZ.length + '</p>';
+    let body = '';
 
     if(wizStep === 0){
       body =
-        '<h1>90 יום</h1>' +
-        '<p class="lead">לא מחכים להרגיש כמו אדם חדש. עושים את הדבר, שוב ושוב, ואוספים ראיות — עד שהסיפור הישן על עצמך כבר לא מחזיק.</p>' +
-        '<div class="card"><h3>הסדר</h3><p class="small muted" style="margin:0">' +
-        '1. מגדירים בצורה מוחשית את מי שאתה הופך להיות.<br>' +
-        '2. בוחרים מעט הרגלים — לכל אחד גרסה רגילה וגרסת מינימום.<br>' +
-        '3. מסדרים את הסביבה כך שתעזור.<br>' +
-        '4. מסמנים כל יום, כותבים קבלות, וסוקרים פעם בשבוע.</p></div>' +
-        '<div class="field"><label for="w-start">תאריך התחלה</label><input type="date" id="w-start" value="' + d.startDate + '"></div>';
+        '<h1>להמציא את עצמך מחדש</h1>' +
+        '<p class="lead">לא מחכים להרגיש כמו אדם חדש. בודקים בכנות איפה אתה, מחליטים לאן, הופכים את זה למספרים ולצעד של היום — ואז אוספים ראיות עד שהסיפור הישן כבר לא מחזיק.</p>' +
+        '<div class="card"><h3>הסדר</h3><p class="small muted flush">' +
+        '1. ביקורת מציאות: איפה אתה בארבעה תחומים.<br>2. שני עתידים: מה אתה רוצה, ומה אתה מסרב לו.<br>3. סיבות.<br>4. זהות מוחשית.<br>' +
+        '5. יעדים במספרים, מפורקים ליום.<br>6. מעט הרגלים — לכל אחד רגיל ומינימום.<br>7. סביבה — בעיקר להוריד.<br>8. לסמן כל יום, לסקור כל שבוע, ותרגיל אחד בשבוע מתוך הספרייה.</p></div>' +
+        '<div class="field"><label for="w-start">תאריך התחלה</label><input type="date" id="w-start" value="' + d.startDate + '"></div>' +
+        '<div class="field"><label>אורך העונה</label><div class="hint">90 יום זה ארוך מספיק לשנות משהו אמיתי וקצר מספיק לראות את כולו. אפשר עונה ארוכה יותר.</div><div class="chips" id="w-len">' +
+          [90,180,365].map(n => '<button type="button" class="chip" data-len="' + n + '" aria-pressed="' + (d.length === n) + '">' + (n === 90 ? '90 יום' : n === 180 ? 'חצי שנה' : 'שנה') + '</button>').join('') +
+        '</div></div>' +
+        '<p class="small muted">כמעט הכול אפשר לדלג ולמלא אחר כך במסך "תוכנית". חובה רק הרגל אחד.</p>';
     }
 
     if(wizStep === 1){
+      body =
+        '<h1>ביקורת מציאות</h1>' +
+        '<p class="lead">אי אפשר לתקן בלי להשוות לנקודה אמיתית. ציון 0–10 לכל תחום, הראיות שמאחוריו, ולאן הוא הולך אם לא משנים כלום.</p>' +
+        AREAS.map(a => {
+          const au = d.audit[a.id];
+          return '<div class="card"><h2>' + a.name + '</h2>' +
+            '<div class="score" data-area="' + a.id + '">' + Array.from({length:11}, (_, i) => '<button type="button" data-score="' + i + '" aria-pressed="' + (au.score === i) + '" aria-label="' + i + '">' + i + '</button>').join('') + '</div>' +
+            '<div class="field" style="margin-top:12px"><label for="w-ev-' + a.id + '">הראיות</label><textarea id="w-ev-' + a.id + '" placeholder="מה בפועל קורה, לא איך זה מרגיש">' + esc(au.evidence) + '</textarea></div>' +
+            '<div class="field" style="margin-bottom:0"><label for="w-tr-' + a.id + '">לאן זה הולך אם לא משנים כלום?</label><input type="text" id="w-tr-' + a.id + '" value="' + esc(au.trend) + '"></div></div>';
+        }).join('');
+    }
+
+    if(wizStep === 2){
+      body =
+        '<h1>שני עתידים</h1>' +
+        '<p class="lead">"אני רוצה להצליח" לא נותן כלום לעבוד איתו. איך כל תחום נראה ביום ' + d.length + '? ומה העתיד שאתה מסרב להמשיך ללכת אליו?</p>' +
+        AREAS.map(a => '<div class="field"><label for="w-vi-' + a.id + '">' + a.name + ' ביום ' + d.length + '</label><div class="hint">' + a.ex + '</div><textarea id="w-vi-' + a.id + '">' + esc(d.vision[a.id]) + '</textarea></div>').join('') +
+        '<div class="field"><label for="w-week">שבוע רגיל בסוף העונה</label><div class="hint">איך נראים הבקרים? עם מי אתה? מה כבר לא מדאיג אותך?</div><textarea id="w-week">' + esc(d.week) + '</textarea></div>' +
+        '<div class="field"><label for="w-anti">העתיד שאתה מסרב לו</label><div class="hint">אם שום דבר לא משתנה — איך החיים נראים בעוד שנה? שלוש שנים?</div><textarea id="w-anti">' + esc(d.anti) + '</textarea></div>';
+    }
+
+    if(wizStep === 3){
+      body =
+        '<h1>סיבות</h1>' +
+        '<p class="lead">היעד מתחרה כל יום בעשרות פרסים קרובים יותר — גלילה, נטפליקס, להישאר במיטה. הסיבות הן מה שגורם לעתיד להשפיע על ההווה.</p>' +
+        field('w-r-here', 'למה אתה איפה שאתה?', 'ההחלטות, ההרגלים, ההנחות והסביבות שייצרו את הציונים', d.reasons.here, true) +
+        field('w-r-want', 'למה אתה באמת רוצה את העתיד שתיארת?', '', d.reasons.want, true) +
+        field('w-r-refuse', 'למה אתה מסרב לעתיד השני?', '', d.reasons.refuse, true);
+    }
+
+    if(wizStep === 4){
       body =
         '<h1>מי אתה הופך להיות</h1>' +
         '<p class="lead">לא "הגרסה הכי טובה שלי". מה האדם הזה <b>עושה</b> ביום רגיל?</p>' +
         field('w-who', 'במשפט אחד', 'למשל: מישהו שמתאמן 4 פעמים בשבוע וכותב כל בוקר', d.identity.who, true) +
         field('w-day', 'מה הוא עושה ביום רגיל?', 'איך הוא מתאמן, איך הוא עובד, מתי הוא קם', d.identity.day, true) +
-        field('w-stop', 'ממה הוא הפסיק?', 'למשל: לגלול בטלפון במיטה, לדחות למחר', d.identity.stop, true) +
+        field('w-stop', 'ממה הוא הפסיק?', 'למשל: לגלול במיטה, לדחות למחר', d.identity.stop, true) +
         field('w-seen', 'מה מישהו היה רואה אם היה עוקב אחריו שבוע?', '', d.identity.seen, true);
     }
 
-    if(wizStep === 2){
+    if(wizStep === 5){
+      body =
+        '<h1>יעדים במספרים</h1>' +
+        '<p class="lead">אחד או שניים. המבחן: בסוף העונה, שני אנשים שונים יכולים להסכים אם הגעת? יעד = <b>איפה אני</b>, <b>לאן</b>, <b>עד מתי</b> — והאפליקציה מחשבת את הקצב ליום.</p>' +
+        (d.goals.length ? d.goals.map((g, i) =>
+          '<div class="card"><div class="row" style="align-items:center"><div style="flex:3">' +
+          '<div class="habit-name">' + esc(g.name) + '</div>' +
+          '<div class="small">' + round(g.actual) + ' ← ' + round(g.target) + ' ' + esc(g.unit) + '</div>' +
+          '<div class="small muted">' + goalPaceText(Object.assign({}, g)) + '</div></div>' +
+          '<div style="flex:0 0 auto" class="row"><button class="icon-btn" data-act="wiz-edit-goal" data-i="' + i + '" aria-label="עריכה">' + icon('settings') + '</button>' +
+          '<button class="icon-btn" data-act="wiz-del-goal" data-i="' + i + '" aria-label="מחיקה">' + icon('trash') + '</button></div></div></div>'
+        ).join('') : '<div class="notice">למשל: לקרוא 10 ספרים = 2,000 עמודים ב־90 יום → 22 עמודים ביום. היום כבר יש משימה.</div>') +
+        (d.goals.length < 2 ? '<button class="btn btn-ghost" data-act="wiz-add-goal">' + icon('plus') + ' הוספת יעד</button>' : '');
+    }
+
+    if(wizStep === 6){
       body =
         '<h1>הרגלים</h1>' +
-        '<p class="lead">2–4 הרגלים, לא 20. המבחן: <b>אם אעשה את זה 90 יום — משהו משמעותי ישתנה?</b> אם לא, הוא לא צריך להיות פה.</p>' +
+        '<p class="lead">2–4 הרגלים שסוגרים את הפער — לא 20. המבחן: <b>אם אעשה את זה כל העונה, משהו משמעותי ישתנה?</b> אם לא, הוא לא צריך להיות פה.</p>' +
+        (d.goals.length ? '<div class="notice">הקצב של היעדים: ' + d.goals.map(g => esc(g.name) + ' — ' + goalPaceText(g).replace('קצב: ', '')).join('<br>') + '</div>' : '') +
         (d.habits.length ? d.habits.map((h, i) =>
           '<div class="card"><div class="row" style="align-items:center"><div style="flex:3">' +
           '<div class="habit-name">' + esc(h.name) + '</div>' +
           '<div class="small muted">' + esc(habitFreqText(h)) + (h.anchor ? ' · ' + esc(h.anchor) : '') + '</div>' +
           '<div class="small">רגיל: ' + esc(h.full) + ' · מינימום: ' + esc(h.min) + '</div></div>' +
-          '<div style="flex:0 0 auto" class="row">' +
-          '<button class="icon-btn" data-act="wiz-edit-habit" data-i="' + i + '" aria-label="עריכה">' + icon('settings') + '</button>' +
-          '<button class="icon-btn" data-act="wiz-del-habit" data-i="' + i + '" aria-label="מחיקה">' + icon('trash') + '</button>' +
-          '</div></div></div>'
-        ).join('') : '<div class="notice">עוד לא הוספת הרגל. הראשון ברשימה יקבל את התראת הבוקר — שים שם את הכי חשוב.</div>') +
+          '<div style="flex:0 0 auto" class="row"><button class="icon-btn" data-act="wiz-edit-habit" data-i="' + i + '" aria-label="עריכה">' + icon('settings') + '</button>' +
+          '<button class="icon-btn" data-act="wiz-del-habit" data-i="' + i + '" aria-label="מחיקה">' + icon('trash') + '</button></div></div></div>'
+        ).join('') : '<div class="notice">עוד לא הוספת הרגל. הראשון ברשימה מקבל את התראת הבוקר — שים שם את הכי חשוב, ועדיף לעשות אותו לפני שפותחים את הטלפון.</div>') +
         (d.habits.length < 4 ? '<button class="btn btn-ghost" data-act="add-habit">' + icon('plus') + ' הוספת הרגל</button>' : '');
     }
 
-    if(wizStep === 3){
+    if(wizStep === 7){
       body =
         '<h1>סביבה</h1>' +
-        '<p class="lead">מה הופך את מה שאתה רוצה לקשה יותר ממה שצריך? כל דבר קטן כאן הוא עוד מקום שבו ההרגל יכול למות. סמן מה רלוונטי — זה ייכנס כרשימת הכנות במסך היום.</p>' +
+        '<p class="lead">"להיעלם" ל־90 יום זה להיעלם מהחלקים בחיים הישנים שממשיכים לייצר את האדם שאתה מפסיק להיות. רוב השיפור בא מהורדה, לא מהוספה. מה שתסמן יופיע כרשימת הכנות במסך היום.</p>' +
         '<div class="card">' + d.env.map((e, i) =>
           '<label class="check-row"><input type="checkbox" data-act="wiz-env" data-i="' + i + '"' + (e.on ? ' checked' : '') + '><span>' + esc(e.text) + '</span></label>'
         ).join('') + '</div>' +
-        '<div class="field"><label for="w-env-new">משהו משלך</label><div class="row"><input type="text" id="w-env-new" placeholder="למשל: להוריד את אינסטגרם מהמסך הראשי"><button class="icon-btn" style="flex:0 0 52px;height:52px" data-act="wiz-env-add" aria-label="הוספה">' + icon('plus') + '</button></div></div>';
+        '<div class="field"><label for="w-env-new">משהו משלך</label><div class="row"><input type="text" id="w-env-new" placeholder="למשל: לבטל את המנוי ל..."><button class="icon-btn" style="height:52px;width:52px" data-act="wiz-env-add" aria-label="הוספה">' + icon('plus') + '</button></div></div>';
     }
 
-    if(wizStep === 4){
-      body =
-        '<h1>מדדים</h1>' +
-        '<p class="lead">אחד או שניים, לא יותר. מצב הרוח הוא מדד גרוע לשינוי — תן לעצמך משהו שלא זז כמו הרגשות.</p>' +
-        d.measures.map((m, i) =>
-          '<div class="card"><div class="row">' +
-          '<div class="field" style="flex:2"><label>שם</label><input type="text" data-m="name" data-i="' + i + '" value="' + esc(m.name) + '" placeholder="משקל / זמן ריצה / סקוואט"></div>' +
-          '<div class="field" style="flex:1"><label>יחידה</label><input type="text" data-m="unit" data-i="' + i + '" value="' + esc(m.unit) + '" placeholder="ק״ג"></div></div>' +
-          '<div class="row"><div class="field" style="flex:2"><label>ערך היום (אופציונלי)</label><input type="number" step="any" inputmode="decimal" data-m="first" data-i="' + i + '" value="' + esc(m.first) + '"></div>' +
-          '<div style="flex:0 0 auto;display:flex;align-items:flex-end;padding-bottom:12px"><button class="icon-btn" data-act="wiz-del-m" data-i="' + i + '" aria-label="מחיקה">' + icon('trash') + '</button></div></div></div>'
-        ).join('') +
-        (d.measures.length < 2 ? '<button class="btn btn-ghost" data-act="wiz-add-m">' + icon('plus') + ' עוד מדד</button>' : '');
-    }
-
-    if(wizStep === 5){
+    if(wizStep === 8){
       body =
         '<h1>אדם אחד</h1>' +
-        '<p class="lead">מישהו אחד שיודע מה התוכנית המדויקת. פעם בשבוע האפליקציה תכין לך עדכון קצר לשלוח לו: מה אמרתי, מה עשיתי, איפה פספסתי. חוץ ממנו — לשמור את זה בשקט.</p>' +
+        '<p class="lead">מישהו אחד שיודע את התוכנית המדויקת. פעם בשבוע האפליקציה תכין עדכון קצר: מה אמרתי, מה עשיתי, איפה פספסתי. חוץ ממנו — לשמור את זה בשקט; לדבר על שינוי נותן פרס לפני שעשית משהו.</p>' +
         field('w-partner', 'השם שלו', 'אפשר להשאיר ריק ולהוסיף אחר כך', d.partner.name, false);
     }
 
-    if(wizStep === 6){
+    if(wizStep === 9){
       const n = d.notify;
       body =
         '<h1>התראות</h1>' +
         '<p class="lead">בוקר — להרגל החשוב, לפני הטלפון. ערב — לסגירת היום. ופעם בשבוע — לסקירה.</p>' +
-        '<div class="row"><div class="field"><label for="w-nm">בוקר</label><input type="time" id="w-nm" value="' + n.morning + '"></div>' +
-        '<div class="field"><label for="w-ne">ערב</label><input type="time" id="w-ne" value="' + n.evening + '"></div></div>' +
-        '<div class="row"><div class="field"><label for="w-nwd">סקירה שבועית — יום</label><select id="w-nwd">' + DAY_LONG.map((x, i) => '<option value="' + i + '"' + (i === Number(n.weeklyDay) ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
-        '<div class="field"><label for="w-nwt">שעה</label><input type="time" id="w-nwt" value="' + n.weeklyTime + '"></div></div>' +
-        '<p class="small muted">את ההתראות עצמן מפעילים אחרי הסיום, במסך ההגדרות. באייפון זה עובד רק כשהאפליקציה פתוחה מהאייקון במסך הבית.</p>';
+        notifyFields('w', n) +
+        '<p class="small muted">את ההתראות עצמן מפעילים אחרי הסיום, במסך "תוכנית". באייפון זה עובד רק כשהאפליקציה פתוחה מהאייקון במסך הבית.</p>';
     }
 
     const foot = '<div class="wiz-foot">' +
       (wizStep > 0 ? '<button class="btn btn-ghost" data-act="wiz-back">הקודם</button>' : '') +
-      (wizStep < WIZ.length - 1
-        ? '<button class="btn btn-primary" data-act="wiz-next">הבא</button>'
-        : '<button class="btn btn-green" data-act="wiz-finish">מתחילים</button>') +
+      (wizStep < WIZ.length - 1 ? '<button class="btn btn-primary" data-act="wiz-next">הבא</button>' : '<button class="btn btn-green" data-act="wiz-finish">מתחילים</button>') +
       '</div>' +
       (wizStep === 0 ? '<button class="btn btn-ghost" data-act="open-import">יש לי גיבוי — ייבוא</button>' : '');
 
-    return '<div class="wrap wiz">' + steps + body + foot + '</div>';
+    return '<div class="wrap wiz">' + steps + stepLabel + body + foot + '</div>';
+  }
+
+  function notifyFields(p, n){
+    return '<div class="row"><div class="field"><label for="' + p + '-nm">בוקר</label><input type="time" id="' + p + '-nm" value="' + n.morning + '"></div>' +
+      '<div class="field"><label for="' + p + '-ne">ערב</label><input type="time" id="' + p + '-ne" value="' + n.evening + '"></div></div>' +
+      '<div class="row"><div class="field"><label for="' + p + '-nwd">סקירה — יום</label><select id="' + p + '-nwd">' + DAY_LONG.map((x, i) => '<option value="' + i + '"' + (i === Number(n.weeklyDay) ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+      '<div class="field"><label for="' + p + '-nwt">שעה</label><input type="time" id="' + p + '-nwt" value="' + n.weeklyTime + '"></div></div>';
+  }
+  function readNotify(p, n){
+    n.morning = val(p + '-nm') || n.morning;
+    n.evening = val(p + '-ne') || n.evening;
+    n.weeklyDay = Number(val(p + '-nwd'));
+    n.weeklyTime = val(p + '-nwt') || n.weeklyTime;
   }
 
   function field(id, label, hint, value, multi){
     return '<div class="field"><label for="' + id + '">' + label + '</label>' +
       (hint && multi ? '<div class="hint">' + hint + '</div>' : '') +
-      (multi
-        ? '<textarea id="' + id + '">' + esc(value) + '</textarea>'
-        : '<input type="text" id="' + id + '" value="' + esc(value) + '" placeholder="' + esc(hint) + '">') +
+      (multi ? '<textarea id="' + id + '">' + esc(value) + '</textarea>'
+             : '<input type="text" id="' + id + '" value="' + esc(value) + '" placeholder="' + esc(hint) + '">') +
       '</div>';
   }
-
   function val(id){ const el = document.getElementById(id); return el ? el.value.trim() : ''; }
 
-  /* שומר את מה שמוקלד במסך הנוכחי של האשף לתוך הטיוטה. */
   function captureWizard(){
     const d = draft;
     if(wizStep === 0){ d.startDate = val('w-start') || today(); }
-    if(wizStep === 1){ d.identity = { who:val('w-who'), day:val('w-day'), stop:val('w-stop'), seen:val('w-seen') }; }
-    if(wizStep === 3){
-      document.querySelectorAll('[data-act="wiz-env"]').forEach(cb => { d.env[Number(cb.dataset.i)].on = cb.checked; });
-    }
-    if(wizStep === 4){
-      document.querySelectorAll('[data-m]').forEach(inp => { d.measures[Number(inp.dataset.i)][inp.dataset.m] = inp.value.trim(); });
-    }
-    if(wizStep === 5){ d.partner.name = val('w-partner'); }
-    if(wizStep === 6){
-      d.notify.morning = val('w-nm') || '06:30';
-      d.notify.evening = val('w-ne') || '21:30';
-      d.notify.weeklyDay = Number(val('w-nwd'));
-      d.notify.weeklyTime = val('w-nwt') || '12:00';
-    }
+    if(wizStep === 1){ AREAS.forEach(a => { d.audit[a.id].evidence = val('w-ev-' + a.id); d.audit[a.id].trend = val('w-tr-' + a.id); }); }
+    if(wizStep === 2){ AREAS.forEach(a => { d.vision[a.id] = val('w-vi-' + a.id); }); d.week = val('w-week'); d.anti = val('w-anti'); }
+    if(wizStep === 3){ d.reasons = { here:val('w-r-here'), want:val('w-r-want'), refuse:val('w-r-refuse') }; }
+    if(wizStep === 4){ d.identity = { who:val('w-who'), day:val('w-day'), stop:val('w-stop'), seen:val('w-seen') }; }
+    if(wizStep === 7){ document.querySelectorAll('[data-act="wiz-env"]').forEach(cb => { d.env[Number(cb.dataset.i)].on = cb.checked; }); }
+    if(wizStep === 8){ d.partner.name = val('w-partner'); }
+    if(wizStep === 9){ readNotify('w', d.notify); }
   }
 
   function finishWizard(){
     captureWizard();
     const d = draft;
-    if(d.habits.length === 0){ wizStep = 2; render(); toast('צריך לפחות הרגל אחד'); return; }
+    if(d.habits.length === 0){ wizStep = 6; render(); toast('צריך לפחות הרגל אחד'); return; }
     const start = d.startDate;
     S = emptyState();
     S.setup = {
-      startDate: start,
-      identity: d.identity,
-      habits: d.habits.map(h => Object.assign({}, h, { from:start })),
-      env: d.env.filter(e => e.on).map(e => ({ id:e.id, text:e.text, done:false })),
-      measures: d.measures.filter(m => m.name).map(m => ({ id:m.id, name:m.name, unit:m.unit })),
-      partner: d.partner,
-      notify: d.notify
+      startDate:start, length:d.length,
+      audit:d.audit, vision:d.vision, week:d.week, anti:d.anti, reasons:d.reasons,
+      identity:d.identity,
+      goals:d.goals,
+      habits:d.habits.map(h => Object.assign({}, h, { from:start })),
+      env:d.env.filter(e => e.on).map(e => ({ id:e.id, text:e.text, done:false })),
+      partner:d.partner,
+      notify:d.notify
     };
-    d.measures.forEach(m => {
-      if(m.name && m.first !== '' && !isNaN(Number(m.first))){
-        S.measureLog.push({ id:uid(), date:today(), measureId:m.id, value:Number(m.first) });
-      }
-    });
+    const scores = {}; let any = false;
+    AREAS.forEach(a => { scores[a.id] = d.audit[a.id].score; if(d.audit[a.id].score !== null) any = true; });
+    if(any) S.audits.push({ id:uid(), date:today(), scores });
     draft = null;
     save();
     tick(30);
     go('today');
   }
 
-  /* ---------- habit editor (shared by wizard + settings) ---------- */
+  /* ---------- עורך הרגל ---------- */
 
-  let habitEdit = null; // { h, onSave }
-
+  let habitEdit = null;
   function openHabitEditor(h, onSave){
-    habitEdit = {
-      h: h ? JSON.parse(JSON.stringify(h)) : { id:uid(), name:'', full:'', min:'', anchor:'', days:[0,1,2,3,4,5,6] },
-      onSave
-    };
-    renderHabitSheet();
-  }
-
-  function renderHabitSheet(){
-    const h = habitEdit.h;
+    habitEdit = { h: h ? JSON.parse(JSON.stringify(h)) : { id:uid(), name:'', full:'', min:'', anchor:'', days:[0,1,2,3,4,5,6] }, onSave };
+    const x = habitEdit.h;
     openSheet(
-      '<h2>' + (h.name ? 'עריכת הרגל' : 'הרגל חדש') + '</h2>' +
+      '<h2>' + (x.name ? 'עריכת הרגל' : 'הרגל חדש') + '</h2>' +
       '<p class="small muted" style="margin:0 0 16px">הגדר את המינימום עכשיו, לפני שהיום הרע מגיע — כדי שלא תתווכח עם עצמך 45 דקות אם זה נחשב.</p>' +
-      '<div class="field"><label for="h-name">שם</label><input type="text" id="h-name" value="' + esc(h.name) + '" placeholder="אימון / כתיבה / קריאה"></div>' +
-      '<div class="field"><label for="h-full">גרסה רגילה</label><input type="text" id="h-full" value="' + esc(h.full) + '" placeholder="60 דקות בחדר כושר"></div>' +
-      '<div class="field"><label for="h-min">מינימום — הרצפה ליום רע</label><div class="hint">לא גדול מדי. זה רצפה, לא תקן חדש.</div><input type="text" id="h-min" value="' + esc(h.min) + '" placeholder="25 דקות בבית"></div>' +
-      '<div class="field"><label for="h-anchor">איפה הוא גר ביום שלך?</label><div class="hint">חבר אותו למשהו שכבר קורה. "מתישהו היום" זה המקום שבו הרגלים נעלמים.</div><input type="text" id="h-anchor" value="' + esc(h.anchor) + '" placeholder="אחרי הקפה של הבוקר"></div>' +
-      '<div class="field"><label>באילו ימים</label><div class="hint">קצב שאפשר להחזיק 13 שבועות, לא השבוע המושלם.</div><div class="days-pick" id="h-days">' +
-        DAY_SHORT.map((x, i) => '<button type="button" data-day="' + i + '" aria-pressed="' + h.days.includes(i) + '" aria-label="' + DAY_LONG[i] + '">' + x + '</button>').join('') +
+      '<div class="field"><label for="h-name">שם</label><input type="text" id="h-name" value="' + esc(x.name) + '" placeholder="אימון / כתיבה / קריאה"></div>' +
+      '<div class="field"><label for="h-full">גרסה רגילה</label><input type="text" id="h-full" value="' + esc(x.full) + '" placeholder="60 דקות בחדר כושר / 22 עמודים"></div>' +
+      '<div class="field"><label for="h-min">מינימום — הרצפה ליום רע</label><div class="hint">לא גדול מדי. רצפה, לא תקן חדש.</div><input type="text" id="h-min" value="' + esc(x.min) + '" placeholder="25 דקות בבית / 5 עמודים"></div>' +
+      '<div class="field"><label for="h-anchor">איפה הוא גר ביום שלך?</label><div class="hint">חבר אותו למשהו שכבר קורה. "מתישהו היום" זה המקום שבו הרגלים נעלמים.</div><input type="text" id="h-anchor" value="' + esc(x.anchor) + '" placeholder="אחרי הקפה של הבוקר"></div>' +
+      '<div class="field"><label>באילו ימים</label><div class="hint">קצב שאפשר להחזיק כל העונה, לא השבוע המושלם.</div><div class="days-pick" id="h-days">' +
+        DAY_SHORT.map((s, i) => '<button type="button" data-day="' + i + '" aria-pressed="' + x.days.includes(i) + '" aria-label="' + DAY_LONG[i] + '">' + s + '</button>').join('') +
       '</div></div>' +
       '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="habit-save">שמירה</button></div>'
     );
   }
-
   function saveHabitFromSheet(){
     const h = habitEdit.h;
-    h.name = val('h-name');
-    h.full = val('h-full');
-    h.min = val('h-min');
-    h.anchor = val('h-anchor');
+    h.name = val('h-name'); h.full = val('h-full'); h.min = val('h-min'); h.anchor = val('h-anchor');
     if(!h.name){ toast('צריך שם להרגל'); return; }
     if(!h.min){ toast('הגדר מינימום — זה מה שמציל את היום הרע'); return; }
     if(h.days.length === 0){ toast('בחר לפחות יום אחד'); return; }
@@ -761,52 +948,90 @@
     closeSheet();
   }
 
+  /* ---------- עורך יעד ---------- */
+
+  let goalEdit = null;
+  function openGoalEditor(g, onSave){
+    goalEdit = { g: g ? Object.assign({}, g) : { id:uid(), name:'', area:'health', unit:'', actual:0, target:0 }, onSave };
+    const x = goalEdit.g;
+    openSheet(
+      '<h2>' + (x.name ? 'עריכת יעד' : 'יעד חדש') + '</h2>' +
+      '<p class="small muted" style="margin:0 0 16px">הפרד את התוצאה מההתנהגויות שמייצרות אותה. את ההתנהגויות שמים בהרגלים.</p>' +
+      '<div class="field"><label for="g-name">מה מודדים</label><input type="text" id="g-name" value="' + esc(x.name) + '" placeholder="משקל / עמודים שנקראו / חיסכון"></div>' +
+      '<div class="field"><label for="g-area">תחום</label><select id="g-area">' + AREAS.map(a => '<option value="' + a.id + '"' + (a.id === x.area ? ' selected' : '') + '>' + a.name + '</option>').join('') + '</select></div>' +
+      '<div class="row"><div class="field"><label for="g-actual">איפה אני עכשיו</label><input type="number" step="any" inputmode="decimal" id="g-actual" value="' + esc(x.actual) + '"></div>' +
+      '<div class="field"><label for="g-target">לאן בסוף העונה</label><input type="number" step="any" inputmode="decimal" id="g-target" value="' + esc(x.target) + '"></div></div>' +
+      '<div class="field"><label for="g-unit">יחידה</label><input type="text" id="g-unit" value="' + esc(x.unit) + '" placeholder="ק״ג / עמודים / ₪ / שעות"></div>' +
+      '<p class="small muted" id="g-pace"></p>' +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="goal-save">שמירה</button></div>'
+    );
+    updateGoalPace();
+  }
+  function readGoalSheet(){
+    const g = goalEdit.g;
+    g.name = val('g-name'); g.area = val('g-area'); g.unit = val('g-unit');
+    g.actual = parseFloat(val('g-actual')); g.target = parseFloat(val('g-target'));
+    return g;
+  }
+  function updateGoalPace(){
+    const el = document.getElementById('g-pace');
+    if(!el) return;
+    const g = readGoalSheet();
+    el.textContent = (isNaN(g.actual) || isNaN(g.target)) ? '' : goalPaceText(g);
+  }
+  function saveGoalFromSheet(){
+    const g = readGoalSheet();
+    if(!g.name){ toast('צריך שם ליעד'); return; }
+    if(isNaN(g.actual) || isNaN(g.target)){ toast('צריך מספר התחלה ומספר יעד'); return; }
+    goalEdit.onSave(g);
+    goalEdit = null;
+    closeSheet();
+  }
+
   /* =========================================================
-     מסך היום
+     היום
      ========================================================= */
 
   function renderToday(){
     const t = today();
-    const setup = S.setup;
+    const s = S.setup;
 
-    if(t < setup.startDate){
-      const n = diffDays(t, setup.startDate);
+    if(t < s.startDate){
+      const n = diffDays(t, s.startDate);
       return '<div class="day-head"><h1>עוד ' + n + ' ' + (n === 1 ? 'יום' : 'ימים') + '</h1></div>' +
-        '<p class="identity">' + esc(setup.identity.who || '') + '</p>' +
-        envCard() +
-        '<div class="card"><p class="muted" style="margin:0">ה-90 יום מתחילים ב-' + fmtLong(setup.startDate) + '. זה זמן טוב להכין את הסביבה.</p></div>';
+        (s.identity.who ? '<p class="identity">' + esc(s.identity.who) + '</p>' : '') +
+        envCard() + exerciseCard() +
+        '<div class="card"><p class="muted flush">העונה מתחילה ב' + fmtLong(s.startDate) + '. זה זמן טוב להכין את הסביבה.</p></div>';
     }
 
     const date = viewDate;
-    const idx = dayIndex(date);
     const ks = keptStats();
-    const pct = Math.min(100, Math.round(Math.min(dayIndex(t), TOTAL) / TOTAL * 100));
-    const done = t > endDate();
+    const dayNow = Math.min(dayIndex(t), L());
+    const pct = Math.round(dayNow / L() * 100);
 
     let html =
-      '<div class="day-head"><h1><span class="num">יום ' + Math.min(dayIndex(t), TOTAL) + '</span> <span class="of">/ 90</span></h1>' +
+      '<div class="day-head"><h1><span class="num">יום ' + dayNow + '</span> <span class="of">/ ' + L() + '</span></h1>' +
       '<div class="kept"><b class="num">' + ks.kept + '</b> ימים מתוך <span class="num">' + ks.passed + '</span></div></div>' +
       '<div class="bar" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + pct + '%"></i></div>';
 
-    if(done) html += finishedCard();
+    if(t > endDate()) html += finishedCard();
+    if(s.identity.who) html += '<p class="identity">' + esc(s.identity.who) + '</p>';
 
-    if(setup.identity.who) html += '<p class="identity">' + esc(setup.identity.who) + '</p>';
+    if(S.focusRun) html += '<div class="notice"><b>בלוק פוקוס רץ:</b> ' + esc(S.focusRun.target) + ' <button class="btn btn-primary btn-sm" style="margin-top:8px" data-act="focus-open">' + icon('timer') + ' לחזור לטיימר</button></div>';
 
     html +=
       '<div class="date-nav">' +
-      '<button class="icon-btn" data-act="day-prev" aria-label="יום קודם"' + (date <= setup.startDate ? ' disabled' : '') + '>' + icon('right') + '</button>' +
-      '<div class="dn-label">' + (date === t ? 'היום · ' : '') + fmtLong(date) + ' <span class="muted small">(' + idx + ')</span></div>' +
+      '<button class="icon-btn" data-act="day-prev" aria-label="יום קודם"' + (date <= s.startDate ? ' disabled' : '') + '>' + icon('right') + '</button>' +
+      '<div class="dn-label">' + (date === t ? 'היום · ' : '') + fmtLong(date) + ' <span class="muted small">(' + dayIndex(date) + ')</span></div>' +
       '<button class="icon-btn" data-act="day-next" aria-label="יום הבא"' + (date >= t || date >= endDate() ? ' disabled' : '') + '>' + icon('left') + '</button>' +
       '</div>';
 
-    const prevPrep = S.days[addDays(date, -1)] && S.days[addDays(date, -1)].prep;
-    if(prevPrep && date === t){
-      html += '<div class="notice"><b>הכנת אתמול למחר:</b> ' + esc(prevPrep) + '</div>';
-    }
+    const prev = S.days[addDays(date, -1)];
+    if(prev && prev.prep && date === t) html += '<div class="notice"><b>הכנת אתמול למחר:</b> ' + esc(prev.prep) + '</div>';
 
     const hs = habitsOn(date);
     if(hs.length === 0){
-      html += '<div class="card"><p class="muted" style="margin:0">אין הרגלים מתוכננים ליום הזה. יום מנוחה.</p></div>';
+      html += '<div class="card"><p class="muted flush">אין הרגלים מתוכננים ליום הזה. יום מנוחה.</p></div>';
     }else{
       html += hs.map(h => {
         const m = mark(date, h.id);
@@ -815,34 +1040,56 @@
           '<div class="habit-name">' + esc(h.name) + '</div>' +
           (h.anchor ? '<div class="habit-anchor">' + esc(h.anchor) + '</div>' : '') +
           '<div class="habit-versions"><span><b>רגיל:</b> ' + esc(h.full || '—') + '</span><span><b>מינימום:</b> ' + esc(h.min) + '</span></div>' +
-          '<div class="tri">' + btn('full', 'רגיל', 'check') + btn('min', 'מינימום', 'half') + btn('miss', 'לא', 'x') + '</div>' +
-          '</div>';
+          '<div class="tri">' + btn('full', 'רגיל', 'check') + btn('min', 'מינימום', 'half') + btn('miss', 'לא', 'x') + '</div></div>';
       }).join('');
     }
 
     const closed = S.days[date] && S.days[date].closed;
-    html += '<button class="btn ' + (closed ? 'btn-ghost' : 'btn-primary') + '" data-act="close-day">' + icon('moon') + (closed ? ' היום נסגר — לפתוח שוב' : ' סגירת יום') + '</button>';
+    html += '<div class="row"><button class="btn ' + (closed ? 'btn-ghost' : 'btn-primary') + '" data-act="close-day">' + icon('moon') + (closed ? ' לפתוח שוב' : ' סגירת יום') + '</button>' +
+      (date === t && !S.focusRun ? '<button class="btn" data-act="focus-new">' + icon('timer') + ' בלוק פוקוס</button>' : '') + '</div>';
 
-    if(date === t) html += envCard();
+    if(date === t){
+      html += goalsTodayCard() + exerciseCard() + envCard();
+    }
     return html;
+  }
+
+  function goalsTodayCard(){
+    const gs = S.setup.goals || [];
+    if(!gs.length) return '';
+    return '<div class="card" style="margin-top:16px"><h2>יעדים</h2>' + gs.map(g => {
+      const cur = goalLatest(g), exp = goalExpected(g), st = goalStatus(g);
+      return '<div class="goal-line"><b>' + esc(g.name) + '</b><span class="' + (st === 'on' ? '' : 'muted') + '">' + round(cur) + ' / צריך ' + round(exp) + ' ' + esc(g.unit) + '</span></div>';
+    }).join('') + '<button class="btn btn-ghost btn-sm" style="width:100%" data-go="proof">לעדכן מספרים</button></div>';
+  }
+
+  function recommendedExercise(){
+    return EXERCISES.find(e => !(S.ex[e.id] && S.ex[e.id].doneOn));
+  }
+
+  function exerciseCard(){
+    const e = recommendedExercise();
+    if(!e) return '';
+    const st = S.ex[e.id] || { steps:{} };
+    const done = Object.keys(st.steps || {}).filter(k => st.steps[k]).length;
+    return '<div class="card accent" style="margin-top:16px"><p class="label">תרגיל השבוע</p><h2>' + esc(e.t) + '</h2><p class="small muted" style="margin:0 0 8px">' + esc(e.idea) + '</p>' +
+      '<button class="btn btn-sm" style="width:100%" data-act="ex-open" data-id="' + e.id + '">' + (done ? 'להמשיך (' + done + '/' + e.steps.length + ')' : 'לפתוח') + '</button></div>';
   }
 
   function envCard(){
     const env = S.setup.env || [];
-    const open = env.filter(e => !e.done);
-    if(open.length === 0) return '';
+    if(env.every(e => e.done)) return '';
     return '<div class="card" style="margin-top:16px"><h2>הכנת הסביבה</h2>' +
       '<p class="small muted" style="margin:0 0 4px">כל אחד מאלה מוריד חיכוך. לסמן כשסידרת.</p>' +
-      env.map(e => '<label class="check-row' + (e.done ? ' done' : '') + '"><input type="checkbox" data-act="env-done" data-id="' + e.id + '"' + (e.done ? ' checked' : '') + '><span>' + esc(e.text) + '</span></label>').join('') +
-      '</div>';
+      env.map(e => '<label class="check-row' + (e.done ? ' done' : '') + '"><input type="checkbox" data-act="env-done" data-id="' + e.id + '"' + (e.done ? ' checked' : '') + '><span>' + esc(e.text) + '</span></label>').join('') + '</div>';
   }
 
   function finishedCard(){
     const ks = keptStats();
-    return '<div class="card" style="border-color:var(--green)"><h2>90 הימים הושלמו</h2>' +
-      '<p style="margin:0 0 8px">עמדת ב-<b>' + ks.kept + '</b> ימים מתוך ' + ks.passed + ', ואספת <b>' + S.receipts.length + '</b> קבלות.</p>' +
-      '<p class="small muted" style="margin:0">תסתכל על המשפט הישן שהיית אומר על עצמך. הוא עדיין מחזיק מול שלושה חודשים של ראיות?</p>' +
-      '<button class="btn btn-ghost" data-go="board">לראות את הלוח</button></div>';
+    return '<div class="card" style="border-color:var(--green)"><h2>העונה הושלמה</h2>' +
+      '<p style="margin:0 0 8px">עמדת ב־<b>' + ks.kept + '</b> ימים מתוך ' + ks.passed + ', ואספת <b>' + S.receipts.length + '</b> קבלות.</p>' +
+      '<p class="small muted flush">תסתכל על המשפט הישן שהיית אומר על עצמך. הוא עדיין מחזיק מול כל הראיות? כדאי לעשות ביקורת מציאות חדשה ולהשוות.</p>' +
+      '<button class="btn btn-ghost" data-go="proof">לראיות</button></div>';
   }
 
   function setMark(date, hid, v){
@@ -862,13 +1109,13 @@
     const todays = S.receipts.filter(r => r.date === date);
     openSheet(
       '<h2>סגירת יום</h2>' +
-      '<p class="small muted" style="margin:0 0 16px">' + fmtLong(date) + '. עובדות, לא הרגשות. "היה יום עמוס" יכול להיות נכון — וההתחייבות עדיין פוספסה.</p>' +
+      '<p class="small muted" style="margin:0 0 16px">' + fmtLong(date) + '. עובדות, לא הרגשות. "היה יום עמוס" יכול להיות נכון — וההתחייבות עדיין פוספסה. וזה בסדר: זה רק נתון.</p>' +
       (unmarked.length
         ? '<p class="label">עוד לא סומנו</p>' + unmarked.map(h =>
             '<div class="card habit" style="padding:12px"><div class="habit-name" style="font-size:1rem;margin-bottom:8px">' + esc(h.name) + '</div><div class="tri">' +
-            ['full:רגיל:check','min:מינימום:half','miss:לא:x'].map(x => { const [v,l,ic] = x.split(':'); return '<button data-act="mark-sheet" data-date="' + date + '" data-h="' + h.id + '" data-v="' + v + '" aria-pressed="false">' + icon(ic) + l + '</button>'; }).join('') +
+            [['full','רגיל','check'],['min','מינימום','half'],['miss','לא','x']].map(([v,l,ic]) => '<button data-act="mark-sheet" data-date="' + date + '" data-h="' + h.id + '" data-v="' + v + '" aria-pressed="false">' + icon(ic) + l + '</button>').join('') +
             '</div></div>').join('')
-        : (hs.length ? '<div class="notice" style="background:rgba(16,185,129,0.12);border-color:rgba(16,185,129,0.4)">כל ההרגלים של היום סומנו.</div>' : '')) +
+        : (hs.length ? '<div class="notice good">כל ההרגלים של היום סומנו.</div>' : '')) +
       '<div class="field"><label for="c-receipt">קבלה</label><div class="hint">משהו שעשית היום שסותר את הגרסה הישנה שלך. "התאמנתי למרות שלא רציתי".</div><textarea id="c-receipt" placeholder="אפשר להשאיר ריק"></textarea></div>' +
       (todays.length ? '<p class="small muted">כבר נרשמו היום: ' + todays.map(r => esc(r.text)).join(' · ') + '</p>' : '') +
       '<div class="field"><label for="c-prep">מה תכין עכשיו כדי שמחר יהיה קל יותר?</label><input type="text" id="c-prep" value="' + esc(d.prep || '') + '" placeholder="בגדי אימון ליד המיטה"></div>' +
@@ -883,38 +1130,109 @@
     if(r) S.receipts.push({ id:uid(), date, text:r });
     d.prep = val('c-prep');
     d.closed = true;
-    save();
-    closeSheet();
-    tick(30);
+    save(); closeSheet(); tick(30);
     toast('היום נסגר. מחר כבר יש תוכנית.');
     render();
   }
 
+  /* ---------- בלוק פוקוס: מתוכנן, בפועל, דחפים, תוצר ---------- */
+
+  let focusTimer = null;
+
+  function suggestPlanned(){
+    const last = S.focus[S.focus.length - 1];
+    if(!last) return 25;
+    /* עומס הדרגתי: אם עמדת בתוכנית — קצת יותר; אם לא — אותו דבר. */
+    return last.actual >= last.planned ? last.planned + 5 : last.planned;
+  }
+
+  function openFocusSetup(prefill){
+    openSheet(
+      '<h2>בלוק פוקוס</h2>' +
+      '<p class="small muted" style="margin:0 0 16px">משימה אחת עם קו סיום שרואים. טלפון בחדר אחר, שולחן נקי, מים ליד. ואז: לכתוב את היעד, חמש נשימות, ולהתחיל.</p>' +
+      '<div class="field"><label for="f-target">מה זה "גמור"?</label><input type="text" id="f-target" value="' + esc(prefill || '') + '" placeholder="1,000 מילים / פרק אחד / 20 תרגילים"></div>' +
+      '<div class="field"><label for="f-planned">כמה דקות</label><div class="hint">עדיף להגיד 30 ולעשות 33 מאשר להגיד 30 ולעשות שעתיים.</div><input type="number" inputmode="numeric" id="f-planned" value="' + suggestPlanned() + '"></div>' +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="focus-start">' + icon('timer') + ' להתחיל</button></div>'
+    );
+  }
+
+  function startFocus(){
+    const target = val('f-target');
+    const planned = parseInt(val('f-planned'), 10);
+    if(!target){ toast('צריך קו סיום'); return; }
+    if(!planned || planned < 1){ toast('כמה דקות?'); return; }
+    S.focusRun = { target, planned, start:Date.now(), urges:0 };
+    save(); tick(30);
+    openFocusRun();
+  }
+
+  function elapsedMin(){ return S.focusRun ? (Date.now() - S.focusRun.start) / 60000 : 0; }
+  function mmss(min){ const s = Math.floor(min * 60); return pad(Math.floor(s / 60)) + ':' + pad(s % 60); }
+
+  function openFocusRun(){
+    const r = S.focusRun;
+    openSheet(
+      '<h2>' + esc(r.target) + '</h2>' +
+      '<div class="timer num" id="f-clock">' + mmss(elapsedMin()) + '</div>' +
+      '<div class="timer-sub">מתוך ' + r.planned + ' דקות</div>' +
+      '<button class="urge-btn" data-act="focus-urge">דחף לברוח <span class="num" id="f-urges">' + r.urges + '</span><small>הדחף הוא תחילת העבודה — עוד 5 דקות</small></button>' +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">להסתיר</button><button class="btn btn-green" data-act="focus-stop">סיום</button></div>' +
+      '<button class="btn btn-ghost btn-sm" style="width:100%" data-act="focus-cancel">ביטול הבלוק בלי לשמור</button>'
+    );
+    clearInterval(focusTimer);
+    focusTimer = setInterval(() => {
+      const el = document.getElementById('f-clock');
+      if(!el || !S.focusRun){ clearInterval(focusTimer); return; }
+      el.textContent = mmss(elapsedMin());
+      if(elapsedMin() >= S.focusRun.planned && !S.focusRun.buzzed){ S.focusRun.buzzed = true; save(); tick(200); }
+    }, 1000);
+  }
+
+  function stopFocus(){
+    clearInterval(focusTimer);
+    const r = S.focusRun;
+    const actual = Math.max(1, Math.round(elapsedMin()));
+    openSheet(
+      '<h2>ארבעה מספרים</h2>' +
+      '<p class="small muted" style="margin:0 0 16px">מדרגים את הסשן לפי מה שקרה, לא לפי איך שהוא הרגיש.</p>' +
+      '<div class="row"><div class="field"><label>מתוכנן</label><input type="number" value="' + r.planned + '" disabled></div>' +
+      '<div class="field"><label for="f-actual">בפועל (דק׳)</label><input type="number" inputmode="numeric" id="f-actual" value="' + actual + '"></div>' +
+      '<div class="field"><label>דחפים</label><input type="number" value="' + r.urges + '" disabled></div></div>' +
+      '<div class="field"><label for="f-produced">מה יצא בפועל?</label><input type="text" id="f-produced" placeholder="' + esc(r.target) + '"></div>' +
+      '<div class="row"><button class="btn btn-primary" data-act="focus-save">שמירה</button></div>'
+    );
+  }
+
+  function saveFocus(){
+    const r = S.focusRun;
+    S.focus.push({ id:uid(), date:today(), target:r.target, planned:r.planned, actual:parseInt(val('f-actual'), 10) || 0, urges:r.urges, produced:val('f-produced') });
+    S.focusRun = null;
+    save(); closeSheet(); tick(30);
+    toast('נרשם. בפעם הבאה: ' + suggestPlanned() + ' דקות');
+    render();
+  }
+
   /* =========================================================
-     התקדמות — לוח 90 יום + מדדים
+     ראיות — לוח, יעדים, ביקורת מציאות, פוקוס, קבלות
      ========================================================= */
 
-  function renderBoard(){
+  function renderProof(){
     const t = today();
+    const ks = keptStats();
+    const focusMin = S.focus.reduce((a, f) => a + (f.actual || 0), 0);
+
     let cells = '';
-    for(let i = 0; i < TOTAL; i++){
+    for(let i = 0; i < L(); i++){
       if(i % 7 === 0) cells += '<div class="wk">שבוע ' + (i/7 + 1) + '</div>';
       const date = addDays(S.setup.startDate, i);
-      let cls;
-      if(date > t) cls = 'future';
-      else{
-        const st = dayStatus(date);
-        cls = st;
-        if(st === 'open' && date < t) cls = 'open';
-      }
+      let cls = date > t ? 'future' : dayStatus(date);
       if(date === t) cls += ' today';
       cells += '<button class="cell ' + cls + '" data-act="board-day" data-date="' + date + '" aria-label="' + fmtLong(date) + '">' + (i + 1) + '</button>';
     }
 
-    const ks = keptStats();
     const perHabit = activeHabits().map(h => {
       let f = 0, mn = 0, ms = 0;
-      for(let i = 0; i < TOTAL; i++){
+      for(let i = 0; i < L(); i++){
         const date = addDays(S.setup.startDate, i);
         if(date > t) break;
         if(!scheduled(h, date)) continue;
@@ -925,105 +1243,171 @@
         '<div class="li-meta num">' + f + ' רגיל · ' + mn + ' מינ׳ · ' + ms + ' לא</div></div>';
     }).join('');
 
-    return '<h1 style="font-size:1.6rem;margin-bottom:12px">התקדמות</h1>' +
-      '<div class="stat-grid" style="margin-bottom:12px">' +
+    return '<h1 class="page">ראיות</h1>' +
+      '<div class="stat-grid">' +
       '<div class="stat"><b class="num">' + ks.kept + '/' + ks.passed + '</b><span>ימים שעמדת בהם</span></div>' +
-      '<div class="stat"><b class="num">' + S.receipts.length + '</b><span>קבלות</span></div></div>' +
-      '<div class="card"><div class="board">' + cells + '</div>' +
-      '<div class="legend">' +
-        '<span><i style="background:var(--green)"></i>הכול רגיל</span>' +
-        '<span><i style="background:var(--amber)"></i>עמדת (עם מינימום)</span>' +
-        '<span><i style="background:repeating-linear-gradient(-45deg,#3A4452 0 3px,var(--surface-2) 3px 6px)"></i>פוספס</span>' +
-        '<span><i style="border:1px solid var(--muted)"></i>לא סומן</span>' +
-        '<span><i style="border:1px solid var(--line)"></i>מנוחה</span>' +
-      '</div></div>' +
+      '<div class="stat"><b class="num">' + S.receipts.length + '</b><span>קבלות</span></div>' +
+      '<div class="stat"><b class="num">' + S.focus.length + '</b><span>בלוקי פוקוס</span></div>' +
+      '<div class="stat"><b class="num">' + Math.round(focusMin / 60 * 10) / 10 + '</b><span>שעות פוקוס</span></div></div>' +
+      renderGoals() +
+      receiptsCard() +
+      '<div class="card"><h2>הלוח</h2><div class="board">' + cells + '</div>' +
+      '<div class="legend"><span><i style="background:var(--green)"></i>הכול רגיל</span><span><i style="background:var(--amber)"></i>עמדת (עם מינימום)</span>' +
+      '<span><i style="background:var(--hatch)"></i>פוספס</span><span><i style="border:1px solid var(--muted)"></i>לא סומן</span><span><i style="border:1px solid var(--line)"></i>מנוחה</span></div></div>' +
       (perHabit ? '<div class="card"><h2>לפי הרגל</h2>' + perHabit + '</div>' : '') +
-      renderMeasures();
+      auditCard() +
+      focusCard();
   }
 
-  function renderMeasures(){
-    const ms = S.setup.measures || [];
-    if(ms.length === 0) return '<div class="card"><h2>מדדים</h2><p class="small muted" style="margin:0">אין מדדים. אפשר להוסיף בהגדרות.</p></div>';
-    return ms.map(m => {
-      const log = S.measureLog.filter(x => x.measureId === m.id).sort((a,b) => a.date.localeCompare(b.date));
-      const first = log[0], last = log[log.length - 1];
-      let summary = '<p class="small muted" style="margin:0">עוד אין ערכים.</p>';
-      if(first){
-        const delta = last.value - first.value;
-        summary = '<p style="margin:0">התחלה: <b class="num">' + first.value + '</b> ' + esc(m.unit) + ' (' + fmt(first.date) + ') · עכשיו: <b class="num">' + last.value + '</b>' +
-          (log.length > 1 ? ' <span class="muted num">(' + (delta > 0 ? '+' : '') + Math.round(delta * 100) / 100 + ')</span>' : '') + '</p>';
-      }
-      return '<div class="card"><h2>' + esc(m.name) + '</h2>' + summary + sparkline(log) +
-        '<div class="row" style="align-items:flex-end"><div class="field" style="flex:2;margin:0"><label for="mv-' + m.id + '">ערך חדש (' + esc(m.unit) + ')</label><input type="number" step="any" inputmode="decimal" id="mv-' + m.id + '"></div>' +
-        '<button class="btn btn-primary" style="flex:1;width:auto;margin:0" data-act="measure-add" data-id="' + m.id + '">' + icon('plus') + ' רישום</button></div>' +
-        (log.length ? '<details style="margin-top:12px"><summary class="small muted" style="cursor:pointer;min-height:32px">כל הערכים (' + log.length + ')</summary>' +
-          log.slice().reverse().map(x => '<div class="list-item"><span class="num">' + x.value + ' ' + esc(m.unit) + '</span><span class="li-meta">' + fmt(x.date) +
-          ' <button class="icon-btn" style="width:40px;height:40px;margin-right:8px" data-act="measure-del" data-id="' + x.id + '" aria-label="מחיקה">' + icon('trash') + '</button></span></div>').join('') +
-          '</details>' : '') +
+  function renderGoals(){
+    const gs = S.setup.goals || [];
+    if(!gs.length) return '<div class="card"><h2>יעדים במספרים</h2><p class="small muted flush">אין יעדים. אפשר להוסיף במסך "תוכנית".</p></div>';
+    return gs.map(g => {
+      const log = S.goalLog.filter(x => x.goalId === g.id).sort((a,b) => a.date.localeCompare(b.date));
+      const cur = goalLatest(g), exp = goalExpected(g), st = goalStatus(g);
+      const span = g.target - g.actual;
+      const pctDone = span ? Math.max(0, Math.min(100, (cur - g.actual) / span * 100)) : 100;
+      const pctExp = span ? Math.max(0, Math.min(100, (exp - g.actual) / span * 100)) : 100;
+      const weekEnd = weekRange(currentWeek())[1];
+      return '<div class="card"><h2>' + esc(g.name) + '<span class="tag">' + esc((AREAS.find(a => a.id === g.area) || {}).name || '') + '</span></h2>' +
+        '<div class="goal-line"><span>עכשיו: <b class="num">' + round(cur) + '</b> ' + esc(g.unit) + '</span><span class="muted">יעד: ' + round(g.target) + '</span></div>' +
+        '<div class="goal-bar" aria-hidden="true"><i style="width:' + pctDone + '%"></i><u style="right:calc(' + pctExp + '% - 1px)"></u></div>' +
+        '<div class="goal-line small"><span class="' + (st === 'on' ? '' : 'muted') + '">' + (st === 'on' ? 'בקצב' : 'מאחורי הקצב') + ' · היום צריך להיות ' + round(exp) + '</span><span class="muted">סוף השבוע: ' + round(goalExpected(g, weekEnd)) + '</span></div>' +
+        '<p class="small muted" style="margin:4px 0 0">' + goalPaceText(g) + '</p>' +
+        sparkline(g, log) +
+        '<div class="row" style="align-items:flex-end"><div class="field" style="flex:2;margin:0"><label for="gv-' + g.id + '">ערך עדכני</label><input type="number" step="any" inputmode="decimal" id="gv-' + g.id + '"></div>' +
+        '<button class="btn btn-primary" style="flex:1;margin:0" data-act="goal-log" data-id="' + g.id + '">' + icon('plus') + ' רישום</button></div>' +
+        (log.length ? '<details style="margin-top:12px"><summary>כל הערכים (' + log.length + ')</summary>' +
+          log.slice().reverse().map(x => '<div class="list-item"><span class="num">' + x.value + ' ' + esc(g.unit) + '</span><span class="li-meta">' + fmt(x.date) +
+          '<button class="icon-btn sm" data-act="goal-log-del" data-id="' + x.id + '" aria-label="מחיקה">' + icon('trash') + '</button></span></div>').join('') + '</details>' : '') +
+        '<p class="small muted" style="margin:8px 0 0">מספר זז מסיבות שלא קשורות לתוכנית (משקל, הכנסה לא אחידה). לא להגיב לכל נקודה — להסתכל על המגמה.</p>' +
         '</div>';
     }).join('');
   }
 
-  function sparkline(log){
-    if(log.length < 2) return '';
-    const vals = log.map(x => x.value);
-    const min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
-    const span = max - min || 1;
+  /* קו הקצב המתוכנן (מקווקו) מול הערכים בפועל. מצויר משמאל לימין כמו כל ציר זמן. */
+  function sparkline(g, log){
+    const pts = [{ i:0, v:g.actual }].concat(log.map(x => ({ i:Math.max(0, dayIndex(x.date)), v:x.value })));
+    if(pts.length < 2) return '';
+    const vals = pts.map(p => p.v).concat([g.target]);
+    const min = Math.min.apply(null, vals), max = Math.max.apply(null, vals), span = max - min || 1;
     const W = 300, H = 64, P = 6;
-    const pts = log.map((x, i) => {
-      const px = P + (i / (log.length - 1)) * (W - 2*P);
-      const py = H - P - ((x.value - min) / span) * (H - 2*P);
-      return [Math.round(px*10)/10, Math.round(py*10)/10];
-    });
-    const lastPt = pts[pts.length - 1];
-    /* מצויר משמאל לימין (זמן), גם בממשק RTL — כמו כל גרף. */
-    return '<svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true" style="direction:ltr"><polyline points="' + pts.map(p => p.join(',')).join(' ') + '"/><circle cx="' + lastPt[0] + '" cy="' + lastPt[1] + '" r="4"/></svg>';
+    const X = i => P + (i / L()) * (W - 2*P);
+    const Y = v => H - P - ((v - min) / span) * (H - 2*P);
+    const poly = pts.map(p => Math.round(X(p.i)*10)/10 + ',' + Math.round(Y(p.v)*10)/10).join(' ');
+    const last = pts[pts.length - 1];
+    return '<svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">' +
+      '<line x1="' + X(0) + '" y1="' + Y(g.actual) + '" x2="' + X(L()) + '" y2="' + Y(g.target) + '"/>' +
+      '<polyline points="' + poly + '"/><circle cx="' + X(last.i) + '" cy="' + Y(last.v) + '" r="4"/></svg>';
+  }
+
+  function receiptsCard(){
+    const list = S.receipts.slice().sort((a,b) => b.date.localeCompare(a.date));
+    return '<div class="card"><h2>קבלות</h2>' +
+      '<p class="small muted" style="margin:0 0 8px">קבלה אחת לא משנה זהות. חמישים מתחילות לטעון טענה. תקרא את זה ביום שהמוח אומר "לא התקדמתי כלום".</p>' +
+      '<div class="field" style="margin-bottom:0"><textarea id="r-new" placeholder="סיימתי את הפרק במקום לנטוש באמצע"></textarea></div>' +
+      '<button class="btn btn-primary" data-act="receipt-add">' + icon('plus') + ' קבלה</button>' +
+      (list.length ? '<details style="margin-top:12px"' + (list.length <= 5 ? ' open' : '') + '><summary>כל הקבלות (' + list.length + ')</summary>' + list.map(r =>
+        '<div class="list-item"><div>' + esc(r.text) + '</div><div class="li-meta">' + (inRange(r.date) ? 'יום ' + dayIndex(r.date) + ' · ' : '') + fmt(r.date) +
+        '<button class="icon-btn sm" data-act="receipt-del" data-id="' + r.id + '" aria-label="מחיקה">' + icon('trash') + '</button></div></div>').join('') + '</details>' : '') +
+      '</div>';
+  }
+
+  function auditCard(){
+    const first = S.audits[0], last = S.audits[S.audits.length - 1];
+    let rows = '';
+    if(first){
+      rows = AREAS.map(a => {
+        const f = first.scores[a.id], l = last.scores[a.id];
+        return '<div class="audit-row"><span class="an">' + a.name + '</span><span class="ab"><u style="width:' + ((f || 0) * 10) + '%"></u><i style="width:' + ((l || 0) * 10) + '%;opacity:' + (S.audits.length > 1 ? 1 : 0.9) + '"></i></span>' +
+          '<span class="av num">' + (f === null ? '—' : f) + (S.audits.length > 1 ? ' → ' + (l === null ? '—' : l) : '') + '</span></div>';
+      }).join('');
+    }
+    return '<div class="card"><h2>ביקורת מציאות</h2>' +
+      (first ? '<p class="small muted" style="margin:0 0 4px">' + (S.audits.length > 1 ? 'הראשונה (' + fmt(first.date) + ') מול האחרונה (' + fmt(last.date) + ')' : 'מ־' + fmt(first.date)) + '</p>' + rows
+             : '<p class="small muted flush">עוד לא נעשתה.</p>') +
+      '<button class="btn btn-sm" style="width:100%" data-act="audit-new">ציון חדש (כדאי כל 30 יום)</button></div>';
+  }
+
+  function openAudit(){
+    const last = S.audits[S.audits.length - 1];
+    openSheet('<h2>ביקורת מציאות</h2><p class="small muted" style="margin:0 0 16px">לפי המציאות של עכשיו — לא לפי מי שאתה מצפה להיות.</p>' +
+      AREAS.map(a => '<div class="field"><label>' + a.name + (last && last.scores[a.id] !== null ? ' <span class="muted small">(קודם: ' + last.scores[a.id] + ')</span>' : '') + '</label><div class="score" data-area="' + a.id + '">' +
+        Array.from({length:11}, (_, i) => '<button type="button" data-score="' + i + '" aria-pressed="false" aria-label="' + i + '">' + i + '</button>').join('') + '</div></div>').join('') +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="audit-save">שמירה</button></div>');
+  }
+
+  function focusCard(){
+    if(!S.focus.length) return '<div class="card"><h2>פוקוס</h2><p class="small muted flush">עוד אין בלוקים. מתחילים מהמסך "היום".</p></div>';
+    const list = S.focus.slice().reverse();
+    return '<div class="card"><h2>פוקוס</h2><p class="small muted" style="margin:0 0 4px">מתוכנן / בפועל / דחפים</p>' +
+      list.slice(0, 12).map(f => '<div class="list-item"><div><b>' + esc(f.target) + '</b>' + (f.produced ? '<div class="small muted">' + esc(f.produced) + '</div>' : '') + '</div>' +
+        '<div class="li-meta num">' + f.planned + ' / ' + f.actual + ' · ' + f.urges + ' · ' + fmt(f.date) + '</div></div>').join('') + '</div>';
   }
 
   /* =========================================================
-     קבלות
+     תרגילים
      ========================================================= */
 
-  function renderReceipts(){
-    const list = S.receipts.slice().sort((a,b) => b.date.localeCompare(a.date) || 0);
-    return '<h1 style="font-size:1.6rem;margin-bottom:8px">קבלות</h1>' +
-      '<p class="muted" style="margin:0 0 16px">קבלה אחת לא משנה זהות. חמישים מתחילות לטעון טענה. תקרא את זה ביום שהמוח אומר "לא התקדמתי כלום".</p>' +
-      '<div class="card"><div class="field" style="margin-bottom:0"><label for="r-new">קבלה חדשה</label>' +
-      '<textarea id="r-new" placeholder="סיימתי את הפרק במקום לנטוש באמצע"></textarea></div>' +
-      '<button class="btn btn-primary" data-act="receipt-add">' + icon('plus') + ' הוספה</button></div>' +
-      (list.length
-        ? '<div class="card">' + list.map(r =>
-            '<div class="list-item"><div>' + esc(r.text) + '</div><div class="li-meta">' +
-            (inRange(r.date) ? 'יום ' + dayIndex(r.date) + ' · ' : '') + fmt(r.date) +
-            ' <button class="icon-btn" style="width:40px;height:40px;margin-right:8px" data-act="receipt-del" data-id="' + r.id + '" aria-label="מחיקה">' + icon('trash') + '</button></div></div>'
-          ).join('') + '</div>'
-        : '<p class="muted small">עוד אין קבלות. תתחיל מהראשונה.</p>');
+  function renderExercises(){
+    const rec = recommendedExercise();
+    const doneN = EXERCISES.filter(e => S.ex[e.id] && S.ex[e.id].doneOn).length;
+    return '<h1 class="page">תרגילים</h1>' +
+      '<p class="muted" style="margin:0 0 12px">' + EXERCISES.length + ' תרגילים מתוך ההדרכות. אחד בשבוע — זה בערך חצי שנה של עבודה. אפשר בכל סדר; המומלץ מסומן.</p>' +
+      '<div class="bar"><i style="width:' + Math.round(doneN / EXERCISES.length * 100) + '%"></i></div>' +
+      '<div class="card">' + EXERCISES.map(e => {
+        const st = S.ex[e.id];
+        const n = st ? Object.keys(st.steps || {}).filter(k => st.steps[k]).length : 0;
+        const pill = st && st.doneOn ? '<span class="pill done">הושלם</span>' : (rec && rec.id === e.id ? '<span class="pill now">השבוע</span>' : (n ? '<span class="pill">' + n + '/' + e.steps.length + '</span>' : ''));
+        return '<button class="list-btn" data-act="ex-open" data-id="' + e.id + '"><span class="lb-main"><span class="lb-title">' + esc(e.t) + '</span><br><span class="lb-sub">' + esc(e.idea) + '</span></span>' + pill + '</button>';
+      }).join('') + '</div>';
+  }
+
+  function exState(id){
+    if(!S.ex[id]) S.ex[id] = { steps:{}, counts:{}, notes:'', doneOn:null };
+    return S.ex[id];
+  }
+
+  function openExercise(id){
+    const e = EXERCISES.find(x => x.id === id);
+    const st = S.ex[id] || { steps:{}, counts:{}, notes:'' };
+    openSheet(
+      '<h2>' + esc(e.t) + '</h2><p class="small muted" style="margin:0 0 12px">' + esc(e.idea) + '</p>' +
+      e.steps.map((s, i) => {
+        const on = !!(st.steps && st.steps[i]);
+        let actions = '';
+        if(s.counter) actions += '<span class="counter"><button class="icon-btn sm" data-act="ex-count" data-id="' + id + '" data-i="' + i + '" data-d="-1" aria-label="פחות">' + icon('minus') + '</button><b class="num" id="cnt-' + i + '">' + ((st.counts && st.counts[i]) || 0) + '</b><button class="icon-btn" data-act="ex-count" data-id="' + id + '" data-i="' + i + '" data-d="1" aria-label="עוד">' + icon('plus') + '</button></span>';
+        if(s.habit) actions += '<button class="btn btn-sm" data-act="ex-habit" data-name="' + esc(s.habit) + '">' + icon('plus') + ' להוסיף כהרגל</button>';
+        if(s.focus) actions += '<button class="btn btn-sm" data-act="ex-focus">' + icon('timer') + ' בלוק פוקוס</button>';
+        if(s.receipt) actions += '<button class="btn btn-sm" data-act="ex-receipt">' + icon('receipt') + ' קבלה</button>';
+        return '<div class="step"><label class="check-row' + (on ? ' done' : '') + '"><input type="checkbox" data-act="ex-step" data-id="' + id + '" data-i="' + i + '"' + (on ? ' checked' : '') + '><span>' + esc(s.t) + '</span></label>' +
+          (actions ? '<div class="step-actions">' + actions + '</div>' : '') + '</div>';
+      }).join('') +
+      '<div class="field" style="margin-top:12px"><label for="ex-notes">הערות ותשובות</label><textarea id="ex-notes" data-id="' + id + '" style="min-height:140px">' + esc(st.notes || '') + '</textarea></div>' +
+      '<button class="btn btn-primary" data-act="ex-close" data-id="' + id + '">שמירה וסגירה</button>'
+    );
+  }
+
+  function saveExNotes(){
+    const ta = document.getElementById('ex-notes');
+    if(!ta) return;
+    const st = exState(ta.dataset.id);
+    if(st.notes !== ta.value){ st.notes = ta.value; save(); }
   }
 
   /* =========================================================
-     סקירה שבועית
+     סקירה שבועית — לולאת המשוב
      ========================================================= */
-
-  function currentWeek(){
-    const t = today();
-    if(t < S.setup.startDate) return 1;
-    if(t > endDate()) return weekOf(endDate());
-    return weekOf(t);
-  }
 
   function weekStats(w){
     const [a, b] = weekRange(w);
     const t = today();
-    const rows = habits().filter(h => {
-      for(let d = a; d <= b; d = addDays(d, 1)) if(scheduled(h, d)) return true;
-      return false;
-    }).map(h => {
-      let planned = 0, f = 0, mn = 0, ms = 0, missDays = [];
-      const cells = [];
+    const rows = habits().filter(h => { for(let d = a; d <= b; d = addDays(d, 1)) if(scheduled(h, d)) return true; return false; }).map(h => {
+      let planned = 0, f = 0, mn = 0, ms = 0; const missDays = [], cells = [];
       for(let d = a; d <= b; d = addDays(d, 1)){
         if(!scheduled(h, d)){ cells.push('rest'); continue; }
-        if(d > t){ cells.push('future'); planned++; continue; }
         planned++;
+        if(d > t){ cells.push('rest'); continue; }
         const m = mark(d, h.id);
         if(m === 'full'){ f++; cells.push('full'); }
         else if(m === 'min'){ mn++; cells.push('min'); }
@@ -1032,55 +1416,57 @@
       }
       return { h, planned, f, mn, ms, missDays, cells };
     });
-    return { a, b, rows };
+    const receipts = S.receipts.filter(r => r.date >= a && r.date <= b);
+    const focus = S.focus.filter(x => x.date >= a && x.date <= b);
+    return { a, b, rows, receipts, focus };
   }
+
+  const EXEC_REASONS = ['שעה לא נכונה','המינימום גדול מדי','יותר מדי חיכוך / הסביבה','הסחות','לא באמת רציתי'];
 
   function renderReview(){
     if(reviewWeek === null) reviewWeek = currentWeek();
     const w = reviewWeek;
-    const maxW = Math.ceil(TOTAL / 7);
+    const maxW = Math.ceil(L() / 7);
     const st = weekStats(w);
-    const dates = [];
-    for(let d = st.a; d <= st.b; d = addDays(d, 1)) dates.push(d);
-
+    const dates = []; for(let d = st.a; d <= st.b; d = addDays(d, 1)) dates.push(d);
     const table = '<table class="wtable"><thead><tr><th></th>' + dates.map(d => '<th>' + DAY_SHORT[weekday(d)] + '<br><span class="num">' + fmt(d) + '</span></th>').join('') + '</tr></thead><tbody>' +
-      st.rows.map(r => '<tr><td class="hn">' + esc(r.h.name) + '</td>' + r.cells.map(c => '<td><span class="dot ' + (c === 'future' ? 'rest' : c) + '"></span></td>').join('') + '</tr>').join('') +
-      '</tbody></table>';
+      st.rows.map(r => '<tr><td class="hn">' + esc(r.h.name) + '</td>' + r.cells.map(c => '<td><span class="dot ' + c + '"></span></td>').join('') + '</tr>').join('') + '</tbody></table>';
 
-    const saved = S.weekly.find(x => x.week === w) || { well:'', broke:'', cause:'', reasons:[], fix:'' };
-    const REASONS = ['שעה לא נכונה','המינימום גדול מדי','הסביבה מקלה על האופציה הרעה','ההרגל לא באמת חשוב לי','משהו אחר'];
+    const saved = S.weekly.find(x => x.week === w) || { well:'', broke:'', cause:'', reasons:[], bottleneck:'', fix:'' };
+    const gs = S.setup.goals || [];
 
-    return '<h1 style="font-size:1.6rem;margin-bottom:12px">סקירה שבועית</h1>' +
+    return '<h1 class="page">סקירה שבועית</h1>' +
       '<div class="date-nav">' +
       '<button class="icon-btn" data-act="week-prev" aria-label="שבוע קודם"' + (w <= 1 ? ' disabled' : '') + '>' + icon('right') + '</button>' +
       '<div class="dn-label">שבוע ' + w + ' <span class="muted small">(' + fmt(st.a) + '–' + fmt(st.b) + ')</span></div>' +
-      '<button class="icon-btn" data-act="week-next" aria-label="שבוע הבא"' + (w >= Math.min(maxW, currentWeek()) ? ' disabled' : '') + '>' + icon('left') + '</button>' +
-      '</div>' +
+      '<button class="icon-btn" data-act="week-next" aria-label="שבוע הבא"' + (w >= Math.min(maxW, currentWeek()) ? ' disabled' : '') + '>' + icon('left') + '</button></div>' +
       '<div class="card">' + table +
-      '<div class="legend"><span><i style="background:var(--green)"></i>רגיל</span><span><i style="background:var(--amber)"></i>מינימום</span><span><i style="background:repeating-linear-gradient(-45deg,#3A4452 0 3px,var(--surface-2) 3px 6px)"></i>לא</span><span><i style="border:1px dashed var(--muted)"></i>לא סומן</span></div></div>' +
+      '<div class="legend"><span><i style="background:var(--green)"></i>רגיל</span><span><i style="background:var(--amber)"></i>מינימום</span><span><i style="background:var(--hatch)"></i>לא</span><span><i style="border:1px dashed var(--muted)"></i>לא סומן</span></div>' +
+      '<p class="small muted" style="margin:12px 0 0">' + st.receipts.length + ' קבלות · ' + st.focus.length + ' בלוקי פוקוס השבוע</p></div>' +
+      (gs.length ? '<div class="card"><h2>המספרים</h2>' + gs.map(g => '<div class="goal-line"><b>' + esc(g.name) + '</b><span>' + round(goalLatest(g)) + ' / צריך ' + round(goalExpected(g, st.b)) + ' ' + esc(g.unit) + '</span></div>').join('') + '</div>' : '') +
       patternCard() +
       '<div class="card"><h2>אבחון</h2>' +
-      '<p class="small muted" style="margin:0 0 12px">תסתכל על השבוע כולו, לא על כל יום בנפרד. פספסת אימון אחד אקראי — או כל אימון אחרי 18:00?</p>' +
+      '<p class="small muted" style="margin:0 0 12px">להסתכל על השבוע כולו, לא על כל יום בנפרד. פספסת אימון אקראי אחד — או כל אימון אחרי 18:00?</p>' +
       '<div class="field"><label for="rv-well">איפה זה עבד?</label><textarea id="rv-well">' + esc(saved.well) + '</textarea></div>' +
-      '<div class="field"><label for="rv-broke">איפה המערכת נשברה?</label><textarea id="rv-broke">' + esc(saved.broke) + '</textarea></div>' +
-      '<div class="field"><label>מה הסיבה האמיתית?</label><div class="chips" id="rv-cause">' +
-        '<button type="button" class="chip" data-cause="effort" aria-pressed="' + (saved.cause === 'effort') + '">מאמץ — ידעתי ולא עשיתי</button>' +
-        '<button type="button" class="chip" data-cause="system" aria-pressed="' + (saved.cause === 'system') + '">המערכת בנויה לא נכון</button>' +
+      '<div class="field"><label for="rv-broke">איפה זה נשבר?</label><textarea id="rv-broke">' + esc(saved.broke) + '</textarea></div>' +
+      '<div class="field"><label>איזו בעיה זו?</label><div class="chips" id="rv-cause">' +
+        '<button type="button" class="chip" data-cause="exec" aria-pressed="' + (saved.cause === 'exec') + '">ביצוע — לא עשיתי את התוכנית</button>' +
+        '<button type="button" class="chip" data-cause="strategy" aria-pressed="' + (saved.cause === 'strategy') + '">אסטרטגיה — עשיתי, והתוצאה לא זזה</button>' +
+        '<button type="button" class="chip" data-cause="none" aria-pressed="' + (saved.cause === 'none') + '">אין בעיה — להמשיך</button>' +
       '</div></div>' +
-      '<div class="field" id="rv-reasons-wrap"' + (saved.cause === 'system' ? '' : ' hidden') + '><label>מה בדיוק?</label><div class="chips" id="rv-reasons">' +
-        REASONS.map(r => '<button type="button" class="chip" data-reason="' + esc(r) + '" aria-pressed="' + saved.reasons.includes(r) + '">' + esc(r) + '</button>').join('') +
-      '</div></div>' +
-      '<div class="field"><label for="rv-fix">מה משנים לשבוע הבא?</label><div class="hint">אם זה מאמץ — פשוט לקחת אחריות. אם זו המערכת — לתקן את הבעיה האמיתית. אפשר לערוך הרגלים בהגדרות.</div><input type="text" id="rv-fix" value="' + esc(saved.fix) + '"></div>' +
+      '<div class="field" id="rv-exec"' + (saved.cause === 'exec' ? '' : ' hidden') + '><label>מה מנע ביצוע?</label><div class="hint">כשהתוכנית היא 5 אימונים ועשית 2 — התוכנית לא נכשלה. מתקנים קודם את הביצוע.</div><div class="chips" id="rv-reasons">' +
+        EXEC_REASONS.map(r => '<button type="button" class="chip" data-reason="' + esc(r) + '" aria-pressed="' + (saved.reasons || []).includes(r) + '">' + esc(r) + '</button>').join('') + '</div></div>' +
+      '<div class="field" id="rv-strat"' + (saved.cause === 'strategy' ? '' : ' hidden') + '><label for="rv-bottle">איפה צוואר הבקבוק?</label><div class="hint">ללכת אחורה בשרשרת (הכנסה ← מכירות ← שיחות ← פניות) עד המספר הראשון שלא מתנהג כמו שצריך. לתקן רק אותו.</div><input type="text" id="rv-bottle" value="' + esc(saved.bottleneck || '') + '"></div>' +
+      '<div class="field"><label for="rv-fix">מה משנים לשבוע הבא?</label><div class="hint">לשמור מה שעובד, לתקן מה שלא. אפשר לערוך הרגלים ויעדים ב"תוכנית".</div><input type="text" id="rv-fix" value="' + esc(saved.fix) + '"></div>' +
       '<button class="btn btn-primary" data-act="review-save">שמירת הסקירה</button></div>' +
       updateCard(w, st, saved);
   }
 
-  /* דפוסים לפי יום בשבוע לאורך כל התקופה — מופיע אחרי שבועיים. */
   function patternCard(){
     const t = today();
     if(dayIndex(t) < 14) return '';
     const planned = [0,0,0,0,0,0,0], missed = [0,0,0,0,0,0,0];
-    for(let i = 0; i < TOTAL; i++){
+    for(let i = 0; i < L(); i++){
       const date = addDays(S.setup.startDate, i);
       if(date >= t) break;
       habitsOn(date).forEach(h => {
@@ -1095,116 +1481,134 @@
       const p = Math.round(missed[i] / planned[i] * 100);
       return '<div class="pattern-row"><span class="pd">' + name + '</span><span class="pb"><i style="width:' + p + '%"></i></span><span class="pv num">' + p + '%</span></div>';
     }).join('');
-    return '<div class="card"><h2>איפה זה נופל</h2><p class="small muted" style="margin:0 0 8px">אחוז ההרגלים שלא בוצעו, לפי יום בשבוע, מתחילת הדרך.</p>' + rows + '</div>';
+    return '<div class="card"><h2>איפה זה נופל</h2><p class="small muted" style="margin:0 0 8px">אחוז ההרגלים שלא בוצעו, לפי יום בשבוע, מתחילת העונה.</p>' + rows + '</div>';
   }
 
   function updateText(w, st, saved){
-    const name = S.setup.partner && S.setup.partner.name;
-    const lines = [];
-    lines.push('עדכון 90 יום — שבוע ' + w + ' (' + fmt(st.a) + '–' + fmt(st.b) + ')');
-    lines.push('');
-    lines.push('אמרתי:');
+    const lines = ['עדכון — שבוע ' + w + ' (' + fmt(st.a) + '–' + fmt(st.b) + ')', '', 'אמרתי:'];
     st.rows.forEach(r => lines.push('• ' + r.h.name + ' — ' + habitFreqText(r.h) + (r.h.full ? ' (' + r.h.full + ')' : '')));
-    lines.push('');
-    lines.push('עשיתי:');
-    st.rows.forEach(r => {
-      const doneN = r.f + r.mn;
-      lines.push('• ' + r.h.name + ': ' + doneN + ' מתוך ' + r.planned + (r.mn ? ' (' + r.mn + ' במינימום)' : ''));
-    });
+    lines.push('', 'עשיתי:');
+    st.rows.forEach(r => lines.push('• ' + r.h.name + ': ' + (r.f + r.mn) + ' מתוך ' + r.planned + (r.mn ? ' (' + r.mn + ' במינימום)' : '')));
+    (S.setup.goals || []).forEach(g => lines.push('• ' + g.name + ': ' + round(goalLatest(g)) + ' ' + g.unit + ' (יעד לשבוע: ' + round(goalExpected(g, st.b)) + ')'));
     const misses = [];
     st.rows.forEach(r => r.missDays.forEach(d => misses.push(r.h.name + ' ביום ' + DAY_LONG[weekday(d)])));
-    lines.push('');
-    lines.push('פספסתי: ' + (misses.length ? misses.join(', ') : 'כלום'));
-    if(saved.fix){ lines.push(''); lines.push('משנה לשבוע הבא: ' + saved.fix); }
-    return { text: lines.join('\n'), name };
+    lines.push('', 'פספסתי: ' + (misses.length ? misses.join(', ') : 'כלום'));
+    if(saved.fix) lines.push('', 'משנה לשבוע הבא: ' + saved.fix);
+    return lines.join('\n');
   }
 
   function updateCard(w, st, saved){
-    const u = updateText(w, st, saved);
-    return '<div class="card"><h2>עדכון ל' + (u.name ? esc(u.name) : 'אדם אחד') + '</h2>' +
-      '<p class="small muted" style="margin:0 0 8px">שתי דקות. הנקודה היא שיהיה קשה יותר לשנות את הכללים בשקט באמצע.</p>' +
-      '<div class="update-box" id="update-text">' + esc(u.text) + '</div>' +
+    const name = S.setup.partner && S.setup.partner.name;
+    return '<div class="card"><h2>עדכון ל' + (name ? esc(name) : 'אדם אחד') + '</h2>' +
+      '<p class="small muted" style="margin:0 0 8px">שתי דקות. הנקודה היא שיהיה קשה לשנות את הכללים בשקט באמצע.</p>' +
+      '<div class="update-box" id="update-text">' + esc(updateText(w, st, saved)) + '</div>' +
       '<div class="row"><button class="btn" data-act="update-copy">' + icon('copy') + ' העתקה</button>' +
       (navigator.share ? '<button class="btn" data-act="update-share">' + icon('share') + ' שליחה</button>' : '') + '</div></div>';
   }
 
   function saveReview(){
     const w = reviewWeek;
-    const cause = (document.querySelector('#rv-cause [aria-pressed="true"]') || {}).dataset;
-    const reasons = Array.from(document.querySelectorAll('#rv-reasons [aria-pressed="true"]')).map(b => b.dataset.reason);
+    const c = document.querySelector('#rv-cause [aria-pressed="true"]');
+    const cause = c ? c.dataset.cause : '';
     const rec = {
-      id: uid(), week:w,
-      well: val('rv-well'), broke: val('rv-broke'),
-      cause: cause ? cause.cause : '',
-      reasons: cause && cause.cause === 'system' ? reasons : [],
-      fix: val('rv-fix'),
-      ts: new Date().toISOString()
+      id:uid(), week:w, well:val('rv-well'), broke:val('rv-broke'), cause,
+      reasons: cause === 'exec' ? Array.from(document.querySelectorAll('#rv-reasons [aria-pressed="true"]')).map(b => b.dataset.reason) : [],
+      bottleneck: cause === 'strategy' ? val('rv-bottle') : '',
+      fix:val('rv-fix'), ts:new Date().toISOString()
     };
     const i = S.weekly.findIndex(x => x.week === w);
     if(i >= 0){ rec.id = S.weekly[i].id; S.weekly[i] = rec; } else S.weekly.push(rec);
-    save();
-    tick(20);
-    toast('הסקירה נשמרה');
-    render();
+    save(); tick(20); toast('הסקירה נשמרה'); render();
   }
 
   /* =========================================================
-     הגדרות
+     תוכנית — לקרוא שוב את הלמה, ולערוך הכול
      ========================================================= */
 
-  function renderSettings(){
+  function renderPlan(){
     const s = S.setup;
     const n = s.notify;
-    return '<h1 style="font-size:1.6rem;margin-bottom:12px">הגדרות</h1>' +
+    const vis = AREAS.filter(a => s.vision[a.id]).map(a => '<p class="label" style="margin:12px 0 4px">' + a.name + '</p><div class="quote want">' + nl(s.vision[a.id]) + '</div>').join('');
+    return '<h1 class="page">תוכנית</h1>' +
 
-      '<div class="card"><h2>מי אתה הופך להיות</h2>' +
-      field('s-who', 'במשפט אחד', '', s.identity.who, true) +
-      field('s-day', 'מה הוא עושה ביום רגיל?', '', s.identity.day, true) +
-      field('s-stop', 'ממה הוא הפסיק?', '', s.identity.stop, true) +
-      field('s-seen', 'מה מישהו היה רואה?', '', s.identity.seen, true) +
-      '<button class="btn btn-primary" data-act="identity-save">שמירה</button></div>' +
+      '<div class="card"><h2>למה</h2>' +
+      (s.reasons.want ? '<p class="label" style="margin:8px 0 4px">למה אני רוצה את זה</p><div class="quote want">' + nl(s.reasons.want) + '</div>' : '') +
+      (s.reasons.refuse ? '<p class="label" style="margin:12px 0 4px">למה אני מסרב לעתיד השני</p><div class="quote anti">' + nl(s.reasons.refuse) + '</div>' : '') +
+      (s.anti ? '<p class="label" style="margin:12px 0 4px">העתיד שאני מסרב לו</p><div class="quote anti">' + nl(s.anti) + '</div>' : '') +
+      (s.reasons.here ? '<p class="label" style="margin:12px 0 4px">למה אני איפה שאני</p><div class="quote">' + nl(s.reasons.here) + '</div>' : '') +
+      (!s.reasons.want && !s.reasons.refuse && !s.anti ? '<p class="small muted flush">עוד לא נכתב.</p>' : '') +
+      '<button class="btn btn-sm" style="width:100%" data-act="edit-why">עריכה</button></div>' +
+
+      '<div class="card"><h2>העתיד ביום ' + L() + '</h2>' + (vis || '<p class="small muted flush">עוד לא נכתב.</p>') +
+      (s.week ? '<p class="label" style="margin:12px 0 4px">שבוע רגיל</p><div class="quote want">' + nl(s.week) + '</div>' : '') +
+      '<button class="btn btn-sm" style="width:100%" data-act="edit-vision">עריכה</button></div>' +
+
+      '<div class="card"><h2>מי אני הופך להיות</h2>' +
+      (s.identity.who ? '<div class="quote want">' + nl(s.identity.who) + '</div>' : '') +
+      (s.identity.day ? '<p class="small" style="margin:8px 0 0"><b>ביום רגיל:</b> ' + nl(s.identity.day) + '</p>' : '') +
+      (s.identity.stop ? '<p class="small" style="margin:8px 0 0"><b>הפסיק:</b> ' + nl(s.identity.stop) + '</p>' : '') +
+      (s.identity.seen ? '<p class="small" style="margin:8px 0 0"><b>מה היו רואים:</b> ' + nl(s.identity.seen) + '</p>' : '') +
+      '<button class="btn btn-sm" style="width:100%" data-act="edit-identity">עריכה</button></div>' +
+
+      '<div class="card"><h2>יעדים במספרים</h2>' +
+      (s.goals || []).map(g => '<div class="list-item"><div><b>' + esc(g.name) + '</b><div class="small muted">' + round(g.actual) + ' ← ' + round(g.target) + ' ' + esc(g.unit) + '</div></div>' +
+        '<div class="row" style="flex:0 0 auto"><button class="icon-btn" data-act="goal-edit" data-id="' + g.id + '" aria-label="עריכה">' + icon('settings') + '</button>' +
+        '<button class="icon-btn" data-act="goal-remove" data-id="' + g.id + '" aria-label="הסרה">' + icon('trash') + '</button></div></div>').join('') +
+      ((s.goals || []).length < 3 ? '<button class="btn btn-ghost" data-act="goal-new">' + icon('plus') + ' הוספת יעד</button>' : '') + '</div>' +
 
       '<div class="card"><h2>הרגלים</h2>' +
-      activeHabits().map(h =>
-        '<div class="list-item"><div><b>' + esc(h.name) + '</b><div class="small muted">' + esc(habitFreqText(h)) + '</div><div class="small">רגיל: ' + esc(h.full) + ' · מינימום: ' + esc(h.min) + '</div></div>' +
+      activeHabits().map(h => '<div class="list-item"><div><b>' + esc(h.name) + '</b><div class="small muted">' + esc(habitFreqText(h)) + '</div><div class="small">רגיל: ' + esc(h.full) + ' · מינימום: ' + esc(h.min) + '</div></div>' +
         '<div class="row" style="flex:0 0 auto"><button class="icon-btn" data-act="habit-edit" data-id="' + h.id + '" aria-label="עריכה">' + icon('settings') + '</button>' +
-        '<button class="icon-btn" data-act="habit-archive" data-id="' + h.id + '" aria-label="הסרה">' + icon('trash') + '</button></div></div>'
-      ).join('') +
-      (activeHabits().length < 4 ? '<button class="btn btn-ghost" data-act="habit-new">' + icon('plus') + ' הוספת הרגל</button>' : '') +
-      '<p class="small muted">הסרת הרגל לא מוחקת את ההיסטוריה שלו — הוא פשוט מפסיק להופיע מהיום.</p></div>' +
+        '<button class="icon-btn" data-act="habit-archive" data-id="' + h.id + '" aria-label="הסרה">' + icon('trash') + '</button></div></div>').join('') +
+      (activeHabits().length < 5 ? '<button class="btn btn-ghost" data-act="habit-new">' + icon('plus') + ' הוספת הרגל</button>' : '') +
+      '<p class="small muted">הסרת הרגל לא מוחקת את ההיסטוריה שלו — הוא פשוט מפסיק להופיע מהיום. ועדיף 4 דברים חשובים בעקביות מ־12 גרוע.</p></div>' +
 
-      '<div class="card"><h2>הכנת הסביבה</h2>' +
+      '<div class="card"><h2>סביבה</h2>' +
       (s.env || []).map(e => '<div class="list-item"><span' + (e.done ? ' class="muted"' : '') + '>' + esc(e.text) + (e.done ? ' ✓' : '') + '</span>' +
-        '<button class="icon-btn" style="flex:0 0 40px;width:40px;height:40px" data-act="env-del" data-id="' + e.id + '" aria-label="מחיקה">' + icon('trash') + '</button></div>').join('') +
-      '<div class="row" style="margin-top:8px"><input type="text" id="s-env-new" placeholder="עוד משהו להכין"><button class="icon-btn" style="flex:0 0 52px;height:52px" data-act="env-add" aria-label="הוספה">' + icon('plus') + '</button></div></div>' +
+        '<button class="icon-btn sm" data-act="env-del" data-id="' + e.id + '" aria-label="מחיקה">' + icon('trash') + '</button></div>').join('') +
+      '<div class="row" style="margin-top:8px"><input type="text" id="s-env-new" placeholder="עוד משהו להכין או להוריד"><button class="icon-btn" style="height:52px;width:52px" data-act="env-add" aria-label="הוספה">' + icon('plus') + '</button></div></div>' +
 
-      '<div class="card"><h2>מדדים</h2>' +
-      (s.measures || []).map(m => '<div class="list-item"><span>' + esc(m.name) + ' (' + esc(m.unit) + ')</span><button class="icon-btn" style="flex:0 0 40px;width:40px;height:40px" data-act="measure-remove" data-id="' + m.id + '" aria-label="מחיקה">' + icon('trash') + '</button></div>').join('') +
-      ((s.measures || []).length < 2 ? '<div class="row" style="margin-top:8px"><input type="text" id="s-m-name" placeholder="שם המדד" style="flex:2"><input type="text" id="s-m-unit" placeholder="יחידה"><button class="icon-btn" style="flex:0 0 52px;height:52px" data-act="measure-new" aria-label="הוספה">' + icon('plus') + '</button></div>' : '') +
-      '</div>' +
+      '<div class="card"><h2>אדם אחד</h2><div class="row"><input type="text" id="s-partner" value="' + esc(s.partner.name || '') + '" placeholder="שם">' +
+      '<button class="btn btn-primary btn-sm" style="flex:0 0 auto;margin:0;min-height:52px" data-act="partner-save">שמירה</button></div></div>' +
 
-      '<div class="card"><h2>אדם אחד</h2>' +
-      '<div class="row"><input type="text" id="s-partner" value="' + esc(s.partner.name || '') + '" placeholder="שם"><button class="btn btn-primary" style="flex:0 0 auto;width:auto;margin:0;min-height:52px" data-act="partner-save">שמירה</button></div></div>' +
-
-      '<div class="card"><h2>התראות</h2>' +
-      '<div class="row"><div class="field"><label for="s-nm">בוקר</label><input type="time" id="s-nm" value="' + n.morning + '"></div>' +
-      '<div class="field"><label for="s-ne">ערב</label><input type="time" id="s-ne" value="' + n.evening + '"></div></div>' +
-      '<div class="row"><div class="field"><label for="s-nwd">סקירה — יום</label><select id="s-nwd">' + DAY_LONG.map((x, i) => '<option value="' + i + '"' + (i === Number(n.weeklyDay) ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
-      '<div class="field"><label for="s-nwt">שעה</label><input type="time" id="s-nwt" value="' + n.weeklyTime + '"></div></div>' +
-      '<p class="small muted" id="push-status">' + pushStatusText() + '</p>' +
-      (n.on
-        ? '<button class="btn btn-primary" data-act="push-on">' + icon('bell') + ' שמירת שעות</button><div class="row"><button class="btn" data-act="push-test">בדיקה</button><button class="btn btn-ghost" data-act="push-off">כיבוי</button></div>'
-        : '<button class="btn btn-primary" data-act="push-on">' + icon('bell') + ' הפעלת התראות</button>') +
-      '</div>' +
+      '<div class="card"><h2>התראות</h2>' + notifyFields('s', n) +
+      '<p class="small muted">' + pushStatusText() + '</p>' +
+      (n.on ? '<button class="btn btn-primary" data-act="push-on">' + icon('bell') + ' שמירת שעות</button><div class="row"><button class="btn" data-act="push-test">בדיקה</button><button class="btn btn-ghost" data-act="push-off">כיבוי</button></div>'
+            : '<button class="btn btn-primary" data-act="push-on">' + icon('bell') + ' הפעלת התראות</button>') + '</div>' +
 
       '<div class="card"><h2>גיבוי</h2>' +
-      '<p class="small muted" style="margin:0 0 8px">הנתונים נשמרים רק בטלפון הזה. באייפון, אפליקציה במסך הבית ו-Safari הם שני אחסונים נפרדים — ומחיקת האייקון מוחקת הכול. לפני שמוחקים: גיבוי.</p>' +
+      '<p class="small muted" style="margin:0 0 8px">הנתונים נשמרים רק בטלפון הזה. באייפון, אפליקציה במסך הבית ו־Safari הם שני אחסונים נפרדים — ומחיקת האייקון מוחקת הכול. לפני שמוחקים: גיבוי.</p>' +
       '<button class="btn" data-act="backup">' + icon('share') + ' גיבוי להעברה למכשיר אחר</button>' +
       '<button class="btn btn-ghost" data-act="open-import">ייבוא גיבוי</button></div>' +
 
-      '<div class="card"><h2>התחלה מחדש</h2>' +
-      '<p class="small muted" style="margin:0 0 8px">מוחק את כל הנתונים במכשיר הזה. כדאי לגבות קודם.</p>' +
+      '<div class="card"><h2>עונה חדשה / איפוס</h2><p class="small muted" style="margin:0 0 8px">מוחק את כל הנתונים במכשיר הזה. כדאי לגבות קודם.</p>' +
       '<button class="btn btn-danger" data-act="reset">איפוס</button></div>';
+  }
+
+  function openEditWhy(){
+    const s = S.setup;
+    openSheet('<h2>למה</h2>' +
+      field('e-want', 'למה אני רוצה את העתיד הזה', '', s.reasons.want, true) +
+      field('e-refuse', 'למה אני מסרב לעתיד השני', '', s.reasons.refuse, true) +
+      field('e-anti', 'העתיד שאני מסרב לו', '', s.anti, true) +
+      field('e-here', 'למה אני איפה שאני', '', s.reasons.here, true) +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="save-why">שמירה</button></div>');
+  }
+  function openEditVision(){
+    const s = S.setup;
+    openSheet('<h2>העתיד ביום ' + L() + '</h2>' +
+      AREAS.map(a => field('e-vi-' + a.id, a.name, '', s.vision[a.id], true)).join('') +
+      field('e-week', 'שבוע רגיל בסוף העונה', '', s.week, true) +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="save-vision">שמירה</button></div>');
+  }
+  function openEditIdentity(){
+    const s = S.setup;
+    openSheet('<h2>מי אני הופך להיות</h2>' +
+      field('e-who', 'במשפט אחד', '', s.identity.who, true) +
+      field('e-day', 'מה הוא עושה ביום רגיל?', '', s.identity.day, true) +
+      field('e-stop', 'ממה הוא הפסיק?', '', s.identity.stop, true) +
+      field('e-seen', 'מה מישהו היה רואה?', '', s.identity.seen, true) +
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="save-identity">שמירה</button></div>');
   }
 
   /* =========================================================
@@ -1216,14 +1620,13 @@
   function pushSupported(){ return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
 
   function pushStatusText(){
-    const n = S.setup.notify;
     if(!pushSupported()){
       return isIOS() && !isStandalone()
         ? 'באייפון: קודם להוסיף למסך הבית (שיתוף ← הוספה למסך הבית), ואז לפתוח מהאייקון ולהפעיל מכאן.'
         : 'הדפדפן הזה לא תומך בהתראות.';
     }
     if(Notification.permission === 'denied') return 'ההתראות חסומות בהגדרות הטלפון. צריך לאפשר אותן שם.';
-    return n.on ? 'פעיל. אחרי שינוי שעות — "שמירת שעות".' : 'כבוי.';
+    return S.setup.notify.on ? 'פעיל. אחרי שינוי שעות — "שמירת שעות".' : 'כבוי.';
   }
 
   function b64ToBytes(b64){
@@ -1231,16 +1634,8 @@
     return Uint8Array.from(atob(s), c => c.charCodeAt(0));
   }
 
-  function readNotifyInputs(){
-    const n = S.setup.notify;
-    n.morning = val('s-nm') || n.morning;
-    n.evening = val('s-ne') || n.evening;
-    n.weeklyDay = Number(val('s-nwd'));
-    n.weeklyTime = val('s-nwt') || n.weeklyTime;
-  }
-
   async function pushOn(){
-    readNotifyInputs();
+    readNotify('s', S.setup.notify);
     save();
     if(!pushSupported()){ toast(pushStatusText()); return; }
     try{
@@ -1252,20 +1647,11 @@
       const n = S.setup.notify;
       const res = await fetch(PUSH_URL + '/subscribe', {
         method:'POST', headers:{ 'Content-Type':'application/json' },
-        body: JSON.stringify({
-          sub: sub.toJSON(),
-          sched:{ morning:n.morning, evening:n.evening, weeklyDay:n.weeklyDay, weeklyTime:n.weeklyTime },
-          tz: Intl.DateTimeFormat().resolvedOptions().timeZone
-        })
+        body: JSON.stringify({ sub:sub.toJSON(), sched:{ morning:n.morning, evening:n.evening, weeklyDay:n.weeklyDay, weeklyTime:n.weeklyTime }, tz:Intl.DateTimeFormat().resolvedOptions().timeZone })
       });
       if(!res.ok) throw new Error('server ' + res.status);
-      n.on = true;
-      save();
-      tick(25);
-      toast('ההתראות פעילות');
-    }catch(e){
-      toast('ההפעלה נכשלה — נסה שוב');
-    }
+      n.on = true; save(); tick(25); toast('ההתראות פעילות');
+    }catch(e){ toast('ההפעלה נכשלה — נסה שוב'); }
     render();
   }
 
@@ -1274,12 +1660,11 @@
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.getSubscription();
       if(sub){
-        await fetch(PUSH_URL + '/unsubscribe', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ endpoint: sub.endpoint }) }).catch(() => {});
+        await fetch(PUSH_URL + '/unsubscribe', { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify({ endpoint:sub.endpoint }) }).catch(() => {});
         await sub.unsubscribe();
       }
     }catch(e){}
-    S.setup.notify.on = false;
-    save();
+    if(S.setup){ S.setup.notify.on = false; save(); }
     toast('ההתראות כובו');
     render();
   }
@@ -1289,20 +1674,20 @@
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.getSubscription();
       if(!sub){ toast('אין מנוי — להפעיל מחדש'); return; }
-      const res = await fetch(PUSH_URL + '/test', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ endpoint: sub.endpoint }) });
+      const res = await fetch(PUSH_URL + '/test', { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify({ endpoint:sub.endpoint }) });
       const j = await res.json();
       toast(j.ok ? 'נשלחה התראת בדיקה' : 'הבדיקה נכשלה (' + (j.status || j.error) + ')');
     }catch(e){ toast('הבדיקה נכשלה'); }
   }
 
-  /* ה-service worker לא רואה localStorage — הוא מקבל את השעות והטקסטים דרך Cache. */
+  /* ה־service worker לא רואה localStorage — מקבל את השעות והטקסטים דרך Cache. */
   function writeSwConfig(){
     if(!S.setup || !('caches' in window)) return;
     const first = activeHabits()[0];
     const cfg = {
-      sched: S.setup.notify,
+      sched:S.setup.notify,
       morning: first ? (first.name + (first.full ? ' — ' + first.full : '') + '. מינימום: ' + first.min) : '',
-      partner: S.setup.partner && S.setup.partner.name || ''
+      partner:(S.setup.partner && S.setup.partner.name) || ''
     };
     caches.open('ninety-cfg').then(c => c.put('cfg', new Response(JSON.stringify(cfg), { headers:{ 'Content-Type':'application/json' } }))).catch(() => {});
   }
@@ -1337,14 +1722,11 @@
 
   async function backup(){
     const link = location.origin + location.pathname + '#restore=' + b64EncodeUnicode(JSON.stringify(S));
-    if(navigator.share){
-      try{ await navigator.share({ title:'גיבוי 90 יום', url:link }); toast('הגיבוי נשלח'); return; }catch(e){}
-    }
+    if(navigator.share){ try{ await navigator.share({ title:'גיבוי 90 יום', url:link }); toast('הגיבוי נשלח'); return; }catch(e){} }
     toast((await copy(link)) ? 'קישור הגיבוי הועתק' : 'ההעתקה נכשלה');
   }
 
-  /* אם אין כאן נתונים — לוקחים את הגיבוי כמו שהוא. אם יש — מוסיפים מה שחסר
-     (ימים, קבלות, מדידות, סקירות) ולא נוגעים בהגדרות הקיימות. */
+  /* מכשיר ריק — לוקחים הכול. מכשיר עם נתונים — מוסיפים רק מה שחסר, בלי לגעת בתוכנית. */
   function importData(data){
     if(!data || typeof data !== 'object' || !('days' in data)) return 'invalid';
     if(!S.setup){
@@ -1352,33 +1734,23 @@
       S = Object.assign(emptyState(), data);
     }else{
       const newDays = Object.keys(data.days || {}).filter(k => !S.days[k]);
-      const ids = arr => new Set(arr.map(x => x.id));
-      const rIds = ids(S.receipts), mIds = ids(S.measureLog), wIds = ids(S.weekly);
-      const nr = (data.receipts || []).filter(x => !rIds.has(x.id));
-      const nm = (data.measureLog || []).filter(x => !mIds.has(x.id));
-      const nw = (data.weekly || []).filter(x => !wIds.has(x.id));
-      if(newDays.length + nr.length + nm.length + nw.length === 0) return 'empty';
-      if(!confirm('נמצאו ' + newDays.length + ' ימים, ' + nr.length + ' קבלות, ' + nm.length + ' מדידות חדשים. להוסיף?')) return 'cancelled';
+      const merge = key => { const have = new Set((S[key] || []).map(x => x.id)); const add = (data[key] || []).filter(x => !have.has(x.id)); S[key] = (S[key] || []).concat(add); return add.length; };
+      const before = JSON.stringify(S);
       newDays.forEach(k => { S.days[k] = data.days[k]; });
-      S.receipts = S.receipts.concat(nr);
-      S.measureLog = S.measureLog.concat(nm);
-      S.weekly = S.weekly.concat(nw);
+      const n = newDays.length + merge('receipts') + merge('goalLog') + merge('weekly') + merge('focus') + merge('audits');
+      if(n === 0) return 'empty';
+      if(!confirm('נמצאו ' + n + ' רשומות חדשות (ימים, קבלות, מדידות, סקירות). להוסיף?')){ S = JSON.parse(before); return 'cancelled'; }
     }
-    save();
-    tick(25);
-    go('today');
+    save(); tick(25); go('today');
     return 'ok';
   }
 
   function openImport(){
-    openSheet(
-      '<h2>ייבוא גיבוי</h2>' +
-      '<p class="small muted" style="margin:0 0 12px">להדביק כאן את הקישור או הקוד. באייפון — לעשות את זה בתוך האפליקציה שנפתחה מהאייקון, לא ב-Safari.</p>' +
+    openSheet('<h2>ייבוא גיבוי</h2>' +
+      '<p class="small muted" style="margin:0 0 12px">להדביק כאן את הקישור או הקוד. באייפון — בתוך האפליקציה שנפתחה מהאייקון, לא ב־Safari.</p>' +
       '<div class="field"><textarea id="imp" style="direction:ltr;text-align:left;font-size:0.8rem" placeholder="https://...#restore=..."></textarea></div>' +
-      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="import-go">ייבוא</button></div>'
-    );
+      '<div class="row"><button class="btn btn-ghost" data-act="sheet-close">ביטול</button><button class="btn btn-primary" data-act="import-go">ייבוא</button></div>');
   }
-
   function doImport(){
     const text = val('imp');
     const m = text.match(/restore=([^\s&]+)/);
@@ -1391,7 +1763,6 @@
     else if(r === 'empty'){ toast('אין שום דבר חדש בגיבוי'); closeSheet(); }
     else if(r === 'ok') closeSheet();
   }
-
   function checkRestoreHash(){
     const m = location.hash.match(/^#restore=(.+)$/);
     if(!m) return;
@@ -1406,8 +1777,12 @@
   function openSheet(html){
     document.getElementById('sheetBody').innerHTML = html;
     document.getElementById('sheet').hidden = false;
+    document.getElementById('sheet').scrollTop = 0;
+    document.getElementById('sheetBody').scrollTop = 0;
   }
   function closeSheet(){
+    saveExNotes();
+    clearInterval(focusTimer);
     document.getElementById('sheet').hidden = true;
     document.getElementById('sheetBody').innerHTML = '';
   }
@@ -1416,18 +1791,30 @@
      אירועים
      ========================================================= */
 
+  function pressOne(container, btn){
+    container.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+    tick(8);
+  }
+
   document.addEventListener('click', async (e) => {
     const goBtn = e.target.closest('[data-go]');
     if(goBtn){ closeSheet(); go(goBtn.dataset.go); return; }
+    if(e.target.id === 'sheet'){ closeSheet(); render(); return; }
 
-    if(e.target.id === 'sheet'){ closeSheet(); return; }
+    const lenBtn = e.target.closest('#w-len [data-len]');
+    if(lenBtn){ pressOne(lenBtn.parentElement, lenBtn); draft.length = Number(lenBtn.dataset.len); return; }
 
-    // בוררי ימים / צ'יפים בתוך טפסים
+    const scoreBtn = e.target.closest('.score [data-score]');
+    if(scoreBtn){
+      const box = scoreBtn.parentElement;
+      pressOne(box, scoreBtn);
+      if(draft && !S.setup) draft.audit[box.dataset.area].score = Number(scoreBtn.dataset.score);
+      return;
+    }
+
     const dayBtn = e.target.closest('#h-days [data-day]');
     if(dayBtn){
-      const d = Number(dayBtn.dataset.day);
-      const arr = habitEdit.h.days;
-      const i = arr.indexOf(d);
+      const d = Number(dayBtn.dataset.day), arr = habitEdit.h.days, i = arr.indexOf(d);
       if(i >= 0) arr.splice(i, 1); else arr.push(d);
       dayBtn.setAttribute('aria-pressed', String(i < 0));
       tick(8);
@@ -1435,17 +1822,13 @@
     }
     const causeBtn = e.target.closest('#rv-cause [data-cause]');
     if(causeBtn){
-      document.querySelectorAll('#rv-cause .chip').forEach(c => c.setAttribute('aria-pressed', String(c === causeBtn)));
-      document.getElementById('rv-reasons-wrap').hidden = causeBtn.dataset.cause !== 'system';
-      tick(8);
+      pressOne(causeBtn.parentElement, causeBtn);
+      document.getElementById('rv-exec').hidden = causeBtn.dataset.cause !== 'exec';
+      document.getElementById('rv-strat').hidden = causeBtn.dataset.cause !== 'strategy';
       return;
     }
     const reasonBtn = e.target.closest('#rv-reasons [data-reason]');
-    if(reasonBtn){
-      reasonBtn.setAttribute('aria-pressed', String(reasonBtn.getAttribute('aria-pressed') !== 'true'));
-      tick(8);
-      return;
-    }
+    if(reasonBtn){ reasonBtn.setAttribute('aria-pressed', String(reasonBtn.getAttribute('aria-pressed') !== 'true')); tick(8); return; }
 
     const el = e.target.closest('[data-act]');
     if(!el) return;
@@ -1453,85 +1836,126 @@
 
     switch(act){
       /* --- wizard --- */
-      case 'wiz-next': captureWizard(); if(wizStep === 2 && draft.habits.length === 0){ toast('צריך לפחות הרגל אחד'); return; } wizStep++; render(); window.scrollTo(0,0); break;
+      case 'wiz-next':
+        captureWizard();
+        if(wizStep === 6 && draft.habits.length === 0){ toast('צריך לפחות הרגל אחד'); return; }
+        wizStep++; render(); window.scrollTo(0,0); break;
       case 'wiz-back': captureWizard(); wizStep--; render(); window.scrollTo(0,0); break;
       case 'wiz-finish': finishWizard(); break;
-      case 'add-habit': captureWizard(); openHabitEditor(null, h => { draft.habits.push(h); render(); }); break;
+      case 'add-habit': openHabitEditor(null, h => { draft.habits.push(h); render(); }); break;
       case 'wiz-edit-habit': { const i = Number(el.dataset.i); openHabitEditor(draft.habits[i], h => { draft.habits[i] = h; render(); }); break; }
       case 'wiz-del-habit': draft.habits.splice(Number(el.dataset.i), 1); render(); break;
+      case 'wiz-add-goal': openGoalEditor(null, g => { draft.goals.push(g); render(); }); break;
+      case 'wiz-edit-goal': { const i = Number(el.dataset.i); openGoalEditor(draft.goals[i], g => { draft.goals[i] = g; render(); }); break; }
+      case 'wiz-del-goal': draft.goals.splice(Number(el.dataset.i), 1); render(); break;
       case 'wiz-env-add': { captureWizard(); const t = val('w-env-new'); if(t){ draft.env.push({ id:uid(), text:t, on:true, done:false }); render(); } break; }
-      case 'wiz-add-m': captureWizard(); draft.measures.push({ id:uid(), name:'', unit:'', first:'' }); render(); break;
-      case 'wiz-del-m': captureWizard(); draft.measures.splice(Number(el.dataset.i), 1); render(); break;
 
-      /* --- habit sheet --- */
+      /* --- sheets --- */
       case 'habit-save': saveHabitFromSheet(); break;
-      case 'sheet-close': closeSheet(); break;
+      case 'goal-save': saveGoalFromSheet(); break;
+      case 'sheet-close': closeSheet(); render(); break;
 
       /* --- today --- */
       case 'mark': setMark(viewDate, el.dataset.h, el.dataset.v); render(); break;
-      case 'mark-sheet': {
+      case 'mark-sheet':
         setMark(el.dataset.date, el.dataset.h, el.dataset.v);
         el.parentElement.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === el && mark(el.dataset.date, el.dataset.h) === el.dataset.v)));
         break;
-      }
       case 'day-prev': viewDate = clampDate(addDays(viewDate, -1)); render(); break;
       case 'day-next': { const n = addDays(viewDate, 1); if(n <= today()) viewDate = clampDate(n); render(); break; }
       case 'close-day': openCloseDay(viewDate); break;
       case 'close-save': saveCloseDay(el.dataset.date); break;
-      case 'env-done': {
-        const env = S.setup.env.find(x => x.id === el.dataset.id);
-        if(env){ env.done = el.checked; save(); tick(15); setTimeout(render, 250); }
-        break;
-      }
+      case 'env-done': { const env = S.setup.env.find(x => x.id === el.dataset.id); if(env){ env.done = el.checked; save(); tick(15); setTimeout(render, 250); } break; }
 
-      /* --- board --- */
+      /* --- focus --- */
+      case 'focus-new': openFocusSetup(''); break;
+      case 'focus-start': startFocus(); break;
+      case 'focus-open': openFocusRun(); break;
+      case 'focus-urge': S.focusRun.urges++; save(); tick(40); document.getElementById('f-urges').textContent = S.focusRun.urges; break;
+      case 'focus-stop': stopFocus(); break;
+      case 'focus-save': saveFocus(); break;
+      case 'focus-cancel': if(confirm('לבטל את הבלוק בלי לשמור?')){ S.focusRun = null; save(); closeSheet(); render(); } break;
+
+      /* --- proof --- */
       case 'board-day': { const d = el.dataset.date; if(d <= today()){ viewDate = d; view = 'today'; render(); window.scrollTo(0,0); } break; }
-      case 'measure-add': {
-        const inp = document.getElementById('mv-' + el.dataset.id);
+      case 'goal-log': {
+        const inp = document.getElementById('gv-' + el.dataset.id);
         const v = inp ? parseFloat(inp.value) : NaN;
         if(isNaN(v)){ toast('צריך מספר'); return; }
-        S.measureLog.push({ id:uid(), date:today(), measureId:el.dataset.id, value:v });
+        S.goalLog.push({ id:uid(), date:today(), goalId:el.dataset.id, value:v });
         save(); tick(20); render();
         break;
       }
-      case 'measure-del':
-        if(!confirm('למחוק את הערך?')) return;
-        S.measureLog = S.measureLog.filter(x => x.id !== el.dataset.id); save(); render();
-        break;
-
-      /* --- receipts --- */
-      case 'receipt-add': {
-        const t = val('r-new');
-        if(!t) return;
-        S.receipts.push({ id:uid(), date:today(), text:t });
-        save(); tick(25); toast('עוד קבלה על הלוח'); render();
+      case 'goal-log-del': if(confirm('למחוק את הערך?')){ S.goalLog = S.goalLog.filter(x => x.id !== el.dataset.id); save(); render(); } break;
+      case 'receipt-add': { const t = val('r-new'); if(!t) return; S.receipts.push({ id:uid(), date:today(), text:t }); save(); tick(25); toast('עוד קבלה על הלוח'); render(); break; }
+      case 'receipt-del': if(confirm('למחוק את הקבלה?')){ S.receipts = S.receipts.filter(x => x.id !== el.dataset.id); save(); render(); } break;
+      case 'audit-new': openAudit(); break;
+      case 'audit-save': {
+        const scores = {}; let any = false;
+        AREAS.forEach(a => { const b = document.querySelector('.score[data-area="' + a.id + '"] [aria-pressed="true"]'); scores[a.id] = b ? Number(b.dataset.score) : null; if(b) any = true; });
+        if(!any){ toast('לבחור לפחות ציון אחד'); return; }
+        S.audits.push({ id:uid(), date:today(), scores }); save(); closeSheet(); render();
         break;
       }
-      case 'receipt-del':
-        if(!confirm('למחוק את הקבלה?')) return;
-        S.receipts = S.receipts.filter(x => x.id !== el.dataset.id); save(); render();
+
+      /* --- exercises --- */
+      case 'ex-open': openExercise(el.dataset.id); break;
+      case 'ex-step': {
+        const st = exState(el.dataset.id);
+        st.steps[el.dataset.i] = el.checked;
+        const ex = EXERCISES.find(x => x.id === el.dataset.id);
+        const all = ex.steps.every((_, i) => st.steps[i]);
+        st.doneOn = all ? (st.doneOn || today()) : null;
+        el.closest('.check-row').classList.toggle('done', el.checked);
+        save(); tick(15);
+        if(all) toast('התרגיל הושלם');
         break;
+      }
+      case 'ex-count': {
+        const st = exState(el.dataset.id);
+        const i = el.dataset.i;
+        st.counts[i] = Math.max(0, (st.counts[i] || 0) + Number(el.dataset.d));
+        document.getElementById('cnt-' + i).textContent = st.counts[i];
+        save(); tick(10);
+        break;
+      }
+      case 'ex-habit': {
+        saveExNotes();
+        const name = el.dataset.name;
+        openHabitEditor({ id:uid(), name, full:'', min:'', anchor:'', days:[0,1,2,3,4,5,6] }, h => {
+          h.from = today() < S.setup.startDate ? S.setup.startDate : today();
+          S.setup.habits.push(h); save(); toast('נוסף להרגלים'); render();
+        });
+        break;
+      }
+      case 'ex-focus': saveExNotes(); openFocusSetup(''); break;
+      case 'ex-receipt': saveExNotes(); closeSheet(); go('proof'); setTimeout(() => { const r = document.getElementById('r-new'); if(r) r.focus(); }, 100); break;
+      case 'ex-close': closeSheet(); render(); break;
 
       /* --- review --- */
       case 'week-prev': reviewWeek = Math.max(1, reviewWeek - 1); render(); break;
       case 'week-next': reviewWeek = Math.min(currentWeek(), reviewWeek + 1); render(); break;
       case 'review-save': saveReview(); break;
       case 'update-copy': { const ok = await copy(document.getElementById('update-text').textContent); toast(ok ? 'הועתק' : 'ההעתקה נכשלה'); break; }
-      case 'update-share': try{ await navigator.share({ text: document.getElementById('update-text').textContent }); }catch(err){} break;
+      case 'update-share': try{ await navigator.share({ text:document.getElementById('update-text').textContent }); }catch(err){} break;
 
-      /* --- settings --- */
-      case 'identity-save':
-        S.setup.identity = { who:val('s-who'), day:val('s-day'), stop:val('s-stop'), seen:val('s-seen') };
-        save(); toast('נשמר');
+      /* --- plan --- */
+      case 'edit-why': openEditWhy(); break;
+      case 'save-why': { const s = S.setup; s.reasons.want = val('e-want'); s.reasons.refuse = val('e-refuse'); s.anti = val('e-anti'); s.reasons.here = val('e-here'); save(); closeSheet(); render(); break; }
+      case 'edit-vision': openEditVision(); break;
+      case 'save-vision': { const s = S.setup; AREAS.forEach(a => { s.vision[a.id] = val('e-vi-' + a.id); }); s.week = val('e-week'); save(); closeSheet(); render(); break; }
+      case 'edit-identity': openEditIdentity(); break;
+      case 'save-identity': S.setup.identity = { who:val('e-who'), day:val('e-day'), stop:val('e-stop'), seen:val('e-seen') }; save(); closeSheet(); render(); break;
+      case 'goal-new': openGoalEditor(null, g => { S.setup.goals.push(g); save(); render(); }); break;
+      case 'goal-edit': { const g = S.setup.goals.find(x => x.id === el.dataset.id); openGoalEditor(g, ng => { Object.assign(g, ng); save(); render(); }); break; }
+      case 'goal-remove':
+        if(!confirm('להסיר את היעד וכל הערכים שלו?')) return;
+        S.setup.goals = S.setup.goals.filter(x => x.id !== el.dataset.id);
+        S.goalLog = S.goalLog.filter(x => x.goalId !== el.dataset.id);
+        save(); render();
         break;
-      case 'habit-new':
-        openHabitEditor(null, h => { h.from = today() < S.setup.startDate ? S.setup.startDate : today(); S.setup.habits.push(h); save(); render(); });
-        break;
-      case 'habit-edit': {
-        const h = S.setup.habits.find(x => x.id === el.dataset.id);
-        openHabitEditor(h, nh => { Object.assign(h, nh); save(); render(); });
-        break;
-      }
+      case 'habit-new': openHabitEditor(null, h => { h.from = today() < S.setup.startDate ? S.setup.startDate : today(); S.setup.habits.push(h); save(); render(); }); break;
+      case 'habit-edit': { const h = S.setup.habits.find(x => x.id === el.dataset.id); openHabitEditor(h, nh => { Object.assign(h, nh); save(); render(); }); break; }
       case 'habit-archive': {
         const h = S.setup.habits.find(x => x.id === el.dataset.id);
         if(!h || !confirm('להסיר את "' + h.name + '" מהיום והלאה? ההיסטוריה נשמרת.')) return;
@@ -1542,19 +1966,6 @@
       }
       case 'env-add': { const t = val('s-env-new'); if(t){ S.setup.env.push({ id:uid(), text:t, done:false }); save(); render(); } break; }
       case 'env-del': S.setup.env = S.setup.env.filter(x => x.id !== el.dataset.id); save(); render(); break;
-      case 'measure-new': {
-        const name = val('s-m-name');
-        if(!name) return;
-        S.setup.measures.push({ id:uid(), name, unit:val('s-m-unit') });
-        save(); render();
-        break;
-      }
-      case 'measure-remove':
-        if(!confirm('להסיר את המדד וכל הערכים שלו?')) return;
-        S.setup.measures = S.setup.measures.filter(x => x.id !== el.dataset.id);
-        S.measureLog = S.measureLog.filter(x => x.measureId !== el.dataset.id);
-        save(); render();
-        break;
       case 'partner-save': S.setup.partner.name = val('s-partner'); save(); toast('נשמר'); break;
       case 'push-on': pushOn(); break;
       case 'push-off': pushOff(); break;
@@ -1574,26 +1985,29 @@
 
   document.addEventListener('change', (e) => {
     const cb = e.target.closest('[data-act="wiz-env"]');
-    if(cb){ draft.env[Number(cb.dataset.i)].on = cb.checked; }
+    if(cb && draft) draft.env[Number(cb.dataset.i)].on = cb.checked;
+  });
+  document.addEventListener('input', (e) => {
+    if(e.target.closest('#g-actual, #g-target, #g-unit')) updateGoalPace();
+  });
+  document.addEventListener('focusout', (e) => {
+    if(e.target.id === 'ex-notes') saveExNotes();
   });
 
   /* =========================================================
      הפעלה
      ========================================================= */
 
-  // פתיחה מהתראה: ?v=close / ?v=review
   const qv = new URLSearchParams(location.search).get('v');
-
   checkRestoreHash();
   if(S.setup) viewDate = clampDate(today());
   render();
   writeSwConfig();
-
   if(S.setup && qv === 'review') go('review');
   if(S.setup && qv === 'close' && inRange(today())) openCloseDay(today());
   if(qv) history.replaceState(null, '', location.pathname);
+  if(S.setup && S.focusRun && !qv) openFocusRun();
 
-  // כשחוזרים לאפליקציה אחרי לילה — "היום" מתעדכן.
   document.addEventListener('visibilitychange', () => {
     if(document.visibilityState === 'visible' && S.setup && view === 'today' && document.getElementById('sheet').hidden){
       viewDate = clampDate(today());
@@ -1603,8 +2017,8 @@
 
   if('serviceWorker' in navigator){
     window.addEventListener('load', () => {
-      /* להעלות יחד עם CACHE_NAME ב-sw.js בכל שינוי ב-index.html */
-      const SW_VERSION = '1';
+      /* להעלות יחד עם CACHE_NAME ב־sw.js בכל שינוי ב־index.html */
+      const SW_VERSION = '2';
       navigator.serviceWorker.register('sw.js?v=' + SW_VERSION).catch(() => {});
     });
   }

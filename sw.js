@@ -1,5 +1,5 @@
 /* להעלות יחד עם SW_VERSION ב-index.html בכל שינוי */
-const CACHE_NAME = 'ninety-v1';
+const CACHE_NAME = 'ninety-v2';
 const APP_SHELL = [
   './',
   './index.html',
